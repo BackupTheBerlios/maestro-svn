@@ -52,12 +52,16 @@ p_liste Fabien::Liste_lignes(QImage *picture)
 	  liste->n = i;
 	}
       i++;
+      while (Est_ligne(picture, i, qRgb(0, 0, 0), 0))
+	i++;
     }
   while (i < fin)
     {
       if (Est_ligne(picture, i, qRgb(0, 0, 0), 0))
 	Ajouter(liste, i);
       i++;
+      while (Est_ligne(picture, i, qRgb(0, 0, 0), 0))
+	i++;
     }
 
   return liste;
