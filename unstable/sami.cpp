@@ -5,7 +5,7 @@
 
 #include"sami.h"
 
-
+ 
 Sami::Sami(QWidget *parent, const char *name)
   : QMainWindow(parent, name)
 {

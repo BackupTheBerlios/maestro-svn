@@ -1,7 +1,7 @@
 #include<stdlib.h>
 #include"sami_list.h"
 
-
+ 
 
 listd min_listed(listd A) 
 {

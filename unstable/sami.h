@@ -6,7 +6,7 @@
 #include<qlabel.h>
 #include<qscrollbar.h>
 
-
+  
 
 class Sami : public QMainWindow
 {
