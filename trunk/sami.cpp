@@ -32,11 +32,15 @@ Sami::Sami(QWidget *parent, const char *name)
   SavBut->setText("Sauvegarder");
   SavBut->move(10, 170);
 
+  CarcBut = new QPushButton(this, "CarcBut");
+  CarcBut->setText("Caracteristiques");
+  CarcBut->move(10, 200);
 
   connect(QuitBut, SIGNAL(clicked()), this, SLOT(close()));
   connect(AffBut, SIGNAL(clicked()), this, SLOT(affichage()));
   connect(RotBut, SIGNAL(clicked()), this, SLOT(rotation()));
   connect(SavBut, SIGNAL(clicked()), this, SLOT(sauvegarder()));
+  connect(CarcBut, SIGNAL(clicked()), this, SLOT(carac()));
 
 }
 
@@ -397,4 +401,12 @@ void Sami::rotation() // connection Pour le boutton proj
   ima = filtrer_median(ima);
   pmap->setPixmap(ima);
   pix = ima; 
+}
+
+
+void Sami::carac()
+{
+  /**  printf("Fichier : %s", FilePath.ascii());**/
+  afficher_caracteristique_cle(caracteristiques_cle(pix));
+  afficher_cle(pix);
 }

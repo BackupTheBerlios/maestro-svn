@@ -6,6 +6,9 @@
 #include<qlabel.h>
 #include<qscrollbar.h>
 #include<qpushbutton.h>
+#include<qstring.h>
+
+#include"morpho.h"
 
 extern QString FilePath;
 extern QImage pix; // parametre global L'image en memoire
@@ -25,6 +28,7 @@ class Sami : public QMainWindow
   QPushButton * AffBut;
   QPushButton * RotBut;
   QPushButton * SavBut;
+  QPushButton * CarcBut;
 
 
   QImage filtrer_grayscale(QImage pix); //  filtrage grayscale
@@ -43,6 +47,7 @@ class Sami : public QMainWindow
     void affichage();
   void rotation();  // connection pour le bouton de rotation
   void sauvegarder(); // Connection pour la sauvegarde;
+  void carac(); //connection pour afficher les caracterisitques de l'image
 };
 
 #endif
