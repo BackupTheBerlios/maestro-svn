@@ -28,6 +28,10 @@ class Fenetre : public QMainWindow
 
   QPushButton *OpenBut;
   QPushButton *QuitBut;
+  QPushButton *FabBut;
+  QPushButton *MatBut;
+  QPushButton *SamBut;
+  QPushButton *RomBut;
   ImageBox *PreviewCadre;
   QImage Partition;
   
