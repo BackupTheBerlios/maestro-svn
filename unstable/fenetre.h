@@ -37,6 +37,8 @@ class Fenetre : public QMainWindow
   QPushButton *RomBut;
   QGroupBox *PreviewCadre;
   QLabel *Apercu;
+  QImage Picture;
+  QString FilePath;
 
     
   public slots:

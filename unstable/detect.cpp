@@ -1,5 +1,7 @@
 #include<stdio.h>
 
+#include<qobject.h>
+
 #include"detect.h"
 #include"fenetre.h"
 #include"lignes.h"
@@ -30,9 +32,9 @@ void Detection::DetectLignes()
 {
   p_liste2 liste;
   QRgb rouge = qRgb(255,0,0);
-  QImage temp, mini;
-  QPixmap tmp;
+  QImage temp;
   int i, w;
+  QObject *papa;
 
   liste = TrouverLignes(&pix);
   if (liste == NULL)
@@ -50,7 +52,6 @@ void Detection::DetectLignes()
       liste = liste->next;
     }
 
-  mini = temp.smoothScale(580, 510, temp.ScaleMin);
-  tmp.convertFromImage(mini, 0);
-  //Apercu.setPixmap(tmp);
+  papa = this->parent();
+  //papa->OuvrirImage();;
 }
