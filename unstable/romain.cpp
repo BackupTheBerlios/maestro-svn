@@ -13,6 +13,7 @@
 #include <qtoolbar.h>
 #include <qimage.h>
 #include <qpixmap.h>
+#include<qfiledialog.h>
 
 #include"romain.h"
 
@@ -29,7 +30,7 @@ Romain::~Romain()
 
 }
 
-void Fenetre::Charger()
+void Romain::Charger()
 {
     QPixmap p;
     bool b;
@@ -52,7 +53,7 @@ void Fenetre::Charger()
 }
 
 
-void Fenetre::FiltrerImage(QImage *img_s, QImage *img_d, float a, float b, float c, float d, float e, float f, float g, float h, float z )
+void Romain::FiltrerImage(QImage *img_s, QImage *img_d, float a, float b, float c, float d, float e, float f, float g, float h, float z )
 {
     int x, y, i, j;
     float res_r, res_g, res_b;
