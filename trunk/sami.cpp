@@ -13,7 +13,7 @@ Sami::Sami(QWidget *parent, const char *name)
   resize(200, 200);
   setCaption("Sami svn marche");
   
-  //OpenBut->setText("Open");
+  But_filtre_gs->setText("Filter gray scale");
   But_filtre_gs->move(10, 30);
   connect(But_filtre_gs, SIGNAL(clicked()), this, SLOT(~Sami()));
 }
