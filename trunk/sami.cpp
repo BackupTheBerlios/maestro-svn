@@ -5,8 +5,6 @@
 
 #include"sami.h"
 
-
-
 Sami::Sami(QWidget *parent, const char *name)
   : QMainWindow(parent, name)
 {
@@ -24,21 +22,21 @@ Sami::Sami(QWidget *parent, const char *name)
   AffBut->setText("Afficher");
   AffBut->move(10,110);
 
-  RotBut = new QPushButton(this, "RotBut");
+  /*  RotBut = new QPushButton(this, "RotBut");
   RotBut->setText("Filtrer");
-  RotBut->move(10, 140);
+  RotBut->move(10, 140);*/
 
   SavBut = new QPushButton(this, "SavBut");
   SavBut->setText("Sauvegarder");
-  SavBut->move(10, 170);
+  SavBut->move(10, 140);
 
   CarcBut = new QPushButton(this, "CarcBut");
   CarcBut->setText("Caracteristiques");
-  CarcBut->move(10, 200);
+  CarcBut->move(10, 170);
 
   connect(QuitBut, SIGNAL(clicked()), this, SLOT(close()));
   connect(AffBut, SIGNAL(clicked()), this, SLOT(affichage()));
-  connect(RotBut, SIGNAL(clicked()), this, SLOT(rotation()));
+  /* connect(RotBut, SIGNAL(clicked()), this, SLOT(rotation()));*/
   connect(SavBut, SIGNAL(clicked()), this, SLOT(sauvegarder()));
   connect(CarcBut, SIGNAL(clicked()), this, SLOT(carac()));
 
@@ -48,8 +46,6 @@ Sami::~Sami()
 {
 
 }
-
-
 
 void Sami::affichage() //connection pour le bouton afficher
 {
@@ -65,21 +61,13 @@ void Sami::affichage() //connection pour le bouton afficher
 }
 
 
-
-
-
-
 void Sami::sauvegarder() //connection pour le boutton sauvegarder
 {
   pix.save("sauvegarde.png", "PNG");    
 }
 
 
-
-
-
-
-
+/*
 void Sami::rotation() // connection Pour le boutton proj
 {
   QImage ima;
@@ -106,7 +94,7 @@ void Sami::rotation() // connection Pour le boutton proj
   pmap->setPixmap(ima);
   pix = ima; 
 }
-
+*/
 
 void Sami::carac()
 {

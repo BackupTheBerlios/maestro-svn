@@ -27,14 +27,14 @@ class Sami : public QMainWindow
 
   QPushButton *QuitBut;
   QPushButton * AffBut;
-  QPushButton * RotBut;
+  //  QPushButton * RotBut;
   QPushButton * SavBut;
   QPushButton * CarcBut;
 
 
   public slots:
     void affichage();
-  void rotation();  // connection pour le bouton de rotation
+  //  void rotation();  // connection pour le bouton de rotation
   void sauvegarder(); // Connection pour la sauvegarde;
   void carac(); //connection pour afficher les caracterisitques de l'image
 };
