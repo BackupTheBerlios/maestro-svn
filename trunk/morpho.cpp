@@ -243,7 +243,7 @@ int reconnaissance_cle(QImage im)
   res = caracteristiques_cle(im);
   v = (res.projved-res.debuth)*100/(res.finh-res.debuth) 
     - (res.projhed-res.debutv)*100/(res.finv-res.debutv);
-
+  printf("\ncalcul des projections = %f ",v);
   //Rajouter ici les controles des tailles de la forme par rapport a l'espacement des lignes.
 
   if(v > 25)
