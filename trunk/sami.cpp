@@ -6,7 +6,6 @@
 #include"sami.h"
 
 
-class Fenetre;
 
 Sami::Sami(QWidget *parent, const char *name)
   : QMainWindow(parent, name)
@@ -32,8 +31,8 @@ Sami::Sami(QWidget *parent, const char *name)
 
 
   connect(QuitBut, SIGNAL(clicked()), this, SLOT(close()));
-  connect(AffBut, SIGNAL(clicked()), this, SLOT(test_affichage()));
-  connect(RotBut, SIGNAL(clicked()), this, SLOT(testt()));
+  connect(AffBut, SIGNAL(clicked()), this, SLOT(affichage()));
+  connect(RotBut, SIGNAL(clicked()), this, SLOT(rotation()));
 
 }
 
@@ -42,20 +41,16 @@ Sami::~Sami()
 
 }
 
-void Sami::testt()
-{
-  printf("Test : \n");
-}
 
 
-void Sami::test_affichage() //connection pour le bouton afficher
+void Sami::affichage() //connection pour le bouton afficher
 {
   int w,h;
-  pix = QImage::QImage("../scanned1.png"); //on charge l'image en memoire
+  //  pix = QImage::QImage(FilePath); //on charge l'image en memoire
   
     w = pix.width();
     h = pix.height();
-
+    /*
     if(w > 650)
       {
        pix = pix.scaleHeight(650*h/w);
@@ -67,7 +62,7 @@ void Sami::test_affichage() //connection pour le bouton afficher
 	pix =	pix.scaleWidth( (int) 400*w/h);
 	pix = pix.scaleHeight(400);
       }
-
+    */
     w = pix.width();
     h = pix.height();    
 
@@ -79,7 +74,7 @@ void Sami::test_affichage() //connection pour le bouton afficher
 
 
 
-void Sami::filtrer_grayscale() // Mise au niveau de gris connection pour le bouton filtre
+QImage Sami::filtrer_grayscale(QImage pix) // Mise au niveau de gris connection pour le bouton filtre
 {
   QRgb rgb;    
   int i,j,k; // i et j pour parcourir l'image  *****   k : coefficiant du grayscale
@@ -97,14 +92,8 @@ void Sami::filtrer_grayscale() // Mise au niveau de gris connection pour le bout
 	} 
       i++;
     }    
-  pmap->setPixmap(pix);   // Mise a jour de l'image pmap 
-}
-
-void Sami::rotation() //connection pour le boutton rotation
-{
-  QImage im2;
-  im2 = filtrer_rotation(pix,(float) (value1->value()) / 10);
-  pmap->setPixmap(im2);
+  //pmap->setPixmap(pix);   // Mise a jour de l'image pmap 
+  return pix;
 }
 
 
@@ -196,14 +185,6 @@ int Sami::arrondi(double a)
   else
     return((int)(a));
 }
-
-
-void Sami::test() //connection pour le boutton filtrer median
-{
-  pix = filtrer_median(pix);
-  pmap->setPixmap(pix);
-}
-
 
 
 
@@ -306,7 +287,7 @@ int Sami::filtrer_rot_calcul_proj(QImage pix) // fais le calcul de la projection
 
 
 
-float Sami::rotation_calcul_angle() //fais le calcul de l'angle de rotation
+float Sami::rotation_calcul_angle(QImage pix) //fais le calcul de l'angle de rotation
 { 
   float angle=-0.01;
   float angl1,angl2;
@@ -338,11 +319,11 @@ float Sami::rotation_calcul_angle() //fais le calcul de l'angle de rotation
     }    
   angl2 = angle - pitch;
     
-  if((angl1!= 0.01)&&(angl2!= -0.01))
+  if( (angl1!= 0.01) && (angl2!= -0.01) )
     if((angl2)>(-1*angl1))
-      angle = angl2;
-    else
       angle = angl1;
+    else
+      angle = angl2;
   else
     {
       if(angl1==-0.01)
@@ -353,12 +334,12 @@ float Sami::rotation_calcul_angle() //fais le calcul de l'angle de rotation
 	    }
 	  else
 	    {
-	      angle = angl2;
+	      angle = angl1;
 	    }
 	}
       else
 	{
-	  angle = angl1;
+	  angle = angl2;
 	}
     }
   printf("meilleur angle = %f pour projection = %i\n",angle,filtrer_rot_calcul_proj(filtrer_rotation(pix,angle)) );
@@ -367,12 +348,19 @@ float Sami::rotation_calcul_angle() //fais le calcul de l'angle de rotation
 
 
 
-void Sami::calcul_angle() // connection Pour le boutton proj
+void Sami::rotation() // connection Pour le boutton proj
 {
   QImage ima;
-  float angle = rotation_calcul_angle();
-  ima = filtrer_rotation(pix,angle);
-  pmap->setPixmap(ima);
-  pix = ima;
+  float angle;
   
+  pix = filtrer_grayscale(pix);
+  pix = filtrer_seuillage(pix);
+
+    angle = rotation_calcul_angle(pix);
+  if (angle != 0.0)   
+    ima = filtrer_rotation(pix,angle);
+  
+  //ima = filtrer_median(ima);
+  pmap->setPixmap(ima);
+  pix = ima; 
 }

@@ -70,9 +70,9 @@ void Fenetre::OuvrirImage()
 					  this,
 					  "openfiledialog",
 					  "Choose an image to load");
-  succesI = Partition.load(FilePath);
-  w = Partition.width();
-  h = Partition.height();
+  succesI = pix.load(FilePath);
+  w = pix.width();
+  h = pix.height();
   if(w > 290)
     {
       h = (int) 290*h/w ;
@@ -86,10 +86,11 @@ void Fenetre::OuvrirImage()
 
   //  OpenBut->setText("OK 1");
 
-  temp = Partition.smoothScale(w, h);//290x400
+  temp = pix.smoothScale(w, h);//290x400
 
   succesA = PreviewCadre->Apercu.convertFromImage(temp);
   //  OpenBut->setText("OK 2");
 
-  PreviewCadre->setPaletteBackgroundPixmap(PreviewCadre->Apercu);
+    PreviewCadre->setPaletteBackgroundPixmap(PreviewCadre->Apercu);
+  
 }

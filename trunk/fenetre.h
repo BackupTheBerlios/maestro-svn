@@ -12,6 +12,9 @@
 #include"mat.h"
 
 
+extern QString FilePath;
+extern QImage pix;
+
 class QPushButton;
 
 class Fenetre : public QMainWindow
@@ -33,10 +36,10 @@ class Fenetre : public QMainWindow
   QPushButton *SamBut;
   QPushButton *RomBut;
   ImageBox *PreviewCadre;
-  QImage Partition;
 
-  QString FilePath; // l'adresse du fichier ouvert
-  
+
+
+    
   public slots:
     void OuvrirImage();
 };

@@ -7,7 +7,8 @@
 #include<qscrollbar.h>
 #include<qpushbutton.h>
 
-
+extern QString FilePath;
+extern QImage pix; // parametre global L'image en memoire
 
 class Sami : public QMainWindow
 {
@@ -16,7 +17,6 @@ class Sami : public QMainWindow
   Sami(QWidget *parent=0, const char *name=0);
   ~Sami();
 
-  QImage pix; // parametre global L'image en memoire
   // QPixmap pmap; // c l'image afficher
   int NBelt_listd;
   QLabel *pmap;
@@ -29,23 +29,21 @@ class Sami : public QMainWindow
 
 
 
-  void filtrer_grayscale();
-  void rotation();  
-  QImage filtrer_rotation( QImage im1, float angle );
-  void image_vider(QImage pix);
+  QImage filtrer_grayscale(QImage pix); //  filtrage grayscale
+  QImage filtrer_rotation( QImage im1, float angle ); // fais la rotation et renvoie l'image
+  void image_vider(QImage pix); //vide l'image pix
   int arrondi(double a);
-  void test();
   QImage filtrer_median( QImage im1 );
   QImage filtrer_seuillage( QImage im1 );
   void sauvegarder();
   int rotation_proj( QImage im, int j );
   int filtrer_rot_calcul_proj(QImage pix);
-  float rotation_calcul_angle();
-  void calcul_angle();
+  float rotation_calcul_angle(QImage pix);
+  //  void calcul_angle(); // connection pour le calcul de l'angle de rotation
 
   public slots:
-    void test_affichage();
-  void testt();
+    void affichage();
+  void rotation();  // connection pour le bouton de rotation
 
 };
 
