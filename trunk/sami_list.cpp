@@ -37,7 +37,7 @@ listd ajouter_listed(int x, listd A, int *NBelt_listd)
 QRgb median_listd(listd a, int *NBelt_listd)
 {
     int i=0;
-    while((a != NULL) && i < ((*NBelt_listd-1) / 2))
+    while((a != NULL) && i < (((*NBelt_listd-1) / 2)+3))
     {
        a = a->suiv;
        i++;

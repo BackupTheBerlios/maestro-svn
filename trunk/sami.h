@@ -17,16 +17,14 @@ class Sami : public QMainWindow
   Sami(QWidget *parent=0, const char *name=0);
   ~Sami();
 
-  // QPixmap pmap; // c l'image afficher
   int NBelt_listd;
   QLabel *pmap;
-  QScrollBar *value1;
 
 
   QPushButton *QuitBut;
   QPushButton * AffBut;
   QPushButton * RotBut;
-
+  QPushButton * SavBut;
 
 
   QImage filtrer_grayscale(QImage pix); //  filtrage grayscale
@@ -35,16 +33,16 @@ class Sami : public QMainWindow
   int arrondi(double a);
   QImage filtrer_median( QImage im1 );
   QImage filtrer_seuillage( QImage im1 );
-  void sauvegarder();
+  QImage filtrer_redim(QImage pix); 
   int rotation_proj( QImage im, int j );
   int filtrer_rot_calcul_proj(QImage pix);
   float rotation_calcul_angle(QImage pix);
-  //  void calcul_angle(); // connection pour le calcul de l'angle de rotation
+
 
   public slots:
     void affichage();
   void rotation();  // connection pour le bouton de rotation
-
+  void sauvegarder(); // Connection pour la sauvegarde;
 };
 
 #endif

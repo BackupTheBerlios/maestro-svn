@@ -25,14 +25,18 @@ Sami::Sami(QWidget *parent, const char *name)
   AffBut->move(10,110);
 
   RotBut = new QPushButton(this, "RotBut");
-  RotBut->setText("Rotation");
+  RotBut->setText("Filtrer");
   RotBut->move(10, 140);
 
+  SavBut = new QPushButton(this, "SavBut");
+  SavBut->setText("Sauvegarder");
+  SavBut->move(10, 170);
 
 
   connect(QuitBut, SIGNAL(clicked()), this, SLOT(close()));
   connect(AffBut, SIGNAL(clicked()), this, SLOT(affichage()));
   connect(RotBut, SIGNAL(clicked()), this, SLOT(rotation()));
+  connect(SavBut, SIGNAL(clicked()), this, SLOT(sauvegarder()));
 
 }
 
@@ -48,21 +52,6 @@ void Sami::affichage() //connection pour le bouton afficher
   int w,h;
   //  pix = QImage::QImage(FilePath); //on charge l'image en memoire
   
-    w = pix.width();
-    h = pix.height();
-    /*
-    if(w > 650)
-      {
-       pix = pix.scaleHeight(650*h/w);
-       pix = pix.scaleWidth(650);
-       
-      }
-    if(h > 400)
-      {
-	pix =	pix.scaleWidth( (int) 400*w/h);
-	pix = pix.scaleHeight(400);
-      }
-    */
     w = pix.width();
     h = pix.height();    
 
@@ -243,6 +232,35 @@ QImage Sami::filtrer_seuillage( QImage im1 )
   return im1;    
 }
 
+QImage filtrer_redime(QImage pix) // fonction de redimmensionnement de l'image
+{
+  QImage im;
+  int w,h;
+ 
+    w = pix.width();
+    h = pix.height();
+    
+    if(w > 1700)
+      {
+       pix = pix.scaleHeight(1700*h/w);
+       pix = pix.scaleWidth(1700);
+       
+      }
+    if(h > 2000)
+      {
+	pix = pix.scaleWidth( (int) 2000*w/h);
+	pix = pix.scaleHeight(2000);
+      }
+    
+    w = pix.width();
+    h = pix.height();  
+    printf("Redimmensionnement de l'image au format %i x %i\n",w,h);
+    im = pix.smoothScale(w, h);
+    //   pix = im;
+  return im;
+}
+
+
 
 void Sami::sauvegarder() //connection pour le boutton sauvegarder
 {
@@ -334,12 +352,12 @@ float Sami::rotation_calcul_angle(QImage pix) //fais le calcul de l'angle de rot
 	    }
 	  else
 	    {
-	      angle = angl1;
+	      angle = angl2;
 	    }
 	}
       else
 	{
-	  angle = angl2;
+	  angle = angl1;
 	}
     }
   printf("meilleur angle = %f pour projection = %i\n",angle,filtrer_rot_calcul_proj(filtrer_rotation(pix,angle)) );
@@ -352,7 +370,14 @@ void Sami::rotation() // connection Pour le boutton proj
 {
   QImage ima;
   float angle;
+  int w,h;
   
+
+  pix = filtrer_redime(pix);
+
+  w = pix.width();
+  h = pix.height();
+  pmap->setGeometry(QRect(120,40,w,h ));
   pix = filtrer_grayscale(pix);
   pix = filtrer_seuillage(pix);
 
@@ -360,7 +385,7 @@ void Sami::rotation() // connection Pour le boutton proj
   if (angle != 0.0)   
     ima = filtrer_rotation(pix,angle);
   
-  //ima = filtrer_median(ima);
+  ima = filtrer_median(ima);
   pmap->setPixmap(ima);
   pix = ima; 
 }
