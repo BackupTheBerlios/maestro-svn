@@ -63,6 +63,22 @@ p_liste2 TrouverLignes(QImage *picture)
   return liste;
 }
 
+float Moyenne_Largeur(p_liste2 liste)
+{
+  float count;
+  int nbr;
+
+  count = nbr = 0;
+  while (!(liste))
+    {
+      nbr++;
+      count += liste->larg;
+      liste = liste->next;
+    }
+  
+  return (count/nbr);
+}
+
 void SupprimerLignes(QImage *img)
 {
     const int h=3;
