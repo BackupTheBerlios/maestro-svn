@@ -1,7 +1,7 @@
 #include<qfiledialog.h>
 
 #include"fenetre.h"
-
+#include"global.h"
 
 Fenetre::Fenetre(QWidget *parent, const char *name)
   : QMainWindow(parent, name)
@@ -14,6 +14,7 @@ Fenetre::Fenetre(QWidget *parent, const char *name)
   OpenBut = new QPushButton(this, "OpenBut");  //allocation
   QuitBut = new QPushButton(this, "QuitBut");
   PreviewCadre = new QGroupBox(this, "PreviewCadre");
+  Apercu = new QLabel(this, "Apercu");
   DetecBut = new QPushButton(this, "DetecBut");
   RecBut = new QPushButton(this, "RecBut");
   SamBut = new QPushButton(this, "SamBut");
@@ -34,14 +35,14 @@ Fenetre::Fenetre(QWidget *parent, const char *name)
   OpenBut->move(10, 30);  //emplacement
   QuitBut->move(10, 80);
   PreviewCadre->move(170, 10);
-  //Apercu.move(180, 40);
+  Apercu->move(180, 40);
   DetecBut->move(10, 320);
   RecBut->move(10, 170);
   SamBut->move(10, 220);
   RomBut->move(10, 270);
   
   PreviewCadre->resize(600, 550); //taille
-  //Apercu.resize(580, 510);
+  Apercu->resize(580, 510);
   RecBut->resize(140, 30);
 
   /* on relie nos boutons a nos fonctions */
@@ -60,17 +61,23 @@ Fenetre::~Fenetre()
 
 void Fenetre::OuvrirImage()
 {
-  bool succesI, succesA;
-  QImage Mini;
-  QPixmap temp;
+  bool succes;
 
   FilePath = QFileDialog::getOpenFileName("~/",
 					  "Images (*.png *.jpg *.bmp)",
 					  this,
 					  "openfiledialog",
 					  "Choose an image to load");
-  succesI = pix.load(FilePath);
-  Mini = pix.smoothScale(580, 510, pix.ScaleMin);
-  succesA = temp.convertFromImage(Mini, 0);
-  //Apercu.setPixmap(temp); 
+  succes = pix.load(FilePath);
+  Image2Apercu(&pix);
+}
+
+void Fenetre::Image2Apercu(QImage *picture)
+{
+  QImage Mini;
+  QPixmap temp;
+
+  Mini = picture->smoothScale(580, 510, picture->ScaleMin);
+  temp.convertFromImage(Mini, 0);
+  Apercu->setPixmap(temp); 
 }

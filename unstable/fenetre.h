@@ -16,11 +16,6 @@
 #include"reco.h"
 
 
-extern QString FilePath;
-extern QImage pix;
-extern QLabel Apercu;
-
-class QPushButton;
 
 class Fenetre : public QMainWindow
 {
@@ -41,10 +36,12 @@ class Fenetre : public QMainWindow
   QPushButton *SamBut;
   QPushButton *RomBut;
   QGroupBox *PreviewCadre;
+  QLabel *Apercu;
 
     
   public slots:
     void OuvrirImage();
+    void Image2Apercu(QImage *picture);
 };
 
 #endif
