@@ -13,7 +13,7 @@ Fabien::~Fabien()
 
 }
 
-/*
+
 
 // modif de sami : ca veut pas compiler alors je met en commentaire on verra ca plus tard
 
@@ -33,7 +33,7 @@ bool Fabien::Est_ligne(QImage *picture, int ord, QRgb couleur, int precision)
       i++;
     }
 
-  return (i > depart/2);
+  return (i > (depart/2));
 }
 
 p_liste Fabien::Liste_lignes(QImage *picture)
@@ -46,7 +46,7 @@ p_liste Fabien::Liste_lignes(QImage *picture)
   fin = picture->height();
   while ((i < fin) && (liste == NULL))
     {
-      if (Est_ligne(picture, i, QRgb(0, 0, 0), 0))
+      if (Est_ligne(picture, i, qRgb(0, 0, 0), 0))
 	{
 	  liste = Initialiser(liste);
 	  liste->n = i;
@@ -55,11 +55,10 @@ p_liste Fabien::Liste_lignes(QImage *picture)
     }
   while (i < fin)
     {
-      if (Est_ligne(picture, i, QRgb(0, 0, 0), 0))
+      if (Est_ligne(picture, i, qRgb(0, 0, 0), 0))
 	Ajouter(liste, i);
       i++;
     }
 
   return liste;
 }
-*/

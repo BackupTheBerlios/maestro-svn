@@ -13,7 +13,7 @@ class Fabien : public QMainWindow
   Fabien(QWidget *parent=0, const char *name=0);
   ~Fabien();
 
-  bool Est_ligne(QImage *picture, int ord, QRgb noir, int precision);
+  bool Est_ligne(QImage *picture, int ord, QRgb couleur, int precision);
   p_liste Liste_lignes(QImage *picture);
 };
 
