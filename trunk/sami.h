@@ -9,6 +9,7 @@
 #include<qstring.h>
 
 #include"morpho.h"
+#include"filtre.h"
 
 extern QString FilePath;
 extern QImage pix; // parametre global L'image en memoire
@@ -20,7 +21,7 @@ class Sami : public QMainWindow
   Sami(QWidget *parent=0, const char *name=0);
   ~Sami();
 
-  int NBelt_listd;
+
   QLabel *pmap;
 
 
@@ -29,18 +30,6 @@ class Sami : public QMainWindow
   QPushButton * RotBut;
   QPushButton * SavBut;
   QPushButton * CarcBut;
-
-
-  QImage filtrer_grayscale(QImage pix); //  filtrage grayscale
-  QImage filtrer_rotation( QImage im1, float angle ); // fais la rotation et renvoie l'image
-  void image_vider(QImage pix); //vide l'image pix
-  int arrondi(double a);
-  QImage filtrer_median( QImage im1 );
-  QImage filtrer_seuillage( QImage im1 );
-  QImage filtrer_redim(QImage pix); 
-  int rotation_proj( QImage im, int j );
-  int filtrer_rot_calcul_proj(QImage pix);
-  float rotation_calcul_angle(QImage pix);
 
 
   public slots:

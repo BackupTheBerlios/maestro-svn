@@ -5,7 +5,6 @@
 
 extern int NBelt_listd;
 
-
 typedef struct s_listd
 {
     QRgb elt;
