@@ -117,7 +117,7 @@ void SupprimerLignes(QImage *img, int h)
     
 }
 
-void AfficherLignes(p_liste p, QImage *img)
+void AfficherLignes(p_liste2 p, QImage *img)
 {
     int i;
 
@@ -128,7 +128,7 @@ void AfficherLignes(p_liste p, QImage *img)
     while (p)
     {
 	for (i=0;img->valid(i,0);i++)
-	    img->setPixel(i,p->n,rouge);
-	p = p->p;
+	    img->setPixel(i,p->ord,rouge);
+	p = p->next;
     }
 }

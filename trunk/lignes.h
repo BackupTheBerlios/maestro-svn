@@ -11,8 +11,8 @@ float Moyenne_Largeur(p_liste2 liste);
 
 float Max_Largeur(p_liste2 liste);
 
-void SupprimerLignes(QImage *img);
+void SupprimerLignes(QImage *img,int h);
 
-void AfficherLignes(p_liste p, QImage *img);
+void AfficherLignes(p_liste2 p, QImage *img);
 
 #endif

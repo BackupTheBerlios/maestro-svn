@@ -158,7 +158,7 @@ void Reco::btnDelLignes_clicked()
     
     pix = lblCadre->pixmap();
     img = pix->convertToImage();
-    SupprimerLignes(&img);
+    SupprimerLignes(&img,3);
     pix->convertFromImage(img);
     lblCadre->setPixmap(*pix);
 }
@@ -195,7 +195,7 @@ void Reco::btnFindLignes_clicked()
     QString s;
     QPixmap *pix;
     QImage img;
-    p_liste p;
+    p_liste2 p;
     
     pix = lblCadre->pixmap();
     img = pix->convertToImage();
