@@ -26,6 +26,16 @@ typedef struct t_coord
     p_coord next;
 } t_coord;
 
+typedef struct t_liste2 * p_liste2;
+
+typedef struct t_liste2
+{
+  int ord;
+  int larg;
+  p_liste next;
+} t_liste2;
+
+
 void Ajouter_liste (p_liste * p, int i);
 
 void Initialiser_liste (p_liste * p);

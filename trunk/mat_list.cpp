@@ -53,3 +53,22 @@ void Initialiser_coord(p_coord *p)
 {
   *p = NULL;
 }
+
+void Ajouter_liste2 (p_liste2 * p, int m, int n)
+{
+  while ((*p))
+    p = &((*p)->p);
+  
+  if (!(*p))
+    {
+      (*p) = (p_liste) (malloc(sizeof(t_liste2)));
+      (*p)->ord = m;
+      (*p)->larg = n;
+      (*p)->next = NULL;
+    }       
+}
+
+void Initialiser_liste2 (p_liste2 *p)
+{
+  *p = NULL;
+}

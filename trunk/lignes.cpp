@@ -22,35 +22,39 @@ bool Est_ligne(QImage *picture, int ord, QRgb couleur, int precision)
   return (i > (depart/2));
 }
 
-p_liste TrouverLignes(QImage *picture)
+p_liste2 TrouverLignes(QImage *picture)
 {
-  p_liste liste;
-  int i, fin;
+  p_liste2 liste;
+  int i, fin, cpt;
 
   liste = NULL;
   i = 0;
+  cpt = 0;
   fin = picture->height();
   while ((i < fin) && (liste == NULL))
     {
       if (Est_ligne(picture, i, qRgb(0, 0, 0), 0))
 	{
-	  Initialiser_liste(&liste);
-	  Ajouter_liste(&liste, i);
-	  i++;
-	  while (Est_ligne(picture, i, qRgb(0, 0, 0), 0))
-	    i++;
+	  Initialiser_liste2(&liste);
+	  cpt++;
+	  while (Est_ligne(picture, i + cpt, qRgb(0, 0, 0), 0))
+	      cpt++;
+	  Ajouter_liste2(&liste, i, cpt);
+	  i = i + cpt;
 	}
       else
 	i++;
     }
   while (i < fin)
     {
+      cpt = 0;
       if (Est_ligne(picture, i, qRgb(0, 0, 0), 0))
 	{
-	  Ajouter_liste(&liste, i);
-	  i++;
+	  cpt++;
 	  while (Est_ligne(picture, i, qRgb(0, 0, 0), 0))
-	    i++;
+	    cpt++;
+	  Ajouter_liste2(&liste, i, cpt);
+	  i = i + cpt;
 	}
       else
 	i++;
