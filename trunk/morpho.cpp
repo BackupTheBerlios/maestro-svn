@@ -93,29 +93,29 @@ void Creuser (QImage *img)
 }
 
 
-int projection_horizontale(QImage im, int j)
+int projection_horizontale(QImage * im, int j)
 {
-  int i=0,res=0,w= im.width();
+  int i=0,res=0,w= im->width();
   QRgb noir = qRgb(0,0,0);
   
   while(i<w)
     {
-      if (im.pixel(i,j)== noir)
+      if (im->pixel(i,j)== noir)
 	res++;
       i++;
     }
   return res;
 }
 
-int projection_verticale(QImage im, int i)
+int projection_verticale(QImage * im, int i)
 {
 
-  int j=0,res=0,w= im.height();
+  int j=0,res=0,w= im->height();
   QRgb noir = qRgb(0,0,0);
   
   while(j<w)
     {
-      if (im.pixel(i,j)== noir)
+      if (im->pixel(i,j)== noir)
 	res++;
       j++;
     }
@@ -123,11 +123,11 @@ int projection_verticale(QImage im, int i)
 }
 
 
-int projh(QImage im)
+int projh(QImage * im)
 {
   int j,h,res,tmp,pos;
 
-  h = im.height();
+  h = im->height();
   res = 0;
   pos = 0;
   j = 0;
@@ -146,11 +146,11 @@ int projh(QImage im)
 }
 
 
-int projv(QImage im)
+int projv(QImage * im)
 {
   int i,w,res,tmp,pos;
 
-  w = im.width();
+  w = im->width();
   res = 0;
   pos = 0;
   i = 0;
@@ -169,21 +169,21 @@ int projv(QImage im)
 }
 
 
-t_rcle caracteristiques_cle(QImage im)
+t_rcle caracteristiques_cle(QImage * im)
 {
   t_rcle res;
   int j=0,i=0,tmp;
   QImage tmp1,tmp2;
 
-  res.largeur = im.width();
-  res.hauteur = im.height();
+  res.largeur = im->width();
+  res.hauteur = im->height();
   res.projh = projh(im);
   res.projv = projv(im);
   res.debutv=0;
   res.debuth=0;
 
-  tmp1 = im.copy(); //pour ed (erosion puis dilatation)
-  tmp2 = im.copy(); // pour eedd (erosion *2 puis dilatation*2)
+  tmp1 = im->copy(); //pour ed (erosion puis dilatation)
+  tmp2 = im->copy(); // pour eedd (erosion *2 puis dilatation*2)
 
   Eroder(&tmp1);
   Eroder(&tmp2);
@@ -192,10 +192,10 @@ t_rcle caracteristiques_cle(QImage im)
   Dilater(&tmp2);
   Dilater(&tmp2);
 
-  res.projhed = projh(tmp1);
-  res.projved = projv(tmp1);
-  res.projheedd = projh(tmp2);
-  res.projveedd = projv(tmp2);
+  res.projhed = projh(&tmp1);
+  res.projved = projv(&tmp1);
+  res.projheedd = projh(&tmp2);
+  res.projveedd = projv(&tmp2);
 
   while(j<res.hauteur)
     {
@@ -235,7 +235,7 @@ void afficher_caracteristique_cle(t_rcle res)
   printf("-------------------------------------");
 }
 
-int reconnaissance_cle(QImage im)
+int reconnaissance_cle(QImage * im)
 {
   t_rcle res;
   float v;
@@ -255,7 +255,7 @@ int reconnaissance_cle(QImage im)
   return 3;
 }
 
-void afficher_cle(QImage im)
+void afficher_cle(QImage * im)
 {
   printf("\n");
   switch(reconnaissance_cle(im))

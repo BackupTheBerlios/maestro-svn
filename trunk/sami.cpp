@@ -407,6 +407,6 @@ void Sami::rotation() // connection Pour le boutton proj
 void Sami::carac()
 {
   /**  printf("Fichier : %s", FilePath.ascii());**/
-  afficher_caracteristique_cle(caracteristiques_cle(pix));
-  afficher_cle(pix);
+  afficher_caracteristique_cle(caracteristiques_cle(&pix));
+  afficher_cle(&pix);
 }
