@@ -34,3 +34,20 @@ void Ajouter_portee(p_portee *p, p_liste pl)
   (*p)->b = pl;
   (*p)->s = NULL;
 }
+
+void Ajouter_coord(p_coord * p, int x1, int y1, int x2, int y2)
+{
+  while ((*p) && (((*p)->n) != i))
+    p = &((*p)->p);
+  
+  if (!(*p))
+    {
+      (*p) = (p_coord) (malloc(sizeof(t_coord)));
+      
+      (*p)->p = NULL;
+    }       
+}
+
+void Initialiser_coord(p_coord *p)
+{
+  *p = NULL;
