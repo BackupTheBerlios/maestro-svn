@@ -32,7 +32,7 @@ typedef struct t_liste2
 {
   int ord;
   int larg;
-  p_liste next;
+  p_liste2 next;
 } t_liste2;
 
 
