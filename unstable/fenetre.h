@@ -28,10 +28,16 @@ class Fenetre : public QMainWindow
   QPushButton *OpenBut;
   QPushButton *QuitBut;
   QPushButton *DetecBut;
+  QPushButton *FiltBut;
+  QPushButton *SaveBut;
+  QPushButton *RecoBut;
+  QPushButton *MidiBut;
+  QPushButton *MusicBut;
   QGroupBox *PreviewCadre;
   QLabel *Apercu;
 
   QImage Picture;
+  QImage PictModif;
   QString FilePath;
   int NBelt_listd;
   p_liste2 list_lignes;
@@ -41,6 +47,11 @@ class Fenetre : public QMainWindow
     void OuvrirImage();
     void Image2Apercu(QImage *picture);
     void DetectLignes();
+    void Filtrage();
+    void Sauvegarde();
+    void Reconnaissance();
+    void CreationMidi();
+    void JouerMidi();
 };
 
 #endif

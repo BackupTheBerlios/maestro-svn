@@ -69,7 +69,7 @@ void mat_Filtrer_bien(QImage *pix, QLabel *lblCadre, int NBelt_listd)
   
   ima = filtrer_median(ima, NBelt_listd);
   lblCadre->setPixmap(ima);
-  *pix = ima; 
+  *pix = ima;
 }
 
 

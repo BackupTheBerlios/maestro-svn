@@ -115,3 +115,8 @@ void AfficherLignes(p_liste2 p, QImage *img)
       p = p->next;
     }
 }
+
+p_coord GroupLignes(p_liste2 liste)
+{
+
+}

@@ -4,6 +4,8 @@
 #include"fenetre.h"
 
 #include"lignes.h"
+#include"filtre.h"
+
 
 
 /* Constructeur de la classe Fenetre */
@@ -20,6 +22,11 @@ Fenetre::Fenetre(QWidget *parent, const char *name)
   PreviewCadre = new QGroupBox(this, "PreviewCadre");
   Apercu = new QLabel(this, "Apercu");
   DetecBut = new QPushButton(this, "DetecBut");
+  FiltBut = new QPushButton(this, "FiltBut");
+  SaveBut = new QPushButton(this, "SaveBut");
+  RecoBut = new QPushButton(this, "RecoBut");
+  MidiBut = new QPushButton(this, "MidiBut");
+  MusicBut = new QPushButton(this, "MusicBut");
 
   NBelt_listd = 0;
 
@@ -27,20 +34,36 @@ Fenetre::Fenetre(QWidget *parent, const char *name)
   QuitBut->setText("Quit");
   PreviewCadre->setTitle("Preview");
   DetecBut->setText("Detection");
+  FiltBut->setText("Filtrer");
+  SaveBut->setText("Sauver");
+  RecoBut->setText("Reconnaissance");
+  MidiBut->setText("Creer Midi");
+  MusicBut->setText("Jouer Midi");
 
   OpenBut->move(10, 30);  //emplacement
   QuitBut->move(10, 80);
   PreviewCadre->move(170, 10);
   Apercu->move(180, 40);
-  DetecBut->move(10, 320);
-  
+  DetecBut->move(10, 250);
+  FiltBut->move(10, 150);
+  RecoBut->move(10, 320);
+  SaveBut->move(30, 190);
+  MidiBut->move(10, 390);
+  MusicBut->move(30, 430);
+
   PreviewCadre->resize(600, 550); //taille
   Apercu->resize(580, 510);
+  RecoBut->resize(130, 30);
 
   /* on relie nos boutons a nos fonctions */
   connect(OpenBut, SIGNAL(clicked()), this, SLOT(OuvrirImage()));
   connect(QuitBut, SIGNAL(clicked()), this, SLOT(close()));
   connect(DetecBut, SIGNAL(clicked()), this, SLOT(DetectLignes()));
+  connect(FiltBut, SIGNAL(clicked()), this, SLOT(Filtrage()));
+  connect(SaveBut, SIGNAL(clicked()), this, SLOT(Sauvegarde()));
+  connect(RecoBut, SIGNAL(clicked()), this, SLOT(Reconnaissance()));
+  connect(MidiBut, SIGNAL(clicked()), this, SLOT(CreationMidi()));
+  connect(MusicBut, SIGNAL(clicked()), this, SLOT(JouerMidi()));
 }
 
 /* Destructeur - fait automatiquement */
@@ -86,6 +109,7 @@ void Fenetre::DetectLignes()
   QRgb rouge;
   QImage temp;
 
+  //detruire l'ancienne liste
   list_lignes = TrouverLignes(&Picture);
   if (list_lignes == NULL)
 	DetecBut->setText("Echec");
@@ -105,4 +129,41 @@ void Fenetre::DetectLignes()
     }
 
   Image2Apercu(&temp);
+}
+
+/* On filtre l'image sans la redimensionner */
+void Fenetre::Filtrage()
+{
+  float angle;
+
+  PictModif = filtrer_grayscale(Picture);
+  PictModif = filtrer_seuillage(PictModif);
+  angle = rotation_calcul_angle(PictModif);
+
+  if (angle != 0.0)   
+    PictModif = filtrer_rotation(PictModif, angle);
+
+  PictModif = filtrer_median(PictModif, NBelt_listd);
+  Image2Apercu(&PictModif);
+}
+
+/* On sauvegarde l'image modifiee apres filtrage */
+void Fenetre::Sauvegarde()
+{
+  Picture = PictModif;
+}
+
+void Fenetre::Reconnaissance()
+{
+
+}
+
+void Fenetre::CreationMidi()
+{
+
+}
+
+void Fenetre::JouerMidi()
+{
+
 }

@@ -15,4 +15,6 @@ void SupprimerLignes(QImage *img,int h);
 
 void AfficherLignes(p_liste2 p, QImage *img);
 
+p_coord GroupLignes(p_liste2 liste);
+
 #endif
