@@ -21,6 +21,7 @@ class Reco : public QMainWindow
 
     QPushButton* btnCharger;
     QPushButton* btnFiltrer;
+    QPushButton* btnFiltrer_bien;
     QPushButton* btnEroder;
     QPushButton* btnDelLignes;
     QPushButton* btnDilater;
@@ -32,6 +33,7 @@ class Reco : public QMainWindow
 public slots:
     virtual void btnCharger_clicked();
     virtual void btnFiltrer_clicked();
+    virtual void btnFiltrer_bien_clicked();
     virtual void btnDelLignes_clicked();
     virtual void btnEroder_clicked();
     virtual void btnDilater_clicked();

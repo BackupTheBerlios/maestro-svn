@@ -19,6 +19,10 @@ Reco::Reco( QWidget* parent, const char* name, WFlags fl )
     btnFiltrer = new QPushButton( this, "btnFiltrer" );
     btnFiltrer->setGeometry( QRect( 90, 139, 60, 31 ) );
 
+    btnFiltrer_bien = new QPushButton( this, "btnFiltrer_bien" );
+    btnFiltrer_bien->setGeometry( QRect( 90, 139, 60, 31 ) );
+
+
     btnEroder = new QPushButton( this, "btnEroder" );
     btnEroder->setGeometry( QRect( 330, 140, 61, 31 ) );
 
@@ -44,6 +48,7 @@ Reco::Reco( QWidget* parent, const char* name, WFlags fl )
 
     btnCharger->move(10, 50);
     btnFiltrer->move(90, 50);
+    btnFiltrer_bien->move(90, 80);
     btnEroder->move(170, 50);
     btnDelLignes->move(250, 50);
     btnDilater->move(330, 50);
@@ -53,6 +58,7 @@ Reco::Reco( QWidget* parent, const char* name, WFlags fl )
 
     connect( btnCharger, SIGNAL( clicked() ), this, SLOT( btnCharger_clicked() ) );
     connect( btnFiltrer, SIGNAL( clicked() ), this, SLOT( btnFiltrer_clicked() ) );
+    connect( btnFiltrer_bien, SIGNAL( clicked() ), this, SLOT( btnFiltrer_bien_clicked() ) );
     connect( btnDelLignes, SIGNAL( clicked() ), this, SLOT( btnDelLignes_clicked() ) );
     connect( btnEroder, SIGNAL( clicked() ), this, SLOT( btnEroder_clicked() ) );
     connect( btnDilater, SIGNAL( clicked() ), this, SLOT( btnDilater_clicked() ) );
@@ -69,6 +75,7 @@ void Reco::languageChange()
 {
     btnCharger->setText( tr( "Charger" ) );
     btnFiltrer->setText( tr( "Filtrer" ) );
+    btnFiltrer_bien->setText( tr( "Filtrer2" ) );
     btnEroder->setText( tr( "Eroder" ) );
     btnDelLignes->setText( tr( "Virer lignes" ) );
     btnDilater->setText( tr( "Dilater" ) );
@@ -79,7 +86,7 @@ void Reco::languageChange()
 
 void Reco::btnCharger_clicked()
 {
-    QPixmap pix;
+   QPixmap pix;
     QImage img;
     QString s = QFileDialog::getOpenFileName(	/* On demande de charger quelle image */
                     ".",
@@ -107,6 +114,40 @@ void Reco::btnFiltrer_clicked()
     Filtre(&img,200);
     pix->convertFromImage(img);
     lblCadre->setPixmap(*pix);
+}
+
+void Reco::btnFiltrer_bien_clicked()
+{
+ QImage ima;
+ 
+ QPixmap * img;
+ QImage pix;
+ float angle;
+ int w,h;
+ 
+ img = lblCadre->pixmap();
+ pix = img->convertToImage();
+      
+  //*******************************************************************/  
+
+  pix = filtrer_redim(pix);
+
+  w = pix.width();
+  h = pix.height();
+  lblCadre->setGeometry(QRect(10,130,w,h ));
+  pix = filtrer_grayscale(pix);
+  pix = filtrer_seuillage(pix);
+
+    angle = rotation_calcul_angle(pix);
+
+  if (angle != 0.0)   
+    ima = filtrer_rotation(pix,angle);
+  else
+    ima = pix;
+  
+  ima = filtrer_median(ima);
+  lblCadre->setPixmap(ima);
+  pix = ima; 
 }
 
 
