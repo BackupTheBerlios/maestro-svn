@@ -16,7 +16,8 @@ Fabien::~Fabien()
 
 
 // modif de sami : ca veut pas compiler alors je met en commentaire on verra ca plus tard
-
+/*
+// ENCORE DES MODIFS MAT A CHANGE LE NOM DE SON MAT_LIST ET SES FONCTIONS ALORS CA REMARCHE ENCORE PAS !!
 
 bool Fabien::Est_ligne(QImage *picture, int ord, QRgb couleur, int precision)
 {
@@ -72,3 +73,4 @@ p_liste Fabien::Liste_lignes(QImage *picture)
 
   return liste;
 }
+*/

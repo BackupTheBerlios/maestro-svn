@@ -12,6 +12,10 @@ Mat::Mat( QWidget* parent, const char* name, WFlags fl )
 	setName( "Fenetre" );
     setCentralWidget( new QWidget( this, "qt_central_widget" ) );
 
+    lblCadre = new QLabel( centralWidget(), "lblCadre" );
+    lblCadre->setGeometry( QRect( 40, 20, 570, 110 ) );
+    lblCadre->setScaledContents( FALSE );
+
     btnCharger = new QPushButton( centralWidget(), "btnCharger" );
     btnCharger->setGeometry( QRect( 30, 139, 60, 31 ) );
 
@@ -30,9 +34,6 @@ Mat::Mat( QWidget* parent, const char* name, WFlags fl )
     btnFindLignes = new QPushButton( centralWidget(), "btnFindLignes" );
     btnFindLignes->setGeometry( QRect( 150, 140, 100, 31 ) );
 
-    lblCadre = new QLabel( centralWidget(), "lblCadre" );
-    lblCadre->setGeometry( QRect( 40, 20, 570, 110 ) );
-    lblCadre->setScaledContents( FALSE );
 
     lblLignes = new QLabel( centralWidget(), "lblLignes" );
     lblLignes->setGeometry( QRect( 60, 200, 241, 21 ) );
