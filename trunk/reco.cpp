@@ -4,6 +4,8 @@
 #include <qimage.h>
 #include <qpixmap.h>
 
+extern QImage pix;
+
 Reco::Reco( QWidget* parent, const char* name, WFlags fl )
     : QMainWindow( parent, name, fl )
 {
@@ -86,8 +88,8 @@ void Reco::languageChange()
 
 void Reco::btnCharger_clicked()
 {
-   QPixmap pix;
-    QImage img;
+   QPixmap pix2;
+   //   QImage img;
     QString s = QFileDialog::getOpenFileName(	/* On demande de charger quelle image */
                     ".",
                     "Images (*.png *.xpm *.jpg *.gif *.bmp)",
@@ -95,11 +97,11 @@ void Reco::btnCharger_clicked()
                     "Reco"
                     "Choisi un fichier" );
     
-    img.load(s); 			/*On charge l'image dans b à partir du string s*/
+    pix.load(s); 			/*On charge l'image dans b à partir du string s*/
     
-    pix.convertFromImage(img);
+    pix2.convertFromImage(pix);
     
-    lblCadre->setPixmap(pix);
+    lblCadre->setPixmap(pix2);
     lblCadre->adjustSize();
 }
 
@@ -121,12 +123,12 @@ void Reco::btnFiltrer_bien_clicked()
  QImage ima;
  
  QPixmap * img;
- QImage pix;
+ // QImage pix;
  float angle;
  int w,h;
  
- img = lblCadre->pixmap();
- pix = img->convertToImage();
+ // img = lblCadre->pixmap();
+ //pix = img->convertToImage();
       
   //*******************************************************************/  
 
@@ -155,10 +157,14 @@ void Reco::btnDelLignes_clicked()
 {
     QPixmap *pix;
     QImage img;
+    p_liste l;
+    float m;
     
     pix = lblCadre->pixmap();
     img = pix->convertToImage();
-    SupprimerLignes(&img,3);
+    l = TrouverLignes(&img);
+    // m = Max_Largeur(l);
+    SupprimerLignes(&img, 8);
     pix->convertFromImage(img);
     lblCadre->setPixmap(*pix);
 }
@@ -195,7 +201,7 @@ void Reco::btnFindLignes_clicked()
     QString s;
     QPixmap *pix;
     QImage img;
-    p_liste2 p;
+    p_liste p;
     
     pix = lblCadre->pixmap();
     img = pix->convertToImage();

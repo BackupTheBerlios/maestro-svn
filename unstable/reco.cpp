@@ -1,3 +1,4 @@
+#include<stdio.h>
 #include "reco.h"
 
 #include <qpushbutton.h>
@@ -157,7 +158,7 @@ void Reco::btnDelLignes_clicked()
 {
     QPixmap *pix;
     QImage img;
-    p_liste l;
+    p_liste2 l;
     float m;
     
     pix = lblCadre->pixmap();
@@ -201,12 +202,17 @@ void Reco::btnFindLignes_clicked()
     QString s;
     QPixmap *pix;
     QImage img;
-    p_liste p;
+    p_liste2 liste;
     
     pix = lblCadre->pixmap();
     img = pix->convertToImage();
-    p = TrouverLignes(&img);
-    AfficherLignes(p,&img);
+    liste = TrouverLignes(&img);
+    while (liste != NULL)
+    {
+      printf("%i est une ligne de %i\n", liste->ord, liste->larg);
+      liste = liste->next;
+    }
+    AfficherLignes(liste, &img);
     pix->convertFromImage(img);
     lblCadre->setPixmap(*pix);
     

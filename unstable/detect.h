@@ -1,18 +1,22 @@
 #ifndef DETECT_H
 #define DETECT_H
 
-#include <qmainwindow.h>
-#include <qimage.h>
-
-#include "mat_list.h"
+#include<qmainwindow.h>
+#include<qpushbutton.h>
 
 
-class Detect : public QMainWindow
+class Detection : public QMainWindow
 {
   Q_OBJECT
  public:
-  Detect(QWidget *parent=0, const char *name=0);
-  ~Detect();
+  Detection(QWidget *parent=0, const char *name=0);
+  ~Detection();
+
+  QPushButton *DectLignes;
+
+
+  public slots:
+    void DetectLignes();
 };
 
 #endif

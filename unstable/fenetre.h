@@ -4,8 +4,12 @@
 #include<qwidget.h>
 #include<qmainwindow.h>
 #include<qpushbutton.h>
+#include<qstring.h>
+#include<qimage.h>
+#include<qlabel.h>
+#include<qpixmap.h>
 
-#include<imgbox.h>
+#include"imgbox.h"
 #include"detect.h"
 #include"sami.h"
 #include"romain.h"
@@ -24,7 +28,7 @@ class Fenetre : public QMainWindow
   Fenetre(QWidget *parent=0, const char *name=0);
   ~Fenetre(); 
 
-  Detect *detec;
+  Detection *detec;
   Romain *rom;
   Sami *sam;
   Reco *rec;
@@ -36,8 +40,7 @@ class Fenetre : public QMainWindow
   QPushButton *SamBut;
   QPushButton *RomBut;
   ImageBox *PreviewCadre;
-
-
+  QLabel *Apercu;
 
     
   public slots:

@@ -1,6 +1,4 @@
-#include<qpoint.h>
 #include<qfiledialog.h>
-#include<qstring.h>
 
 #include"fenetre.h"
 
@@ -16,11 +14,12 @@ Fenetre::Fenetre(QWidget *parent, const char *name)
   OpenBut = new QPushButton(this, "OpenBut");  //allocation
   QuitBut = new QPushButton(this, "QuitBut");
   PreviewCadre = new ImageBox(this, "PreviewCadre");
+  Apercu = new QLabel(this, "Apercu");
   DetecBut = new QPushButton(this, "DetecBut");
   RecBut = new QPushButton(this, "RecBut");
   SamBut = new QPushButton(this, "SamBut");
   RomBut = new QPushButton(this, "RomBut");
-  detec = new Detect(this, "dect");
+  detec = new Detection(this, "detec");
   rom = new Romain(this, "rom");
   sam = new Sami(this, "sam");
   rec = new Reco(this, "rec");
@@ -36,12 +35,14 @@ Fenetre::Fenetre(QWidget *parent, const char *name)
   OpenBut->move(10, 30);  //emplacement
   QuitBut->move(10, 80);
   PreviewCadre->move(170, 10);
+  Apercu->move(180, 40);
   DetecBut->move(10, 320);
   RecBut->move(10, 170);
   SamBut->move(10, 220);
   RomBut->move(10, 270);
   
   PreviewCadre->resize(600, 550); //taille
+  Apercu->resize(580, 510);
   RecBut->resize(140, 30);
 
   /* on relie nos boutons a nos fonctions */
@@ -60,11 +61,9 @@ Fenetre::~Fenetre()
 
 void Fenetre::OuvrirImage()
 {
-  int w,h;
-
   bool succesI, succesA;
-  // QString FilePath; //dans fenetre.h
-  QImage temp;
+  QImage Mini;
+  QPixmap temp;
 
   FilePath = QFileDialog::getOpenFileName("~/",
 					  "Images (*.png *.jpg *.bmp)",
@@ -72,26 +71,7 @@ void Fenetre::OuvrirImage()
 					  "openfiledialog",
 					  "Choose an image to load");
   succesI = pix.load(FilePath);
-  w = pix.width();
-  h = pix.height();
-  if(w > 290)
-    {
-      h = (int) 290*h/w ;
-      w = 290;
-    }
-  if(h > 400)
-    {
-      w = (int) 400*w/h;
-      h = 400;
-    }
-
-  //  OpenBut->setText("OK 1");
-
-  temp = pix.smoothScale(w, h);//290x400
-
-  succesA = PreviewCadre->Apercu.convertFromImage(temp);
-  //  OpenBut->setText("OK 2");
-
-    PreviewCadre->setPaletteBackgroundPixmap(PreviewCadre->Apercu);
-  
+  Mini = pix.smoothScale(580, 510, pix.ScaleMin);
+  succesA = temp.convertFromImage(Mini, 0);
+  Apercu->setPixmap(temp); 
 }

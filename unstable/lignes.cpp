@@ -1,21 +1,19 @@
 #include <qimage.h>
 #include <qcolor.h>
 #include "lignes.h"
-#include <stdio.h>
 
-/*
-bool Est_ligne(QImage *picture, int ord, QRgb couleur, int precision)
+
+bool Est_ligne(QImage *picture, int ord, QRgb couleur, int depart, int g, int d)
 {
-  int i, depart;
+  int i;
 
   i = 0;
-  depart = (picture->height())/2;
-  while (picture->valid(depart + i, ord) && precision >= 0)
+  while (picture->valid(depart + i, ord) && ((d > 0) || (g > 0)))
     {
       if (picture->pixel(depart + i, ord) != couleur)
-	precision--;
+	d--;
       if (picture->pixel(depart - i, ord) != couleur)
-	precision--;
+	g--;
       i++;
     }
 
@@ -26,25 +24,20 @@ bool Est_ligne(QImage *picture, int ord, QRgb couleur, int precision)
 p_liste2 TrouverLignes(QImage *picture)
 {
   p_liste2 liste;
-  int i, fin, cpt;
+  int i, fin, cpt, depart;
 
   Initialiser_liste2(&liste);
   i = 0;
   fin = picture->height();
+  depart = (picture->width())/2;
 
-  printf("romain le grosd pd1\n");
   while (i < fin)
     {
-      printf("romain le grosd pdi %i\n",i);
-
-
-      if (Est_ligne(picture, i, qRgb(0, 0, 0), 5))
+      if (Est_ligne(picture, i, qRgb(0, 0, 0), depart, 3, 3))
 	{
-	  printf("on rentre dabs est ligne\n");
 	  cpt = 1;
-	  while (Est_ligne(picture, i + cpt, qRgb(0, 0, 0), 5))
+	  while (Est_ligne(picture, i + cpt, qRgb(0, 0, 0), depart, 3, 3))
 	      cpt++;
-	  printf("%i %i\n",i,cpt);
 	  Ajouter_liste2(&liste, i, cpt);
 	  i = i + cpt;
 	}
@@ -54,8 +47,8 @@ p_liste2 TrouverLignes(QImage *picture)
 
   return liste;
 }
-*/
 
+/*
 p_liste TrouverLignes(QImage *img)
 {
     int i,j,s,d=0;
@@ -100,7 +93,7 @@ bool Est_ligne(QImage *picture, int ord,QRgb noir, int precision)
 
   return (s >= (picture->width())/2);
 }
-
+*/
 
 float Moyenne_Largeur(p_liste2 liste)
 {
@@ -157,19 +150,15 @@ void SupprimerLignes(QImage *img, int h)
     
 }
 
-void AfficherLignes(p_liste p, QImage *img)
+void AfficherLignes(p_liste2 p, QImage *img)
 {
-    int i;
-
-    QRgb rouge = qRgb(255,0,0);
+  int i;
+  QRgb rouge = qRgb(255,0,0);
     
-
-    
-    while (p)
+  while (p)
     {
-      printf("%i \n",p->n);
-	for (i=0;img->valid(i,0);i++)
-	    img->setPixel(i,p->n,rouge);
-	p = p->p;
+      for (i=0;img->valid(i,0);i++)
+	img->setPixel(i,p->ord,rouge);
+      p = p->next;
     }
 }
