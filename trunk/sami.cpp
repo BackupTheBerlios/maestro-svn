@@ -6,13 +6,35 @@
 #include"sami.h"
 
 
+class Fenetre;
+
 Sami::Sami(QWidget *parent, const char *name)
   : QMainWindow(parent, name)
 {
-  resize(200, 200);
+  resize(800, 600);
   setCaption("Sami");
-
   NBelt_listd = 0;
+
+  pmap = new QLabel(this);
+
+  QuitBut = new QPushButton(this, "QuitBut");
+  QuitBut->setText("Quit");
+  QuitBut->move(10, 80);
+
+  AffBut =  new QPushButton(this, "AffBut");
+  AffBut->setText("Afficher");
+  AffBut->move(10,110);
+
+  RotBut = new QPushButton(this, "RotBut");
+  RotBut->setText("Rotation");
+  RotBut->move(10, 140);
+
+
+
+  connect(QuitBut, SIGNAL(clicked()), this, SLOT(close()));
+  connect(AffBut, SIGNAL(clicked()), this, SLOT(test_affichage()));
+  connect(RotBut, SIGNAL(clicked()), this, SLOT(testt()));
+
 }
 
 Sami::~Sami()
@@ -20,17 +42,38 @@ Sami::~Sami()
 
 }
 
+void Sami::testt()
+{
+  printf("Test : \n");
+}
+
+
 void Sami::test_affichage() //connection pour le bouton afficher
 {
   int w,h;
-  pix = QImage::QImage("./images/scanned0.png"); //on charge l'image en memoire
+  pix = QImage::QImage("../scanned1.png"); //on charge l'image en memoire
   
-  w = pix.width();
-  h = pix.height();
+    w = pix.width();
+    h = pix.height();
 
-  pmap->setGeometry(QRect(30,40,w,h ));
+    if(w > 650)
+      {
+       pix = pix.scaleHeight(650*h/w);
+       pix = pix.scaleWidth(650);
+       
+      }
+    if(h > 400)
+      {
+	pix =	pix.scaleWidth( (int) 400*w/h);
+	pix = pix.scaleHeight(400);
+      }
 
-  pmap->setPixmap(pix);  
+    w = pix.width();
+    h = pix.height();    
+
+    pmap->setGeometry(QRect(120,40,w,h ));
+
+     pmap->setPixmap(pix);  
 }
 
 

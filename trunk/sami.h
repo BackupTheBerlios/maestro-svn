@@ -5,6 +5,7 @@
 #include<qimage.h>
 #include<qlabel.h>
 #include<qscrollbar.h>
+#include<qpushbutton.h>
 
 
 
@@ -16,12 +17,18 @@ class Sami : public QMainWindow
   ~Sami();
 
   QImage pix; // parametre global L'image en memoire
-// QPixmap pmap c l'image afficher
+  // QPixmap pmap; // c l'image afficher
   int NBelt_listd;
   QLabel *pmap;
   QScrollBar *value1;
 
-  void test_affichage();
+
+  QPushButton *QuitBut;
+  QPushButton * AffBut;
+  QPushButton * RotBut;
+
+
+
   void filtrer_grayscale();
   void rotation();  
   QImage filtrer_rotation( QImage im1, float angle );
@@ -35,6 +42,11 @@ class Sami : public QMainWindow
   int filtrer_rot_calcul_proj(QImage pix);
   float rotation_calcul_angle();
   void calcul_angle();
+
+  public slots:
+    void test_affichage();
+  void testt();
+
 };
 
 #endif

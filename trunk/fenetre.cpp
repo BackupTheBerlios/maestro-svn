@@ -59,8 +59,10 @@ Fenetre::~Fenetre()
 
 void Fenetre::OuvrirImage()
 {
+  int w,h;
+
   bool succesI, succesA;
-  QString FilePath;
+  // QString FilePath; //dans fenetre.h
   QImage temp;
 
   FilePath = QFileDialog::getOpenFileName("~/",
@@ -69,12 +71,25 @@ void Fenetre::OuvrirImage()
 					  "openfiledialog",
 					  "Choose an image to load");
   succesI = Partition.load(FilePath);
-  OpenBut->setText("OK 1");
+  w = Partition.width();
+  h = Partition.height();
+  if(w > 290)
+    {
+      h = (int) 290*h/w ;
+      w = 290;
+    }
+  if(h > 400)
+    {
+      w = (int) 400*w/h;
+      h = 400;
+    }
 
-  temp = Partition.smoothScale(290, 400);
+  //  OpenBut->setText("OK 1");
+
+  temp = Partition.smoothScale(w, h);//290x400
 
   succesA = PreviewCadre->Apercu.convertFromImage(temp);
-  OpenBut->setText("OK 2");
+  //  OpenBut->setText("OK 2");
 
   PreviewCadre->setPaletteBackgroundPixmap(PreviewCadre->Apercu);
 }

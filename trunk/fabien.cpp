@@ -13,6 +13,11 @@ Fabien::~Fabien()
 
 }
 
+/*
+
+// modif de sami : ca veut pas compiler alors je met en commentaire on verra ca plus tard
+
+
 bool Fabien::Est_ligne(QImage *picture, int ord, QRgb couleur, int precision)
 {
   int i, depart;
@@ -57,3 +62,4 @@ p_liste Fabien::Liste_lignes(QImage *picture)
 
   return liste;
 }
+*/

@@ -34,6 +34,8 @@ class Fenetre : public QMainWindow
   QPushButton *RomBut;
   ImageBox *PreviewCadre;
   QImage Partition;
+
+  QString FilePath; // l'adresse du fichier ouvert
   
   public slots:
     void OuvrirImage();
