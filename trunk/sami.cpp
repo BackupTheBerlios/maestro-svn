@@ -336,12 +336,18 @@ float Sami::rotation_calcul_angle(QImage pix) //fais le calcul de l'angle de rot
       ima = filtrer_rotation(pix,angle);
     }    
   angl2 = angle - pitch;
+  printf("Angle1 = %f - Angle2 = %f \n",angl1,angl2);
     
   if( (angl1!= 0.01) && (angl2!= -0.01) )
     if((angl2)>(-1*angl1))
       angle = angl1;
     else
-      angle = angl2;
+      {
+      if (angl1 != -1*angl2)
+	angle = angl2;
+      else
+	angle = angl1/2;
+      }
   else
     {
       if(angl1==-0.01)
@@ -382,8 +388,11 @@ void Sami::rotation() // connection Pour le boutton proj
   pix = filtrer_seuillage(pix);
 
     angle = rotation_calcul_angle(pix);
+
   if (angle != 0.0)   
     ima = filtrer_rotation(pix,angle);
+  else
+    ima = pix;
   
   ima = filtrer_median(ima);
   pmap->setPixmap(ima);
