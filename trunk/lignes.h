@@ -9,6 +9,8 @@ p_liste2 TrouverLignes(QImage *picture);
 
 float Moyenne_Largeur(p_liste2 liste);
 
+float Max_Largeur(p_liste2 liste);
+
 void SupprimerLignes(QImage *img);
 
 void AfficherLignes(p_liste p, QImage *img);

@@ -79,6 +79,20 @@ float Moyenne_Largeur(p_liste2 liste)
   return (count/nbr);
 }
 
+float Max_Largeur(p_liste2 liste)
+{
+  float temp;
+
+  temp = 0;
+  while (!(liste))
+    {
+      if (temp < liste->larg)
+	temp = liste->larg;
+    }
+
+  return temp;
+}
+
 void SupprimerLignes(QImage *img)
 {
     const int h=3;
