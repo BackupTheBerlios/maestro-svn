@@ -48,53 +48,6 @@ p_liste2 TrouverLignes(QImage *picture)
   return liste;
 }
 
-/*
-p_liste TrouverLignes(QImage *img)
-{
-    int i,j,s,d=0;
-    QRgb noir = qRgb(0,0,0);
-    p_liste p;
-    
-    Initialiser_liste(&p);
-    
-    for (j=0;(img->valid(0,j));j++)
-    {
-	s = 0;
-	for (i=0;(img->valid(i,0));i++)
-	{
-	    if (img->pixel(i,j) == noir)
-	    {
-		s += 1;
-	    }
-	    
-	}
-	if ((s >= ((img->width())/2)) && ((j-d)>3))
-	{
-	    Ajouter_liste(&p,j);
-	    d = j;
-	}
-    }
-    
-    return p;
-}
-
-bool Est_ligne(QImage *picture, int ord,QRgb noir, int precision)
-{
-  int i, s;
-
-  i = 0;
-  s =0;
-
-  for(i=0;picture->valid(i,ord);i++)
-    {
-      if(picture->pixel(i,ord)== noir)
-	s++;
-    }
-
-  return (s >= (picture->width())/2);
-}
-*/
-
 float Moyenne_Largeur(p_liste2 liste)
 {
   float count;

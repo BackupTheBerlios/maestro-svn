@@ -1,8 +1,12 @@
 #include<qfiledialog.h>
+#include<stdio.h>
 
 #include"fenetre.h"
-#include"global.h"
 
+#include"lignes.h"
+
+
+/* Constructeur de la classe Fenetre */
 Fenetre::Fenetre(QWidget *parent, const char *name)
   : QMainWindow(parent, name)
 {
@@ -16,49 +20,38 @@ Fenetre::Fenetre(QWidget *parent, const char *name)
   PreviewCadre = new QGroupBox(this, "PreviewCadre");
   Apercu = new QLabel(this, "Apercu");
   DetecBut = new QPushButton(this, "DetecBut");
-  RecBut = new QPushButton(this, "RecBut");
-  SamBut = new QPushButton(this, "SamBut");
-  RomBut = new QPushButton(this, "RomBut");
-  detec = new Detection(this, "detec");
-  rom = new Romain(this, "rom");
-  sam = new Sami(this, "sam");
-  rec = new Reco(this, "rec");
+
+  NBelt_listd = 0;
 
   OpenBut->setText("Open");  //nom affiche
   QuitBut->setText("Quit");
   PreviewCadre->setTitle("Preview");
   DetecBut->setText("Detection");
-  RecBut->setText("Reconnaissance");
-  SamBut->setText("Sami");
-  RomBut->setText("Romain");
 
   OpenBut->move(10, 30);  //emplacement
   QuitBut->move(10, 80);
   PreviewCadre->move(170, 10);
   Apercu->move(180, 40);
   DetecBut->move(10, 320);
-  RecBut->move(10, 170);
-  SamBut->move(10, 220);
-  RomBut->move(10, 270);
   
   PreviewCadre->resize(600, 550); //taille
   Apercu->resize(580, 510);
-  RecBut->resize(140, 30);
 
   /* on relie nos boutons a nos fonctions */
   connect(OpenBut, SIGNAL(clicked()), this, SLOT(OuvrirImage()));
   connect(QuitBut, SIGNAL(clicked()), this, SLOT(close()));
-  connect(DetecBut, SIGNAL(clicked()), detec, SLOT(show()));
-  connect(SamBut, SIGNAL(clicked()), sam, SLOT(show()));
-  connect(RecBut, SIGNAL(clicked()), rec, SLOT(show()));
-  connect(RomBut, SIGNAL(clicked()), rom, SLOT(show()));
+  connect(DetecBut, SIGNAL(clicked()), this, SLOT(DetectLignes()));
 }
 
+/* Destructeur - fait automatiquement */
 Fenetre::~Fenetre()
 {
 
 }
 
+/* On ouvre une image qu'on stocke dans la variable Picture 
+de la classe Fenetre, le chemin est sauvegarde dans 
+FilePath */
 void Fenetre::OuvrirImage()
 {
   bool succes;
@@ -68,10 +61,12 @@ void Fenetre::OuvrirImage()
 					  this,
 					  "openfiledialog",
 					  "Choose an image to load");
-  succes = pix.load(FilePath);
-  Image2Apercu(&pix);
+  succes = Picture.load(FilePath);
+  Image2Apercu(&Picture);
 }
 
+/* On convertit une image en pixmap et on l'affiche 
+sur le label Apercu de la classe Fenetre */
 void Fenetre::Image2Apercu(QImage *picture)
 {
   QImage Mini;
@@ -80,4 +75,34 @@ void Fenetre::Image2Apercu(QImage *picture)
   Mini = picture->smoothScale(580, 510, picture->ScaleMin);
   temp.convertFromImage(Mini, 0);
   Apercu->setPixmap(temp); 
+}
+
+/* On detecte les lignes qu'on stocke dans une p_liste2 
+de la classe Fenetre, puis on affiche en rouge les lignes 
+pour verifier en meme temps qu'on les affiche dans le term */
+void Fenetre::DetectLignes()
+{
+  int i, j, w;
+  QRgb rouge;
+  QImage temp;
+
+  list_lignes = TrouverLignes(&Picture);
+  if (list_lignes == NULL)
+	DetecBut->setText("Echec");
+  rouge = qRgb(255, 0, 0);
+  w = Picture.width();
+  temp = Picture;
+
+  while (list_lignes)
+    {
+      for (i=0; i<w; i++)
+	{
+	  for (j=0; j<list_lignes->larg; j++)
+	    temp.setPixel(i, list_lignes->ord + j, rouge);
+	}      
+      printf("%i est ligne de %i\n", list_lignes->ord, list_lignes->larg);
+      list_lignes = list_lignes->next;
+    }
+
+  Image2Apercu(&temp);
 }

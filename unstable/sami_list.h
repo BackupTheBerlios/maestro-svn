@@ -3,7 +3,6 @@
 #define SAMI_LIST_H
 
 
-extern int NBelt_listd;
 
 typedef struct s_listd
 {

@@ -10,10 +10,7 @@
 #include<qpixmap.h>
 #include<qgroupbox.h>
 
-#include"detect.h"
-#include"sami.h"
-#include"romain.h"
-#include"reco.h"
+#include"mat_list.h"
 
 
 
@@ -24,26 +21,26 @@ class Fenetre : public QMainWindow
   Fenetre(QWidget *parent=0, const char *name=0);
   ~Fenetre(); 
 
-  Detection *detec;
-  Romain *rom;
+  /*Romain *rom;
   Sami *sam;
-  Reco *rec;
+  Reco *rec;*/
 
   QPushButton *OpenBut;
   QPushButton *QuitBut;
   QPushButton *DetecBut;
-  QPushButton *RecBut;
-  QPushButton *SamBut;
-  QPushButton *RomBut;
   QGroupBox *PreviewCadre;
   QLabel *Apercu;
+
   QImage Picture;
   QString FilePath;
+  int NBelt_listd;
+  p_liste2 list_lignes;
 
     
   public slots:
     void OuvrirImage();
     void Image2Apercu(QImage *picture);
+    void DetectLignes();
 };
 
 #endif

@@ -2,12 +2,10 @@
 #define FILTRE_H
 
 #include"sami_list.h"
-extern int NBelt_listd;
+
 
 void Charger(QImage * img);
-
 int Moyenne ( QRgb r);
-
 void Filtre( QImage *img , int seuil);
 
 
@@ -15,7 +13,7 @@ QImage filtrer_grayscale(QImage pix); //  filtrage grayscale
 QImage filtrer_rotation( QImage im1, float angle ); // fais la rotation et renvoie l'image
 void image_vider(QImage pix); //vide l'image pix
 int arrondi(double a);
-QImage filtrer_median( QImage im1 );
+QImage filtrer_median( QImage im1, int NBelt_listd);
 QImage filtrer_seuillage( QImage im1 );
 QImage filtrer_redim(QImage pix); 
 int rotation_proj( QImage im, int j );
