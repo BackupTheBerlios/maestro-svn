@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Fabien meta object code from reading C++ file 'fabien.h'
 **
-** Created: Thu Feb 10 21:13:40 2005
+** Created: Mon Feb 14 23:32:24 2005
 **      by: The Qt MOC ($Id: qt/moc_yacc.cpp   3.3.3   edited Aug 5 16:40 $)
 **
 ** WARNING! All changes made in this file will be lost!

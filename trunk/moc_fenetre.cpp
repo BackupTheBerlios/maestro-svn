@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Fenetre meta object code from reading C++ file 'fenetre.h'
 **
-** Created: Thu Feb 10 21:13:43 2005
+** Created: Mon Feb 14 23:32:27 2005
 **      by: The Qt MOC ($Id: qt/moc_yacc.cpp   3.3.3   edited Aug 5 16:40 $)
 **
 ** WARNING! All changes made in this file will be lost!

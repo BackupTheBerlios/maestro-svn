@@ -1,7 +1,7 @@
 /****************************************************************************
 ** ImageBox meta object code from reading C++ file 'imgbox.h'
 **
-** Created: Fri Jan 7 00:17:07 2005
+** Created: Mon Feb 14 23:32:29 2005
 **      by: The Qt MOC ($Id: qt/moc_yacc.cpp   3.3.3   edited Aug 5 16:40 $)
 **
 ** WARNING! All changes made in this file will be lost!

@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Mat meta object code from reading C++ file 'mat.h'
 **
-** Created: Thu Feb 10 21:13:46 2005
+** Created: Mon Feb 14 23:32:31 2005
 **      by: The Qt MOC ($Id: qt/moc_yacc.cpp   3.3.3   edited Aug 5 16:40 $)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -52,9 +52,45 @@ QMetaObject* Mat::staticMetaObject()
     if ( metaObj )
 	return metaObj;
     QMetaObject* parentObject = QMainWindow::staticMetaObject();
+    static const QUMethod slot_0 = {"ChargerImage", 0, 0 };
+    static const QUParameter param_slot_1[] = {
+	{ "img", &static_QUType_varptr, "\x0f", QUParameter::In }
+    };
+    static const QUMethod slot_1 = {"Filtre", 1, param_slot_1 };
+    static const QUParameter param_slot_2[] = {
+	{ "img", &static_QUType_varptr, "\x0f", QUParameter::In }
+    };
+    static const QUMethod slot_2 = {"Reconnaissance", 1, param_slot_2 };
+    static const QUMethod slot_3 = {"Reconnaitre", 0, 0 };
+    static const QUParameter param_slot_4[] = {
+	{ "p", &static_QUType_ptr, "p_liste", QUParameter::In },
+	{ "img", &static_QUType_varptr, "\x0f", QUParameter::In }
+    };
+    static const QUMethod slot_4 = {"AfficherLignes", 2, param_slot_4 };
+    static const QUMethod slot_5 = {"BoutonLigne", 0, 0 };
+    static const QUParameter param_slot_6[] = {
+	{ "img", &static_QUType_varptr, "\x0f", QUParameter::In }
+    };
+    static const QUMethod slot_6 = {"Filtre2", 1, param_slot_6 };
+    static const QUMethod slot_7 = {"BoutonFiltre", 0, 0 };
+    static const QUParameter param_slot_8[] = {
+	{ "i", &static_QUType_int, 0, QUParameter::In }
+    };
+    static const QUMethod slot_8 = {"slider1_valueChanged", 1, param_slot_8 };
+    static const QMetaData slot_tbl[] = {
+	{ "ChargerImage()", &slot_0, QMetaData::Public },
+	{ "Filtre(QImage*)", &slot_1, QMetaData::Public },
+	{ "Reconnaissance(QImage*)", &slot_2, QMetaData::Public },
+	{ "Reconnaitre()", &slot_3, QMetaData::Public },
+	{ "AfficherLignes(p_liste,QImage*)", &slot_4, QMetaData::Public },
+	{ "BoutonLigne()", &slot_5, QMetaData::Public },
+	{ "Filtre2(QImage*)", &slot_6, QMetaData::Public },
+	{ "BoutonFiltre()", &slot_7, QMetaData::Public },
+	{ "slider1_valueChanged(int)", &slot_8, QMetaData::Public }
+    };
     metaObj = QMetaObject::new_metaobject(
 	"Mat", parentObject,
-	0, 0,
+	slot_tbl, 9,
 	0, 0,
 #ifndef QT_NO_PROPERTIES
 	0, 0,
@@ -74,7 +110,20 @@ void* Mat::qt_cast( const char* clname )
 
 bool Mat::qt_invoke( int _id, QUObject* _o )
 {
-    return QMainWindow::qt_invoke(_id,_o);
+    switch ( _id - staticMetaObject()->slotOffset() ) {
+    case 0: ChargerImage(); break;
+    case 1: Filtre((QImage*)static_QUType_varptr.get(_o+1)); break;
+    case 2: Reconnaissance((QImage*)static_QUType_varptr.get(_o+1)); break;
+    case 3: Reconnaitre(); break;
+    case 4: AfficherLignes((p_liste)(*((p_liste*)static_QUType_ptr.get(_o+1))),(QImage*)static_QUType_varptr.get(_o+2)); break;
+    case 5: BoutonLigne(); break;
+    case 6: Filtre2((QImage*)static_QUType_varptr.get(_o+1)); break;
+    case 7: BoutonFiltre(); break;
+    case 8: slider1_valueChanged((int)static_QUType_int.get(_o+1)); break;
+    default:
+	return QMainWindow::qt_invoke( _id, _o );
+    }
+    return TRUE;
 }
 
 bool Mat::qt_emit( int _id, QUObject* _o )
