@@ -1,4 +1,5 @@
 #include "mat_list.h"
+#include<qpoint.h>
 #include <stdlib.h>
 
 void Ajouter_liste (p_liste * p, int i)
@@ -37,17 +38,18 @@ void Ajouter_portee(p_portee *p, p_liste pl)
 
 void Ajouter_coord(p_coord * p, int x1, int y1, int x2, int y2)
 {
-  while ((*p) && (((*p)->n) != i))
-    p = &((*p)->p);
+  while ((*p))
+    p = &((*p)->next);
   
   if (!(*p))
     {
       (*p) = (p_coord) (malloc(sizeof(t_coord)));
-      
-      (*p)->p = NULL;
+      (*p)->pos = QRect(QPoint(x1, y1), QPoint(x2, y2));
+      (*p)->next = NULL;
     }       
 }
 
 void Initialiser_coord(p_coord *p)
 {
   *p = NULL;
+}
