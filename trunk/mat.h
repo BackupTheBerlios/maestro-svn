@@ -2,45 +2,46 @@
 #define MAT_H
 
 #include<qmainwindow.h>
-#include<qcheckbox.h>
 #include<qpushbutton.h>
 #include<qlabel.h>
-#include<qslider.h>
-#include"mat_list.h"
+#include<qfiledialog.h>
 
+#include "filtre.h"
+#include "lignes.h"
+#include "liste.h"
+#include "morpho.h"
 
 
 class Mat : public QMainWindow
 {
   Q_OBJECT
  public:
-  Mat(QWidget *parent=0, const char *name=0);
+  Mat(QWidget* parent = 0, const char* name = 0, WFlags fl = WType_TopLevel);
   ~Mat();
 
-  QCheckBox* radio;
-  QPushButton* pushButton5;
-  QLabel* textLabel1;
-  QLabel* cadre;
-  QPushButton* pushButton2;
-  QPushButton* pushButton1;
-  QCheckBox* Automatik;
-  QSlider* slider1;
-  QPushButton* pushButton3;
+    QPushButton* btnCharger;
+    QPushButton* btnFiltrer;
+    QPushButton* btnEroder;
+    QPushButton* btnDelLignes;
+    QPushButton* btnDilater;
+    QPushButton* btnFindLignes;
+    QLabel* lblCadre;
+    QLabel* lblLignes;
+    QPushButton* btnCreuser;
 
-  virtual bool Fonction( QRgb r );
-  virtual int Moyenne( QRgb r );
-  virtual p_liste TrouverLignes( QImage * img );
+public slots:
+    virtual void btnCharger_clicked();
+    virtual void btnFiltrer_clicked();
+    virtual void btnDelLignes_clicked();
+    virtual void btnEroder_clicked();
+    virtual void btnDilater_clicked();
+    virtual void btnFindLignes_clicked();
+    virtual void btnCreuser_clicked();
 
- public slots:
-  virtual void ChargerImage();
-  virtual void Filtre(QImage *img);
-  virtual void Reconnaissance(QImage *img);
-  virtual void Reconnaitre();
-  virtual void AfficherLignes(p_liste p, QImage *img);
-  virtual void BoutonLigne();
-  virtual void Filtre2(QImage *img);
-  virtual void BoutonFiltre();
-  virtual void slider1_valueChanged(int i);
+protected:
+
+protected slots:
+    virtual void languageChange();
 };
 
 #endif

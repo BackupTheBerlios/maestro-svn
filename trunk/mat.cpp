@@ -1,257 +1,173 @@
-#include<qimage.h>
-#include<qpixmap.h>
-#include<qfiledialog.h>
+#include "mat.h"
 
-#include"mat.h"
+#include <qpushbutton.h>
+#include <qimage.h>
+#include <qpixmap.h>
 
-
-Mat::Mat(QWidget *parent, const char *name)
-  : QMainWindow(parent, name)
+Mat::Mat( QWidget* parent, const char* name, WFlags fl )
+    : QMainWindow( parent, name, fl )
 {
-  resize(400, 400);
-  setCaption("Mat");
+    (void)statusBar();
+    if ( !name )
+	setName( "Fenetre" );
+    setCentralWidget( new QWidget( this, "qt_central_widget" ) );
 
-  pushButton1 = new QPushButton(this, "pushButton1" );
-  pushButton2 = new QPushButton(this, "pushButton2" );
-  pushButton3 = new QPushButton(this, "pushButton3" );
-  pushButton5 = new QPushButton(this, "pushButton5" );
-  textLabel1 = new QLabel(this, "textLabel1" );
-  cadre = new QLabel(this, "cadre" );
-  radio = new QCheckBox(this, "radio" );
-  Automatik = new QCheckBox(this, "Automatik" );
-  slider1 = new QSlider(this, "slider1" );
+    btnCharger = new QPushButton( centralWidget(), "btnCharger" );
+    btnCharger->setGeometry( QRect( 30, 139, 60, 31 ) );
 
-  pushButton1->setText("Charger");
-  pushButton2->setText("Reconnaitre");
-  pushButton5->setText("Filtre 2");
-  
-  pushButton1->move(10, 10);
-  pushButton2->move(10, 80);
-  pushButton3->move(10, 120);
-  pushButton5->move(10, 150);
-  textLabel1->move(120, 10);
-  cadre->move(120, 60);
-  radio->move(120, 100);
-  Automatik->move(200, 10);
-  slider1->move(200, 50);
+    btnFiltrer = new QPushButton( centralWidget(), "btnFiltrer" );
+    btnFiltrer->setGeometry( QRect( 90, 139, 60, 31 ) );
 
-  radio->setChecked( TRUE );
-  slider1->setMaxValue( 255 );
-  slider1->setValue( 80 );
-  slider1->setOrientation( QSlider::Horizontal );
+    btnEroder = new QPushButton( centralWidget(), "btnEroder" );
+    btnEroder->setGeometry( QRect( 330, 140, 61, 31 ) );
+
+    btnDelLignes = new QPushButton( centralWidget(), "btnDelLignes" );
+    btnDelLignes->setGeometry( QRect( 250, 140, 80, 31 ) );
+
+    btnDilater = new QPushButton( centralWidget(), "btnDilater" );
+    btnDilater->setGeometry( QRect( 390, 140, 51, 31 ) );
+
+    btnFindLignes = new QPushButton( centralWidget(), "btnFindLignes" );
+    btnFindLignes->setGeometry( QRect( 150, 140, 100, 31 ) );
+
+    lblCadre = new QLabel( centralWidget(), "lblCadre" );
+    lblCadre->setGeometry( QRect( 40, 20, 570, 110 ) );
+    lblCadre->setScaledContents( FALSE );
+
+    lblLignes = new QLabel( centralWidget(), "lblLignes" );
+    lblLignes->setGeometry( QRect( 60, 200, 241, 21 ) );
+
+    btnCreuser = new QPushButton( centralWidget(), "btnCreuser" );
+    btnCreuser->setGeometry( QRect( 440, 139, 61, 31 ) );
+
+    languageChange();
+    resize( QSize(632, 295).expandedTo(minimumSizeHint()) );
+    clearWState( WState_Polished );
+
+    connect( btnCharger, SIGNAL( clicked() ), this, SLOT( btnCharger_clicked() ) );
+    connect( btnFiltrer, SIGNAL( clicked() ), this, SLOT( btnFiltrer_clicked() ) );
+    connect( btnDelLignes, SIGNAL( clicked() ), this, SLOT( btnDelLignes_clicked() ) );
+    connect( btnEroder, SIGNAL( clicked() ), this, SLOT( btnEroder_clicked() ) );
+    connect( btnDilater, SIGNAL( clicked() ), this, SLOT( btnDilater_clicked() ) );
+    connect( btnFindLignes, SIGNAL( clicked() ), this, SLOT( btnFindLignes_clicked() ) );
+    connect( btnCreuser, SIGNAL( clicked() ), this, SLOT( btnCreuser_clicked() ) );
 }
 
 Mat::~Mat()
 {
-
-}
-
-void Mat::ChargerImage()
-{
-  QImage img;
-  QPixmap p;
-  bool b;
-  p_liste t;
-  
-  QString s = QFileDialog::getOpenFileName(
-					   ".",
-					   "Images (*.png *.xpm *.jpg *.gif *.bmp)",
-					   this,
-					   "Mat"
-					   "Choisi un fichier" );
-  b = img.load(s); 
-   
-  if (Automatik->isChecked())
-    {
-      slider1->setValue(200);
-      Filtre(&img);
-      t = TrouverLignes(&img);       
-      Filtre2(&img);
-      AfficherLignes(t,&img);
-    }
-  else     
-    if (radio->isChecked())
-      Filtre(&img);
-  b = p.convertFromImage(img);
-  cadre->setAutoResize(true);
-  cadre->setPixmap(p);
-}
-
-
-void Mat::Filtre( QImage *img )
-{
-  int i=0,j=0;
-  QRgb r;
- 
-  for (i=0;img->valid(i,0);i++)
-    {
-      for(j=0;img->valid(0,j);j++)
-	{
-	  if (Fonction(img->pixel(i,j)))
-	    r = qRgb(255,255,255);
-	  else
-	    r = qRgb(0,0,0);
-	  img->setPixel(i,j,r);
-	}
-    }
-}
-
-
-bool Mat::Fonction( QRgb r )
-{
-  if (/*qGray(r)*/ Moyenne(r) >= (slider1->value()))
-      return true;
-    else
-      return false;
-}
-
-int Mat::Moyenne ( QRgb r)
-{
-  return ((qRed(r) + qGreen(r) + qBlue(r))/3);
-}
-
-void Mat::Reconnaissance(QImage *img)
-{
-  int i=0,j=0;
-  bool b = false,a = false;
-  QRgb rose = qRgb(128,0,128), noir =qRgb(0,0,0);
-  p_liste p=NULL;
-    
-  p = Initialiser(p);
-  for (i=0;img->valid(i,0);i++)
-    {
-      a = b;
-      b = false;
-      for(j=0;(img->valid(0,j)) && (!b);j++)
-	{
-	  if (img->pixel(i,j) == noir)
-	    b = true;
-	}
-      if (a == (!b))
-	Ajouter(p,i);
-    }
-  Ajouter(p,(i-1));
-    
-  while (p)
-    {
-      for (i=(p->n);i<=(p->p->n);i++)
-	{
-	  for(j=0;(img->valid(0,j)) && (!b);j++)
-	    {
-	      img->setPixel(i,j,rose);
-	    }
-	}
-      p = p->p->p;
-    }
-}
-
-
-void Mat::Reconnaitre()
-{
-  QImage img;
-  QPixmap p;
-  bool b;
-    
-  p = *(cadre->pixmap());
-  img = (p.convertToImage());
-  Reconnaissance(&img);
-  b = p.convertFromImage(img);
-  cadre->setPixmap(p);
-}
-
-p_liste Mat::TrouverLignes(QImage *img)
-{
-  int i,j,s,d=0;
-  QRgb noir = qRgb(0,0,0);
-  p_liste p = NULL;
-    
-  p = Initialiser(p);
-    
-  for (j=0;(img->valid(0,j));j++)
-    {
-      s = 0;
-      for (i=0;(img->valid(i,0));i++)
-	{
-	  if (img->pixel(i,j) == noir)
-	    s += 1;
-	}
-      if ((s >= ((img->width())/2)) && ((j-d)>3))
-	{
-	  Ajouter(p,j);
-	  d = j;
-	}
-    }
-    p = p->p;
-    
-    return p;
-}
-
-void Mat::AfficherLignes(p_liste p, QImage *img)
-{
-  int i;
-  QRgb rouge = qRgb(255,0,0);
-    
-  while (p)
-    {
-      for (i=0;img->valid(i,0);i++)
-	img->setPixel(i,p->n,rouge);
-      p = p->p;
-    }
-}
-
-void Mat::BoutonLigne()
-{
-  QImage img;
-  QPixmap *p;
-  bool b;
-      
-  p = (cadre->pixmap());  
-  img = (p->convertToImage());
-  AfficherLignes(TrouverLignes(&img),&img);
-  b = (p->convertFromImage(img));
-  cadre->setPixmap(*p);
-}
-
-void Mat::Filtre2(QImage *img)
-{
-  int i,j,t,n;
-  QRgb blanc = qRgb(255,255,255);
-    
-  n = 3;  
-  t = 0;
-    
-  for (i=0;img->valid(i,0);i++)
-    {
-      t = 0;
-      for (j=0;img->valid(0,j);j++)
-	{
-	  if ((img->pixel(i,j)) == blanc)
-	    if (t<=n)
-	      while(t)
-		img->setPixel(i,(j - (t--)),blanc);
-	    else
-	      t = 0;
-	  else
-	    t++;
-	}
-    }
   
 }
 
-void Mat::BoutonFiltre()
+void Mat::languageChange()
 {
-  QImage img;
-  QPixmap *p;
-  bool b;
-    
-  p = (cadre->pixmap());
-  img = (p->convertToImage()); 
-  Filtre2(&img); 
-  b = (p->convertFromImage(img)); 
-  cadre->setPixmap(*p);
+    setCaption( tr( "Soutenance 2" ) );
+    btnCharger->setText( tr( "Charger" ) );
+    btnFiltrer->setText( tr( "Filtrer" ) );
+    btnEroder->setText( tr( "Eroder" ) );
+    btnDelLignes->setText( tr( "Virer lignes" ) );
+    btnDilater->setText( tr( "Dilater" ) );
+    btnFindLignes->setText( tr( "Trouver lignes" ) );
+    lblLignes->setText( QString::null );
+    btnCreuser->setText( tr( "Creuser" ) );
 }
 
-void Mat::slider1_valueChanged(int i)
+void Mat::btnCharger_clicked()
 {
-  textLabel1->setText(QString::number(i,10));
+    QPixmap pix;
+    QImage img;
+    QString s = QFileDialog::getOpenFileName(	/* On demande de charger quelle image */
+                    ".",
+                    "Images (*.png *.xpm *.jpg *.gif *.bmp)",
+                    this,
+                    "Mat"
+                    "Choisi un fichier" );
+    
+    img.load(s); 			/*On charge l'image dans b à partir du string s*/
+    
+    pix.convertFromImage(img);
+    
+    lblCadre->setPixmap(pix);
+    lblCadre->adjustSize();
+}
+
+
+void Mat::btnFiltrer_clicked()
+{
+    QPixmap *pix;
+    QImage img;
+    
+    pix = lblCadre->pixmap();
+    img = pix->convertToImage();
+    Filtre(&img,200);
+    pix->convertFromImage(img);
+    lblCadre->setPixmap(*pix);
+}
+
+
+void Mat::btnDelLignes_clicked()
+{
+    QPixmap *pix;
+    QImage img;
+    
+    pix = lblCadre->pixmap();
+    img = pix->convertToImage();
+    SupprimerLignes(&img);
+    pix->convertFromImage(img);
+    lblCadre->setPixmap(*pix);
+}
+
+
+void Mat::btnEroder_clicked()
+{
+    QPixmap *pix;
+    QImage img;
+    
+    pix = lblCadre->pixmap();
+    img = pix->convertToImage();
+    Eroder(&img);
+    pix->convertFromImage(img);
+    lblCadre->setPixmap(*pix);
+}
+
+
+void Mat::btnDilater_clicked()
+{
+        QPixmap *pix;
+    QImage img;
+    
+    pix = lblCadre->pixmap();
+    img = pix->convertToImage();
+    Dilater(&img);
+    pix->convertFromImage(img);
+    lblCadre->setPixmap(*pix);
+}
+
+
+void Mat::btnFindLignes_clicked()
+{
+    QString s;
+    QPixmap *pix;
+    QImage img;
+    p_liste p;
+    
+    pix = lblCadre->pixmap();
+    img = pix->convertToImage();
+    p = TrouverLignes(&img);
+    AfficherLignes(p,&img);
+    pix->convertFromImage(img);
+    lblCadre->setPixmap(*pix);
+    
+}
+
+
+void Mat::btnCreuser_clicked()
+{
+    QPixmap *pix;
+    QImage img;
+    
+    pix = lblCadre->pixmap();
+    img = pix->convertToImage();
+    Creuser(&img);
+    pix->convertFromImage(img);
+    lblCadre->setPixmap(*pix);
 }
