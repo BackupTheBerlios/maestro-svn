@@ -13,12 +13,6 @@ Fabien::~Fabien()
 
 }
 
-
-
-// modif de sami : ca veut pas compiler alors je met en commentaire on verra ca plus tard
-/*
-// ENCORE DES MODIFS MAT A CHANGE LE NOM DE SON MAT_LIST ET SES FONCTIONS ALORS CA REMARCHE ENCORE PAS !!
-
 bool Fabien::Est_ligne(QImage *picture, int ord, QRgb couleur, int precision)
 {
   int i, depart;
@@ -49,8 +43,8 @@ p_liste Fabien::Liste_lignes(QImage *picture)
     {
       if (Est_ligne(picture, i, qRgb(0, 0, 0), 0))
 	{
-	  liste = Initialiser(liste);
-	  liste->n = i;
+	  Initialiser_liste(&liste);
+	  Ajouter_liste(&liste, i);
 	  i++;
 	  while (Est_ligne(picture, i, qRgb(0, 0, 0), 0))
 	    i++;
@@ -62,7 +56,7 @@ p_liste Fabien::Liste_lignes(QImage *picture)
     {
       if (Est_ligne(picture, i, qRgb(0, 0, 0), 0))
 	{
-	  Ajouter(liste, i);
+	  Ajouter_liste(&liste, i);
 	  i++;
 	  while (Est_ligne(picture, i, qRgb(0, 0, 0), 0))
 	    i++;
@@ -73,4 +67,3 @@ p_liste Fabien::Liste_lignes(QImage *picture)
 
   return liste;
 }
-*/
