@@ -50,17 +50,23 @@ p_liste Fabien::Liste_lignes(QImage *picture)
 	{
 	  liste = Initialiser(liste);
 	  liste->n = i;
+	  i++;
+	  while (Est_ligne(picture, i, qRgb(0, 0, 0), 0))
+	    i++;
 	}
-      i++;
-      while (Est_ligne(picture, i, qRgb(0, 0, 0), 0))
+      else
 	i++;
     }
   while (i < fin)
     {
       if (Est_ligne(picture, i, qRgb(0, 0, 0), 0))
-	Ajouter(liste, i);
-      i++;
-      while (Est_ligne(picture, i, qRgb(0, 0, 0), 0))
+	{
+	  Ajouter(liste, i);
+	  i++;
+	  while (Est_ligne(picture, i, qRgb(0, 0, 0), 0))
+	    i++;
+	}
+      else
 	i++;
     }
 
