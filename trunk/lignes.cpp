@@ -1,6 +1,6 @@
 #include <qimage.h>
 #include <qcolor.h>
-#include "liste.h"
+#include "mat_list.h"
 #include "lignes.h"
 
 p_liste TrouverLignes(QImage *img)

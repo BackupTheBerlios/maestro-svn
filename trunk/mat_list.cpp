@@ -1,4 +1,4 @@
-#include "liste.h"
+#include "mat_list.h"
 #include <stdlib.h>
 
 void Ajouter_liste (p_liste * p, int i)
