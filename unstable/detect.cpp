@@ -1,4 +1,5 @@
 #include<stdio.h>
+
 #include"detect.h"
 #include"fenetre.h"
 #include"lignes.h"
@@ -28,15 +29,28 @@ Detection::~Detection()
 void Detection::DetectLignes()
 {
   p_liste2 liste;
+  QRgb rouge = qRgb(255,0,0);
+  QImage temp, mini;
+  QPixmap tmp;
+  int i, w;
 
   liste = TrouverLignes(&pix);
   if (liste == NULL)
     DectLignes->setText("Echec");
   else
     DectLignes->setText("Succes");
+  w = pix.width();
+  temp = pix;
+
   while (liste != NULL)
     {
       printf("%i est une ligne de %i\n", liste->ord, liste->larg);
+      for (i=0; i<w; i++)
+	temp.setPixel(i, liste->ord, rouge);
       liste = liste->next;
     }
+
+  mini = temp.smoothScale(580, 510, temp.ScaleMin);
+  tmp.convertFromImage(mini, 0);
+  //Apercu.setPixmap(tmp);
 }

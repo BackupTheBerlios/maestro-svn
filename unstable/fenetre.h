@@ -8,8 +8,8 @@
 #include<qimage.h>
 #include<qlabel.h>
 #include<qpixmap.h>
+#include<qgroupbox.h>
 
-#include"imgbox.h"
 #include"detect.h"
 #include"sami.h"
 #include"romain.h"
@@ -18,6 +18,7 @@
 
 extern QString FilePath;
 extern QImage pix;
+extern QLabel Apercu;
 
 class QPushButton;
 
@@ -39,8 +40,7 @@ class Fenetre : public QMainWindow
   QPushButton *RecBut;
   QPushButton *SamBut;
   QPushButton *RomBut;
-  ImageBox *PreviewCadre;
-  QLabel *Apercu;
+  QGroupBox *PreviewCadre;
 
     
   public slots:
