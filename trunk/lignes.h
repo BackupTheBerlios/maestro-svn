@@ -3,7 +3,9 @@
 
 #include "mat_list.h"
 
-p_liste TrouverLignes(QImage *img);
+bool Est_ligne(QImage *picture, int ord, QRgb couleur, int precision);
+
+p_liste TrouverLignes(QImage *picture);
 
 void SupprimerLignes(QImage *img);
 

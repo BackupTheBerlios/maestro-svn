@@ -1,35 +1,62 @@
 #include <qimage.h>
 #include <qcolor.h>
-#include "mat_list.h"
 #include "lignes.h"
 
-p_liste TrouverLignes(QImage *img)
+
+
+bool Est_ligne(QImage *picture, int ord, QRgb couleur, int precision)
 {
-    int i,j,s,d=0;
-    QRgb noir = qRgb(0,0,0);
-    p_liste p;
-    
-    Initialiser_liste(&p);
-    
-    for (j=0;(img->valid(0,j));j++)
+  int i, depart;
+
+  i = 0;
+  depart = (picture->width())/2;
+  while (picture->valid(depart + i, ord) && precision >= 0)
     {
-	s = 0;
-	for (i=0;(img->valid(i,0));i++)
-	{
-	    if (img->pixel(i,j) == noir)
-	    {
-		s += 1;
-	    }
-	    
-	}
-	if ((s >= ((img->width())/2)) && ((j-d)>3))
-	{
-	    Ajouter_liste(&p,j);
-	    d = j;
-	}
+      if (picture->pixel(depart + i, ord) != couleur)
+	precision--;
+      if (picture->pixel(depart - i, ord) != couleur)
+	precision--;
+      i++;
     }
-    
-    return p;
+
+  return (i > (depart/2));
+}
+
+p_liste TrouverLignes(QImage *picture)
+{
+  p_liste liste;
+  int i, fin;
+
+  liste = NULL;
+  i = 0;
+  fin = picture->height();
+  while ((i < fin) && (liste == NULL))
+    {
+      if (Est_ligne(picture, i, qRgb(0, 0, 0), 0))
+	{
+	  Initialiser_liste(&liste);
+	  Ajouter_liste(&liste, i);
+	  i++;
+	  while (Est_ligne(picture, i, qRgb(0, 0, 0), 0))
+	    i++;
+	}
+      else
+	i++;
+    }
+  while (i < fin)
+    {
+      if (Est_ligne(picture, i, qRgb(0, 0, 0), 0))
+	{
+	  Ajouter_liste(&liste, i);
+	  i++;
+	  while (Est_ligne(picture, i, qRgb(0, 0, 0), 0))
+	    i++;
+	}
+      else
+	i++;
+    }
+
+  return liste;
 }
 
 void SupprimerLignes(QImage *img)

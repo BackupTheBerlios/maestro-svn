@@ -9,46 +9,47 @@ Fenetre::Fenetre(QWidget *parent, const char *name)
   : QMainWindow(parent, name)
 {
   /* on definit l'aspect de la fenetre*/
-  resize(450, 420);  //taille
+  resize(800, 600);  //taille
   setCaption("Maestro");  //nom
 
   /* on definit nos boutons et autres composantes de la fenetre*/
   OpenBut = new QPushButton(this, "OpenBut");  //allocation
   QuitBut = new QPushButton(this, "QuitBut");
   PreviewCadre = new ImageBox(this, "PreviewCadre");
-  FabBut = new QPushButton(this, "FabBut");
-  MatBut = new QPushButton(this, "MatBut");
+  DetecBut = new QPushButton(this, "DetecBut");
+  RecBut = new QPushButton(this, "RecBut");
   SamBut = new QPushButton(this, "SamBut");
   RomBut = new QPushButton(this, "RomBut");
-  fab = new Fabien(this, "fab");
+  detec = new Detect(this, "dect");
   rom = new Romain(this, "rom");
   sam = new Sami(this, "sam");
-  m = new Mat(this, "m");
+  rec = new Reco(this, "rec");
 
   OpenBut->setText("Open");  //nom affiche
   QuitBut->setText("Quit");
   PreviewCadre->setTitle("Preview");
-  FabBut->setText("Fabien");
-  MatBut->setText("Mathieu");
+  DetecBut->setText("Detection");
+  RecBut->setText("Reconnaissance");
   SamBut->setText("Sami");
   RomBut->setText("Romain");
 
   OpenBut->move(10, 30);  //emplacement
   QuitBut->move(10, 80);
-  PreviewCadre->move(140, 10);
-  FabBut->move(10, 320);
-  MatBut->move(10, 170);
+  PreviewCadre->move(170, 10);
+  DetecBut->move(10, 320);
+  RecBut->move(10, 170);
   SamBut->move(10, 220);
   RomBut->move(10, 270);
   
-  PreviewCadre->resize(290, 400); //taille
+  PreviewCadre->resize(600, 550); //taille
+  RecBut->resize(140, 30);
 
   /* on relie nos boutons a nos fonctions */
   connect(OpenBut, SIGNAL(clicked()), this, SLOT(OuvrirImage()));
   connect(QuitBut, SIGNAL(clicked()), this, SLOT(close()));
-  connect(FabBut, SIGNAL(clicked()), fab, SLOT(show()));
+  connect(DetecBut, SIGNAL(clicked()), detec, SLOT(show()));
   connect(SamBut, SIGNAL(clicked()), sam, SLOT(show()));
-  connect(MatBut, SIGNAL(clicked()), m, SLOT(show()));
+  connect(RecBut, SIGNAL(clicked()), rec, SLOT(show()));
   connect(RomBut, SIGNAL(clicked()), rom, SLOT(show()));
 }
 
