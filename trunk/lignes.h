@@ -1,7 +1,7 @@
 #ifndef LIGNES_H
 #define LIGNES_H
 
-#include "liste.h"
+#include "mat_list.h"
 
 p_liste TrouverLignes(QImage *img);
 
