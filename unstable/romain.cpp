@@ -1,3 +1,6 @@
+
+#include<qmainwindow.h>
+#include <qimage.h>
 #include <qvariant.h>
 #include <qbuttongroup.h>
 #include <qlineedit.h>
@@ -11,7 +14,6 @@
 #include <qmenubar.h>
 #include <qpopupmenu.h>
 #include <qtoolbar.h>
-#include <qimage.h>
 #include <qpixmap.h>
 #include<qfiledialog.h>
 
@@ -30,56 +32,58 @@ Romain::~Romain()
 
 }
 
+
+
 void Romain::Charger()
 {
-    QPixmap p;
-    bool b;
-    
-    QString s = QFileDialog::getOpenFileName(
-                    "~",
-                    "Images (*.png *.xpm *.jpg *.gif *.bmp)",
-                    this,
-                    "Romain"
-                    "Choisi un fichier" );
-    
-    b = img.load(s); 
-    b = img_d.load(s);
-    
-    b = p.convertFromImage(img);
-   
-
-    cadre->setAutoResize(true);
-    cadre->setPixmap(p);
+  QPixmap p;
+  bool b;
+  
+  QString s = QFileDialog::getOpenFileName(
+					   "~",
+					   "Images (*.png *.xpm *.jpg *.gif *.bmp)",
+					   this,
+					   "Romain"
+					   "Choisi un fichier" );
+  
+  b = img.load(s); 
+  b = img_d.load(s);
+  b = p.convertFromImage(img);
+  
+  
+  cadre->setAutoResize(true);
+  cadre->setPixmap(p);
 }
 
+    
 
 void Romain::FiltrerImage(QImage *img_s, QImage *img_d, float a, float b, float c, float d, float e, float f, float g, float h, float z )
-{
+    {
     int x, y, i, j;
     float res_r, res_g, res_b;
     QRgb rgb;
     
-    /* Définition du filtre */
+    //    /* Définition du filtre */
     
-   /*float filtre[3][3] = {{1.0,2.0,1.0},
-		  {2.0,4.0,2.0},
-		  {1.0,2.0,1.0}};*/
+    // /*float filtre[3][3] = {{1.0,2.0,1.0},
+    //		  {2.0,4.0,2.0},
+    //		  {1.0,2.0,1.0}};*/
     
-    float filtre[3][3] = {{a,b,c},
+   float filtre[3][3] = {{a,b,c},
 		  {d,e,f},
 		  {g,h,z}};
     
-   /* float filtre_div = 16.0;  */
+    //   /* float filtre_div = 16.0;  */
     
     float filtre_div = a+b+c+d+e+f+g+h+z;
     if (filtre_div == 0)
 	filtre_div = 1;
 			  
-    /* Début de l'algo */
+    // /* Début de l'algo */
  
-    for (y=1;(img_s->valid(0,y))/*valid(i,1)*/;y++)
+    for (y=1;(img_s->valid(0,y));y++)// /*valid(i,1)*/
     {
-	for(x=1;(img_s->valid(x,0))/*valid(1,j)*/;x++)
+      for(x=1;(img_s->valid(x,0));x++) // /*valid(1,j)*/
 	{
 	    res_r = 0;
 	    res_g = 0;
@@ -100,13 +104,13 @@ void Romain::FiltrerImage(QImage *img_s, QImage *img_d, float a, float b, float 
 	    res_g /= filtre_div;
 	    res_b /= filtre_div;
 	    
-	    /* Saturation du résultat */
+	    //    /* Saturation du résultat */
 	    
 	    res_r = (res_r > 255.0)? 255.0 : ((res_r < 0.0)? 0.0 : res_r);
 	    res_g = (res_g > 255.0)? 255.0 : ((res_g < 0.0)? 0.0 : res_g);
 	    res_b = (res_b > 255.0)? 255.0 : ((res_b < 0.0)? 0.0 : res_b);
 	    
-	    /* On remplace les valeurs du pixel en position (i,j) */
+	    // /* On remplace les valeurs du pixel en position (i,j) */
 	    
 	    rgb = qRgb((uint)res_r, (uint)res_g, (uint)res_b);
 	    img_d->setPixel(x+1, y+1, rgb);
@@ -194,15 +198,15 @@ void Romain::FiltreGris( QImage *img )
 
     filtre_div = 3;
 			  
-    /* Début de l'algo */
+    // /* Début de l'algo */
  
     for (y=0;(img->valid(0,y));y++)
     {
 	for(x=0;(img->valid(x,0));x++)
 	{
-	    /*s = 0;
-	    res_g = 0;
-	    res_b = 0;*/
+	  // /*s = 0;
+	  //  res_g = 0;
+	  //  res_b = 0;*/
 	    rgb = img->pixel(x, y);
 	    res_r = qRed(rgb) + qGreen(rgb) + qBlue(rgb);
 	    res_g = res_b = res_r;
@@ -210,12 +214,12 @@ void Romain::FiltreGris( QImage *img )
 	    res_r /= 3;
 	    res_g = res_b = res_r;
 	    
-	    /* Saturation du résultat */
+	    // /* Saturation du résultat */
 	    
 	    res_r = (res_r > 255)? 255 : ((res_r < 0)? 0 : res_r);
 	    res_g = res_b = res_r;
 	    
-	    /* On remplace les valeurs du pixel en position (x,y) */
+	    //  /* On remplace les valeurs du pixel en position (x,y) */
 	    
 	    rgb = qRgb((uint)res_r, (uint)res_g, (uint)res_b);
 	    img->setPixel(x, y, rgb);
@@ -251,7 +255,7 @@ void Romain::FiltreSelectif( QImage *img_s, QImage *img_d )
   int i,j;
   float res_r, res_g, res_b;
   QRgb vpix,cpix, rgb;
-  /* definition di filtre utilise (en forme de cloche => gaussien) */
+  //  /* definition di filtre utilise (en forme de cloche => gaussien) */
   float filter_red  [3][3];
   float filter_green[3][3];
   float filter_blue [3][3];
@@ -262,10 +266,10 @@ void Romain::FiltreSelectif( QImage *img_s, QImage *img_d )
     for(vx = 0;(img_s->valid(vx,0)); vx++)
     {
       filter_red_sum = filter_green_sum = filter_blue_sum = 0.0;
-      /* recupere le point que l'on traite */
+      // /* recupere le point que l'on traite */
       cpix = img_s->pixel(vx, vy);
-      /* fabrique la matrice de convolution en fonction des variations */
-      /* de l'intensité (fabrique le filtre local)                     */
+      //   /* fabrique la matrice de convolution en fonction des variations */
+      // /* de l'intensité (fabrique le filtre local)                     */
       for(j=0;j<3;j++)
         for(i=0;i<3;i++)
         {
@@ -312,7 +316,7 @@ void Romain::FiltreSelectif( QImage *img_s, QImage *img_d )
           if(filter_blue_sum != 0.0)
             filter_blue [j][i] /= filter_blue_sum;
         }
-      /* on applique le filtre calculé */
+      //  /* on applique le filtre calculé */
       res_r = 0.0;
       res_g = 0.0;
       res_b = 0.0;
@@ -325,12 +329,12 @@ void Romain::FiltreSelectif( QImage *img_s, QImage *img_d )
           res_b += (float)qBlue(vpix) * filter_blue [j][i];
         }
 
-      /* on sature le résultat */
+      //   /* on sature le résultat */
       res_r = (res_r > 255.0)? 255.0 : ((res_r < 0.0)? 0.0:res_r);
       res_g = (res_g > 255.0)? 255.0 : ((res_g < 0.0)? 0.0:res_g);
       res_b = (res_b > 255.0)? 255.0 : ((res_b < 0.0)? 0.0:res_b);
 
-      /* on place le résultat dans l'image destination */      
+      // /* on place le résultat dans l'image destination */      
       
       rgb = qRgb((uint)res_r, (uint)res_g, (uint)res_b);
       img_d->setPixel(vx, vy, rgb);
@@ -350,28 +354,28 @@ void Romain::FiltreMedian( QImage *img_s, QImage *img_d )
   QRgb rgb_swap;
   int pos;
 
-  /* Début de l'algo */
+  //  /* Début de l'algo */
 
   for (y = 0;(img_s->valid(0,y)); y++)
   {
       for (x = 0; (img_s->valid(x,0)); x++)
       {
-	/*rgb = img_s->pixel(x, y);
-	res_r = qRed(rgb) + qGreen(rgb) + qBlue(rgb);
-	res_g = res_b = res_r;
-	
-	res_r /= 3;
-	res_g = res_b = res_r;
-	
-	
-	
-	res_r = (res_r > 255)? 255 : ((res_r < 0)? 0 : res_r);
-	res_g = res_b = res_r;
-	
-	
-	
-	rgb = qRgb((uint)res_r, (uint)res_g, (uint)res_b);
-	img_s->setPixel(x, y, rgb);*/
+	//	/*rgb = img_s->pixel(x, y);
+	//	res_r = qRed(rgb) + qGreen(rgb) + qBlue(rgb);
+	//	res_g = res_b = res_r;
+	//	
+	//	res_r /= 3;
+	//	res_g = res_b = res_r;
+	//	
+	//	
+	//	
+	//	res_r = (res_r > 255)? 255 : ((res_r < 0)? 0 : res_r);
+	//	res_g = res_b = res_r;
+	//	
+	//	
+	//	
+	//	rgb = qRgb((uint)res_r, (uint)res_g, (uint)res_b);
+	//	img_s->setPixel(x, y, rgb);*/
 	
 	pos = 0;
 	for (j=0;j<3;j++)
@@ -382,7 +386,7 @@ void Romain::FiltreMedian( QImage *img_s, QImage *img_d )
           
 	    rgb_tab[pos] = rgb;
 	  
-	    /* on calcule la luminance */
+	    //	    /* on calcule la luminance */
 	  
 	    lum_tab[pos] = 0.299*(float)qRed(rgb) +
 			   0.587*(float)qGreen(rgb) +
@@ -390,7 +394,7 @@ void Romain::FiltreMedian( QImage *img_s, QImage *img_d )
 	    pos++;
 	}
 	
-	/* on tri le tableau des pixels en fonction de la luminance */
+	//	/* on tri le tableau des pixels en fonction de la luminance */
 	
 	for (j=0;j<8;j++)
 	{
@@ -408,7 +412,7 @@ void Romain::FiltreMedian( QImage *img_s, QImage *img_d )
 	    rgb_tab[pos] = rgb_swap;
 	}
 	
-	/* on place le point avec l'intensité moyenne dans l'image destination */
+	//	/* on place le point avec l'intensité moyenne dans l'image destination */
 	
 	rgb = qRgb(qRed(rgb_tab[4]),
 		   qGreen(rgb_tab[4]),
@@ -417,3 +421,5 @@ void Romain::FiltreMedian( QImage *img_s, QImage *img_d )
     }
   }
 }
+
+

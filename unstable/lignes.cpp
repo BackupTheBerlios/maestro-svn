@@ -1,7 +1,60 @@
 #include <qimage.h>
 #include <qcolor.h>
-#include "liste.h"
 #include "lignes.h"
+#include <stdio.h>
+
+/*
+bool Est_ligne(QImage *picture, int ord, QRgb couleur, int precision)
+{
+  int i, depart;
+
+  i = 0;
+  depart = (picture->height())/2;
+  while (picture->valid(depart + i, ord) && precision >= 0)
+    {
+      if (picture->pixel(depart + i, ord) != couleur)
+	precision--;
+      if (picture->pixel(depart - i, ord) != couleur)
+	precision--;
+      i++;
+    }
+
+  return (i > (depart/2));
+}
+
+
+p_liste2 TrouverLignes(QImage *picture)
+{
+  p_liste2 liste;
+  int i, fin, cpt;
+
+  Initialiser_liste2(&liste);
+  i = 0;
+  fin = picture->height();
+
+  printf("romain le grosd pd1\n");
+  while (i < fin)
+    {
+      printf("romain le grosd pdi %i\n",i);
+
+
+      if (Est_ligne(picture, i, qRgb(0, 0, 0), 5))
+	{
+	  printf("on rentre dabs est ligne\n");
+	  cpt = 1;
+	  while (Est_ligne(picture, i + cpt, qRgb(0, 0, 0), 5))
+	      cpt++;
+	  printf("%i %i\n",i,cpt);
+	  Ajouter_liste2(&liste, i, cpt);
+	  i = i + cpt;
+	}
+      else
+	i++;
+    }
+
+  return liste;
+}
+*/
 
 p_liste TrouverLignes(QImage *img)
 {
@@ -32,9 +85,56 @@ p_liste TrouverLignes(QImage *img)
     return p;
 }
 
-void SupprimerLignes(QImage *img)
+bool Est_ligne(QImage *picture, int ord,QRgb noir, int precision)
 {
-    const int h=3;
+  int i, s;
+
+  i = 0;
+  s =0;
+
+  for(i=0;picture->valid(i,ord);i++)
+    {
+      if(picture->pixel(i,ord)== noir)
+	s++;
+    }
+
+  return (s >= (picture->width())/2);
+}
+
+
+float Moyenne_Largeur(p_liste2 liste)
+{
+  float count;
+  int nbr;
+
+  count = nbr = 0;
+  while (!(liste))
+    {
+      nbr++;
+      count += liste->larg;
+      liste = liste->next;
+    }
+  
+  return (count/nbr);
+}
+
+
+float Max_Largeur(p_liste2 liste)
+{
+  float temp;
+
+  temp = 0;
+  while (!(liste))
+    {
+      if (temp < liste->larg)
+	temp = liste->larg;
+    }
+
+  return temp;
+}
+
+void SupprimerLignes(QImage *img, int h)
+{
     int i,j,t;
     QRgb blanc = qRgb(255,255,255);
      
@@ -67,6 +167,7 @@ void AfficherLignes(p_liste p, QImage *img)
     
     while (p)
     {
+      printf("%i \n",p->n);
 	for (i=0;img->valid(i,0);i++)
 	    img->setPixel(i,p->n,rouge);
 	p = p->p;

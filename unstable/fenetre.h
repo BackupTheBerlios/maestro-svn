@@ -6,11 +6,14 @@
 #include<qpushbutton.h>
 
 #include<imgbox.h>
-#include"fabien.h"
+#include"detect.h"
 #include"sami.h"
 #include"romain.h"
-#include"mat.h"
+#include"reco.h"
 
+
+extern QString FilePath;
+extern QImage pix;
 
 class QPushButton;
 
@@ -21,20 +24,22 @@ class Fenetre : public QMainWindow
   Fenetre(QWidget *parent=0, const char *name=0);
   ~Fenetre(); 
 
-  Fabien *fab;
+  Detect *detec;
   Romain *rom;
   Sami *sam;
-  Mat *m;
+  Reco *rec;
 
   QPushButton *OpenBut;
   QPushButton *QuitBut;
-  QPushButton *FabBut;
-  QPushButton *MatBut;
+  QPushButton *DetecBut;
+  QPushButton *RecBut;
   QPushButton *SamBut;
   QPushButton *RomBut;
   ImageBox *PreviewCadre;
-  QImage Partition;
-  
+
+
+
+    
   public slots:
     void OuvrirImage();
 };

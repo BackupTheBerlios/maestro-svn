@@ -5,8 +5,14 @@
 #include<qimage.h>
 #include<qlabel.h>
 #include<qscrollbar.h>
+#include<qpushbutton.h>
+#include<qstring.h>
 
-  
+#include"morpho.h"
+#include"filtre.h"
+
+extern QString FilePath;
+extern QImage pix; // parametre global L'image en memoire
 
 class Sami : public QMainWindow
 {
@@ -15,26 +21,22 @@ class Sami : public QMainWindow
   Sami(QWidget *parent=0, const char *name=0);
   ~Sami();
 
-  QImage pix; // parametre global L'image en memoire
-// QPixmap pmap c l'image afficher
-  int NBelt_listd;
-  QLabel *pmap;
-  QScrollBar *value1;
 
-  void test_affichage();
-  void filtrer_grayscale();
-  void rotation();  
-  QImage filtrer_rotation( QImage im1, float angle );
-  void image_vider(QImage pix);
-  int arrondi(double a);
-  void test();
-  QImage filtrer_median( QImage im1 );
-  QImage filtrer_seuillage( QImage im1 );
-  void sauvegarder();
-  int rotation_proj( QImage im, int j );
-  int filtrer_rot_calcul_proj(QImage pix);
-  float rotation_calcul_angle();
-  void calcul_angle();
+  QLabel *pmap;
+
+
+  QPushButton *QuitBut;
+  QPushButton * AffBut;
+  //  QPushButton * RotBut;
+  QPushButton * SavBut;
+  QPushButton * CarcBut;
+
+
+  public slots:
+    void affichage();
+  //  void rotation();  // connection pour le bouton de rotation
+  void sauvegarder(); // Connection pour la sauvegarde;
+  void carac(); //connection pour afficher les caracterisitques de l'image
 };
 
 #endif

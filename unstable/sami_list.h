@@ -5,7 +5,6 @@
 
 extern int NBelt_listd;
 
-
 typedef struct s_listd
 {
     QRgb elt;
@@ -24,4 +23,3 @@ void vider_listd(listd, int*);
 
 
 #endif
- 
