@@ -93,9 +93,8 @@ float Max_Largeur(p_liste2 liste)
   return temp;
 }
 
-void SupprimerLignes(QImage *img)
+void SupprimerLignes(QImage *img, int h)
 {
-    const int h=3;
     int i,j,t;
     QRgb blanc = qRgb(255,255,255);
      
