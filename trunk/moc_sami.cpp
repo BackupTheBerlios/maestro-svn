@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Sami meta object code from reading C++ file 'sami.h'
 **
-** Created: Thu Feb 10 21:13:50 2005
+** Created: Sun Feb 13 22:34:06 2005
 **      by: The Qt MOC ($Id: qt/moc_yacc.cpp   3.3.3   edited Aug 5 16:40 $)
 **
 ** WARNING! All changes made in this file will be lost!
