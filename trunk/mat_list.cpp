@@ -57,11 +57,11 @@ void Initialiser_coord(p_coord *p)
 void Ajouter_liste2 (p_liste2 * p, int m, int n)
 {
   while ((*p))
-    p = &((*p)->p);
+    p = &((*p)->next);
   
   if (!(*p))
     {
-      (*p) = (p_liste) (malloc(sizeof(t_liste2)));
+      (*p) = (p_liste2) (malloc(sizeof(t_liste2)));
       (*p)->ord = m;
       (*p)->larg = n;
       (*p)->next = NULL;
