@@ -3,21 +3,34 @@
 #include "lignes.h"
 
 
+// optimisation - lignes trouees
 bool Est_ligne(QImage *picture, int ord, QRgb couleur, int depart, int g, int d)
 {
-  int i;
+  int i, gt, dt;
 
   i = 0;
-  while (picture->valid(depart + i, ord) && ((d > 0) || (g > 0)))
+  dt = d;
+  gt = g;
+  while (i < depart && ((dt > 0) && (gt > 0)))
     {
       if (picture->pixel(depart + i, ord) != couleur)
-	d--;
+	dt--;
+      else
+	{
+	  if (dt < d)
+	    dt++;
+	}
       if (picture->pixel(depart - i, ord) != couleur)
-	g--;
+	gt--;
+      else
+	{
+	  if (gt < g)
+	    gt++;
+	}
       i++;
     }
 
-  return (i > (depart/2));
+  return (i > (depart/3));
 }
 
 
@@ -33,10 +46,10 @@ p_liste2 TrouverLignes(QImage *picture)
 
   while (i < fin)
     {
-      if (Est_ligne(picture, i, qRgb(0, 0, 0), depart, 3, 3))
+      if (Est_ligne(picture, i, qRgb(0, 0, 0), depart, 5, 5))
 	{
 	  cpt = 1;
-	  while (Est_ligne(picture, i + cpt, qRgb(0, 0, 0), depart, 3, 3))
+	  while (Est_ligne(picture, i + cpt, qRgb(0, 0, 0), depart, 5, 5))
 	      cpt++;
 	  Ajouter_liste2(&liste, i, cpt);
 	  i = i + cpt;
@@ -116,7 +129,54 @@ void AfficherLignes(p_liste2 p, QImage *img)
     }
 }
 
-p_coord GroupLignes(p_liste2 liste)
+int EcartMin(p_liste2 liste)
 {
+  int debut, fin, res, temp;
 
+  debut = liste->ord;
+  liste = liste->next;
+  fin = liste->ord;
+  res = fin - debut;
+  liste = liste->next;
+  while (liste)
+    {
+      debut = fin;
+      fin = liste->ord;
+      temp = fin - debut;
+      if (res > temp)
+	res = temp;
+      liste = liste->next;
+    }
+
+  return res;
+}
+
+
+p_coord GroupLignes(p_liste2 liste, int droite, int bas)
+{
+  p_coord result;
+  int debut, fin, temp1, temp2, reference, ecart;
+
+  Initialiser_coord(&result);
+  debut = 0;
+  reference = EcartMin(liste);
+  temp1 = liste->ord;
+  liste = liste->next;
+  while (liste) 
+    {
+      temp2 = liste->ord;
+      ecart = temp2 - temp1;
+      if (ecart > 4 * reference) 
+	{
+	  if (liste->next = NULL)
+	    fin = bas;
+	  else
+	    fin = temp1 + ((liste->next->ord - temp1) / 2);
+	  Ajouter_coord(&result, 0, debut, droite, fin);
+	}
+      temp1 = temp2;
+      liste = liste->next;
+    }
+  
+  return result;
 }

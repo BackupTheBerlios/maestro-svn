@@ -54,7 +54,7 @@ void Initialiser_coord(p_coord *p)
   *p = NULL;
 }
 
-void Ajouter_liste2 (p_liste2 * p, int m, int n)
+void Ajouter_liste2(p_liste2 * p, int m, int n)
 {
   while ((*p))
     p = &((*p)->next);
@@ -68,7 +68,19 @@ void Ajouter_liste2 (p_liste2 * p, int m, int n)
     }       
 }
 
-void Initialiser_liste2 (p_liste2 *p)
+void Initialiser_liste2(p_liste2 *p)
 {
   *p = NULL;
+}
+
+void Supprimer_liste2(p_liste2 *p)
+{
+  p_liste2 temp;
+
+  while ((*p))
+    {
+      temp = *p;
+      *p = (*p)->next;
+      free(temp);
+    }
 }

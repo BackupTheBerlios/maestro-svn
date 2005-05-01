@@ -29,6 +29,7 @@ Fenetre::Fenetre(QWidget *parent, const char *name)
   MusicBut = new QPushButton(this, "MusicBut");
 
   NBelt_listd = 0;
+  list_lignes = NULL;
 
   OpenBut->setText("Open");  //nom affiche
   QuitBut->setText("Quit");
@@ -80,7 +81,7 @@ void Fenetre::OuvrirImage()
   bool succes;
 
   FilePath = QFileDialog::getOpenFileName("~/",
-					  "Images (*.png *.jpg *.bmp)",
+					  "Images (*.png *.jpg *.bmp *.gif)",
 					  this,
 					  "openfiledialog",
 					  "Choose an image to load");
@@ -109,7 +110,8 @@ void Fenetre::DetectLignes()
   QRgb rouge;
   QImage temp;
 
-  //detruire l'ancienne liste
+  //Supprimer_liste2(&list_lignes);
+  //DetecBut->setText("Detection");
   list_lignes = TrouverLignes(&Picture);
   if (list_lignes == NULL)
 	DetecBut->setText("Echec");
@@ -117,7 +119,7 @@ void Fenetre::DetectLignes()
   w = Picture.width();
   temp = Picture;
 
-  while (list_lignes)
+  while (list_lignes) // on verifie
     {
       for (i=0; i<w; i++)
 	{
