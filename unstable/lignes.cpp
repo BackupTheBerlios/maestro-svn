@@ -137,16 +137,17 @@ int EcartMin(p_liste2 liste)
   liste = liste->next;
   fin = liste->ord;
   res = fin - debut;
+  /*debut = fin;
   liste = liste->next;
   while (liste)
     {
-      debut = fin;
       fin = liste->ord;
       temp = fin - debut;
       if (res > temp)
 	res = temp;
+      debut = fin;
       liste = liste->next;
-    }
+      }*/
 
   return res;
 }
@@ -162,21 +163,20 @@ p_coord GroupLignes(p_liste2 liste, int droite, int bas)
   reference = EcartMin(liste);
   temp1 = liste->ord;
   liste = liste->next;
-  while (liste) 
+  /*while (liste) 
     {
       temp2 = liste->ord;
       ecart = temp2 - temp1;
-      if (ecart > 4 * reference) 
-	{
-	  if (liste->next = NULL)
-	    fin = bas;
-	  else
-	    fin = temp1 + ((liste->next->ord - temp1) / 2);
+      if (ecart > 4 * reference)
+	{ 
+	  fin = temp1 + (ecart / 2);
 	  Ajouter_coord(&result, 0, debut, droite, fin);
-	}
+	  debut = fin + 1;
+	}      
       temp1 = temp2;
       liste = liste->next;
-    }
+      }*/
+  Ajouter_coord(&result, 0, debut, droite, bas);
   
   return result;
 }

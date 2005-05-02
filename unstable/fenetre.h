@@ -41,6 +41,7 @@ class Fenetre : public QMainWindow
   QString FilePath;
   int NBelt_listd;
   p_liste2 list_lignes;
+  p_coord list_portees;
 
     
   public slots:

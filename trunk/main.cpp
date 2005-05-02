@@ -1,7 +1,6 @@
 #include<qapplication.h>
 
 #include"fenetre.h"
-#include"global.h"
 
 
 int main(int argc, char **argv)

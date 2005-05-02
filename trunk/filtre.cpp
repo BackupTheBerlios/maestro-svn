@@ -1,27 +1,30 @@
 #include <qimage.h>
 #include <qcolor.h>
+
 #include "filtre.h"
+
+
 
 int Moyenne ( QRgb r)
 {
-    return ((qRed(r) + qGreen(r) + qBlue(r))/3);	/*moyenne non pondérée*/
+    return ((qRed(r) + qGreen(r) + qBlue(r))/3);  /*moyenne non pondérée*/
 }
 
 void Filtre( QImage *img , int seuil)
 {
-  int i=0,j=0;			/*i va parcourir les abscisses et j les ordonnées*/
-  QRgb r;			/*r va prendre la couleur noir ou blanc*/
+  int i=0,j=0;	/*i va parcourir les abscisses et j les ordonnées*/
+  QRgb r;       /*r va prendre la couleur noir ou blanc*/
   
-  for (i=0;img->valid(i,0);i++)	/*on parcours les abscisses*/
+  for (i=0;img->valid(i,0);i++)  /*on parcours les abscisses*/
     {
-      for(j=0;img->valid(0,j);j++)	/*puis les ordonnées*/
+      for(j=0;img->valid(0,j);j++)  /*puis les ordonnées*/
 	{
-	  if (Moyenne(img->pixel(i,j)) > seuil)		/*on teste si un point est plus banc que noir*/
-	    r = qRgb(255,255,255);	/*si il est plus noir, il devient noir*/
-	  else				/*sinon*/
-	    r = qRgb(0,0,0);		/*on le met à blanc*/
+	  if (Moyenne(img->pixel(i,j)) > seuil)	 /*on teste si un point est plus banc que noir*/
+	    r = qRgb(255,255,255);  /*si il est plus noir, il devient noir*/
+	  else			    /*sinon*/
+	    r = qRgb(0,0,0);	    /*on le met à blanc*/
 	  
-	  img->setPixel(i,j,r);		/*on met à jour le pixel dans l'image*/
+	  img->setPixel(i,j,r);	 /*on met à jour le pixel dans l'image*/
 	}
     }
 }
@@ -113,6 +116,7 @@ void image_vider(QImage pix)
 {
   int x,y;
   QRgb rgb;
+
   x = 0;
   rgb = qRgb (255,255,255);
   while (x < pix.width())
@@ -132,6 +136,7 @@ void image_vider(QImage pix)
 int arrondi(double a)
 {
   double tmp;
+
   tmp = (a / (int)(a) ) *10;
   if (tmp >= 5)
     return((int)(a)+1);
@@ -140,7 +145,7 @@ int arrondi(double a)
 }
 
 
-QImage filtrer_median( QImage im1 )
+QImage filtrer_median(QImage im1, int NBelt_listd)
 {
   QImage im2 = im1.copy();
   listd p=NULL;
@@ -310,20 +315,15 @@ float rotation_calcul_angle(QImage pix) //fais le calcul de l'angle de rotation
       if(angl1==-0.01)
 	{
 	  if(angl2==0.01)
-	    {
 	      angle = 0;
-	    }
 	  else
-	    {
 	      angle = angl2;
-	    }
 	}
       else
-	{
 	  angle = angl1;
-	}
     }
-  printf("meilleur angle = %f pour projection = %i\n",angle,filtrer_rot_calcul_proj(filtrer_rotation(pix,angle)) );
+  printf("meilleur angle = %f pour projection = %i\n",
+	 angle,filtrer_rot_calcul_proj(filtrer_rotation(pix,angle)) );
   return (angle);
 }
 

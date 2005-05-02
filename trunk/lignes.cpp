@@ -1,50 +1,56 @@
 #include <qimage.h>
 #include <qcolor.h>
 #include "lignes.h"
-#include <stdio.h>
 
-/*
-bool Est_ligne(QImage *picture, int ord, QRgb couleur, int precision)
+
+// optimisation - lignes trouees
+bool Est_ligne(QImage *picture, int ord, QRgb couleur, int depart, int g, int d)
 {
-  int i, depart;
+  int i, gt, dt;
 
   i = 0;
-  depart = (picture->height())/2;
-  while (picture->valid(depart + i, ord) && precision >= 0)
+  dt = d;
+  gt = g;
+  while (i < depart && ((dt > 0) && (gt > 0)))
     {
       if (picture->pixel(depart + i, ord) != couleur)
-	precision--;
+	dt--;
+      else
+	{
+	  if (dt < d)
+	    dt++;
+	}
       if (picture->pixel(depart - i, ord) != couleur)
-	precision--;
+	gt--;
+      else
+	{
+	  if (gt < g)
+	    gt++;
+	}
       i++;
     }
 
-  return (i > (depart/2));
+  return (i > (depart/3));
 }
 
 
 p_liste2 TrouverLignes(QImage *picture)
 {
   p_liste2 liste;
-  int i, fin, cpt;
+  int i, fin, cpt, depart;
 
   Initialiser_liste2(&liste);
   i = 0;
   fin = picture->height();
+  depart = (picture->width())/2;
 
-  printf("romain le grosd pd1\n");
   while (i < fin)
     {
-      printf("romain le grosd pdi %i\n",i);
-
-
-      if (Est_ligne(picture, i, qRgb(0, 0, 0), 5))
+      if (Est_ligne(picture, i, qRgb(0, 0, 0), depart, 5, 5))
 	{
-	  printf("on rentre dabs est ligne\n");
 	  cpt = 1;
-	  while (Est_ligne(picture, i + cpt, qRgb(0, 0, 0), 5))
+	  while (Est_ligne(picture, i + cpt, qRgb(0, 0, 0), depart, 5, 5))
 	      cpt++;
-	  printf("%i %i\n",i,cpt);
 	  Ajouter_liste2(&liste, i, cpt);
 	  i = i + cpt;
 	}
@@ -54,53 +60,6 @@ p_liste2 TrouverLignes(QImage *picture)
 
   return liste;
 }
-*/
-
-p_liste TrouverLignes(QImage *img)
-{
-    int i,j,s,d=0;
-    QRgb noir = qRgb(0,0,0);
-    p_liste p;
-    
-    Initialiser_liste(&p);
-    
-    for (j=0;(img->valid(0,j));j++)
-    {
-	s = 0;
-	for (i=0;(img->valid(i,0));i++)
-	{
-	    if (img->pixel(i,j) == noir)
-	    {
-		s += 1;
-	    }
-	    
-	}
-	if ((s >= ((img->width())/2)) && ((j-d)>3))
-	{
-	    Ajouter_liste(&p,j);
-	    d = j;
-	}
-    }
-    
-    return p;
-}
-
-bool Est_ligne(QImage *picture, int ord,QRgb noir, int precision)
-{
-  int i, s;
-
-  i = 0;
-  s =0;
-
-  for(i=0;picture->valid(i,ord);i++)
-    {
-      if(picture->pixel(i,ord)== noir)
-	s++;
-    }
-
-  return (s >= (picture->width())/2);
-}
-
 
 float Moyenne_Largeur(p_liste2 liste)
 {
@@ -157,19 +116,67 @@ void SupprimerLignes(QImage *img, int h)
     
 }
 
-void AfficherLignes(p_liste p, QImage *img)
+void AfficherLignes(p_liste2 p, QImage *img)
 {
-    int i;
-
-    QRgb rouge = qRgb(255,0,0);
+  int i;
+  QRgb rouge = qRgb(255,0,0);
     
-
-    
-    while (p)
+  while (p)
     {
-      printf("%i \n",p->n);
-	for (i=0;img->valid(i,0);i++)
-	    img->setPixel(i,p->n,rouge);
-	p = p->p;
+      for (i=0;img->valid(i,0);i++)
+	img->setPixel(i,p->ord,rouge);
+      p = p->next;
     }
+}
+
+int EcartMin(p_liste2 liste)
+{
+  int debut, fin, res, temp;
+
+  debut = liste->ord;
+  liste = liste->next;
+  fin = liste->ord;
+  res = fin - debut;
+  /*debut = fin;
+  liste = liste->next;
+  while (liste)
+    {
+      fin = liste->ord;
+      temp = fin - debut;
+      if (res > temp)
+	res = temp;
+      debut = fin;
+      liste = liste->next;
+      }*/
+
+  return res;
+}
+
+
+p_coord GroupLignes(p_liste2 liste, int droite, int bas)
+{
+  p_coord result;
+  int debut, fin, temp1, temp2, reference, ecart;
+
+  Initialiser_coord(&result);
+  debut = 0;
+  reference = EcartMin(liste);
+  temp1 = liste->ord;
+  liste = liste->next;
+  /*while (liste) 
+    {
+      temp2 = liste->ord;
+      ecart = temp2 - temp1;
+      if (ecart > 4 * reference)
+	{ 
+	  fin = temp1 + (ecart / 2);
+	  Ajouter_coord(&result, 0, debut, droite, fin);
+	  debut = fin + 1;
+	}      
+      temp1 = temp2;
+      liste = liste->next;
+      }*/
+  Ajouter_coord(&result, 0, debut, droite, bas);
+  
+  return result;
 }

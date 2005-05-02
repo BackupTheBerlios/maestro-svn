@@ -4,18 +4,15 @@
 #include<qwidget.h>
 #include<qmainwindow.h>
 #include<qpushbutton.h>
+#include<qstring.h>
+#include<qimage.h>
+#include<qlabel.h>
+#include<qpixmap.h>
+#include<qgroupbox.h>
 
-#include<imgbox.h>
-#include"detect.h"
-#include"sami.h"
-#include"romain.h"
-#include"reco.h"
+#include"mat_list.h"
 
 
-extern QString FilePath;
-extern QImage pix;
-
-class QPushButton;
 
 class Fenetre : public QMainWindow
 {
@@ -24,24 +21,38 @@ class Fenetre : public QMainWindow
   Fenetre(QWidget *parent=0, const char *name=0);
   ~Fenetre(); 
 
-  Detect *detec;
-  Romain *rom;
+  /*Romain *rom;
   Sami *sam;
-  Reco *rec;
+  Reco *rec;*/
 
   QPushButton *OpenBut;
   QPushButton *QuitBut;
   QPushButton *DetecBut;
-  QPushButton *RecBut;
-  QPushButton *SamBut;
-  QPushButton *RomBut;
-  ImageBox *PreviewCadre;
+  QPushButton *FiltBut;
+  QPushButton *SaveBut;
+  QPushButton *RecoBut;
+  QPushButton *MidiBut;
+  QPushButton *MusicBut;
+  QGroupBox *PreviewCadre;
+  QLabel *Apercu;
 
-
+  QImage Picture;
+  QImage PictModif;
+  QString FilePath;
+  int NBelt_listd;
+  p_liste2 list_lignes;
+  p_coord list_portees;
 
     
   public slots:
     void OuvrirImage();
+    void Image2Apercu(QImage *picture);
+    void DetectLignes();
+    void Filtrage();
+    void Sauvegarde();
+    void Reconnaissance();
+    void CreationMidi();
+    void JouerMidi();
 };
 
 #endif

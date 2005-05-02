@@ -1,40 +1,13 @@
-
-#include<qmainwindow.h>
-#include <qimage.h>
-#include <qvariant.h>
-#include <qbuttongroup.h>
-#include <qlineedit.h>
-#include <qpushbutton.h>
-#include <qlabel.h>
-#include <qcheckbox.h>
-#include <qlayout.h>
-#include <qtooltip.h>
-#include <qwhatsthis.h>
-#include <qaction.h>
-#include <qmenubar.h>
-#include <qpopupmenu.h>
-#include <qtoolbar.h>
 #include <qpixmap.h>
 #include<qfiledialog.h>
 
 #include"romain.h"
 
 
-Romain::Romain(QWidget *parent, const char *name)
-  : QMainWindow(parent, name)
-{
-  resize(200, 200);
-  setCaption("Romain");
-}
-
-Romain::~Romain()
-{
-
-}
 
 
-
-void Romain::Charger()
+/* le 'this' ne pointe nul part
+void rom_Charger()
 {
   QPixmap p;
   bool b;
@@ -54,10 +27,10 @@ void Romain::Charger()
   cadre->setAutoResize(true);
   cadre->setPixmap(p);
 }
-
+*/
     
 
-void Romain::FiltrerImage(QImage *img_s, QImage *img_d, float a, float b, float c, float d, float e, float f, float g, float h, float z )
+void rom_FiltrerImage(QImage *img_s, QImage *img_d, float a, float b, float c, float d, float e, float f, float g, float h, float z )
     {
     int x, y, i, j;
     float res_r, res_g, res_b;
@@ -119,7 +92,9 @@ void Romain::FiltrerImage(QImage *img_s, QImage *img_d, float a, float b, float 
 }
 
 
-void Romain::Filtrer()
+/* j'ai modifie le prototype -Fab- */
+void rom_Filtrer(QImage img, QImage img_d, QLabel *cadre, QCheckBox *gaussien, QCheckBox *laplacien, QCheckBox *passeh, 
+		 QCheckBox *niveaux, QCheckBox *noir, QCheckBox *selectif, QCheckBox *median)
 {
     bool r;
     QPixmap p;
@@ -139,7 +114,7 @@ void Romain::Filtrer()
 	g = 1.0;
 	h = 2.0;
 	i = 1.0;
-	FiltrerImage(&img, &img_d, a,b,c,d,e,f,g,h,i);
+	rom_FiltrerImage(&img, &img_d, a,b,c,d,e,f,g,h,i);
     };   
     
     if (laplacien->isChecked())
@@ -152,7 +127,7 @@ void Romain::Filtrer()
 	g = -1.0;
 	h = -1.0;
 	i = -1.0;
-	FiltrerImage(&img, &img_d, a,b,c,d,e,f,g,h,i);
+	rom_FiltrerImage(&img, &img_d, a,b,c,d,e,f,g,h,i);
     };   
     
     if (passeh->isChecked())
@@ -165,23 +140,23 @@ void Romain::Filtrer()
 	g = 0.0;
 	h = -1.0;
 	i = 0.0;
-	FiltrerImage(&img, &img_d, a,b,c,d,e,f,g,h,i);
+	rom_FiltrerImage(&img, &img_d, a,b,c,d,e,f,g,h,i);
     };   
     
     if (niveaux->isChecked())
-	FiltreGris(&img_d);
+	rom_FiltreGris(&img_d);
     
     if (noir->isChecked())
     {
-	FiltreGris(&img_d);
-	FiltreNoir(&img_d);
+	rom_FiltreGris(&img_d);
+	rom_FiltreNoir(&img_d);
     };
     
     if (selectif->isChecked())
-	FiltreSelectif(&img, &img_d);
+	rom_FiltreSelectif(&img, &img_d);
     
     if (median->isChecked())
-	FiltreMedian(&img, &img_d);
+	rom_FiltreMedian(&img, &img_d);
     
     r = p.convertFromImage(img_d);
     cadre->setAutoResize(true);
@@ -189,7 +164,7 @@ void Romain::Filtrer()
 }
 
 
-void Romain::FiltreGris( QImage *img )
+void rom_FiltreGris( QImage *img )
 {
     int x, y;
     int res_r, res_g, res_b, filtre_div;
@@ -228,7 +203,7 @@ void Romain::FiltreGris( QImage *img )
 }
 
 
-void Romain::FiltreNoir( QImage *img )
+void rom_FiltreNoir( QImage *img )
 {
     int i, j;
     QRgb rgb;
@@ -249,7 +224,7 @@ void Romain::FiltreNoir( QImage *img )
 }
 
 
-void Romain::FiltreSelectif( QImage *img_s, QImage *img_d )
+void rom_FiltreSelectif( QImage *img_s, QImage *img_d )
 {
   int vx,vy;
   int i,j;
@@ -343,7 +318,7 @@ void Romain::FiltreSelectif( QImage *img_s, QImage *img_d )
 }
 
 
-void Romain::FiltreMedian( QImage *img_s, QImage *img_d )
+void rom_FiltreMedian( QImage *img_s, QImage *img_d )
 {  
   int x, y, i, j;
   int res_r, res_b, res_g;

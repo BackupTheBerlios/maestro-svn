@@ -37,19 +37,16 @@ typedef struct t_liste2
 
 
 void Ajouter_liste (p_liste * p, int i);
-
 void Initialiser_liste (p_liste * p);
 
 void Ajouter_portee(p_portee * p, p_liste pl);
-
 void Initialiser_portee (p_portee * p);
 
 void Ajouter_coord(p_coord * p, int x1, int y1, int x2, int y2);
-
 void Initialiser_coord(p_coord *p);
 
 void Ajouter_liste2 (p_liste2 * p, int m, int n);
-
 void Initialiser_liste2 (p_liste2 *p);
+void Supprimer_liste2(p_liste2 *p);
 
 #endif

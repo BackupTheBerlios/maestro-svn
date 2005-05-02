@@ -1,8 +1,6 @@
 #ifndef RECO_H
 #define RECO_H
 
-#include<qmainwindow.h>
-#include<qpushbutton.h>
 #include<qlabel.h>
 #include<qfiledialog.h>
 
@@ -12,38 +10,15 @@
 #include "morpho.h"
 
 
-class Reco : public QMainWindow
-{
-  Q_OBJECT
- public:
-  Reco(QWidget* parent = 0, const char* name = 0, WFlags fl = WType_TopLevel);
-  ~Reco();
 
-    QPushButton* btnCharger;
-    QPushButton* btnFiltrer;
-    QPushButton* btnFiltrer_bien;
-    QPushButton* btnEroder;
-    QPushButton* btnDelLignes;
-    QPushButton* btnDilater;
-    QPushButton* btnFindLignes;
-    QLabel* lblCadre;
-    QLabel* lblLignes;
-    QPushButton* btnCreuser;
+//void mat_Charger(QImage pix, QLabel *lblCadre);
+void mat_Filtrer(QLabel *lblCadre);
+void mat_Filtrer_bien(QImage *pix, QLabel *lblCadre, int NBelt_listd);
+void mat_DelLignes(QLabel *lblCadre);
+void mat_Eroder(QLabel *lblCadre);
+void mat_Dilater(QLabel *lblCadre);
+void mat_FindLignes(QLabel *lblCadre);
+void mat_Creuser(QLabel *lblCadre);
 
-public slots:
-    virtual void btnCharger_clicked();
-    virtual void btnFiltrer_clicked();
-    virtual void btnFiltrer_bien_clicked();
-    virtual void btnDelLignes_clicked();
-    virtual void btnEroder_clicked();
-    virtual void btnDilater_clicked();
-    virtual void btnFindLignes_clicked();
-    virtual void btnCreuser_clicked();
-
-protected:
-
-protected slots:
-    virtual void languageChange();
-};
 
 #endif

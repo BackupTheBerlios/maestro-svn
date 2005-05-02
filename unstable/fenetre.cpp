@@ -107,15 +107,16 @@ pour verifier en meme temps qu'on les affiche dans le term */
 void Fenetre::DetectLignes()
 {
   int i, j, w;
-  QRgb rouge;
+  QRgb rouge, bleu;
   QImage temp;
 
-  //Supprimer_liste2(&list_lignes);
-  //DetecBut->setText("Detection");
+  Supprimer_liste2(&list_lignes);
+  DetecBut->setText("Detection");
   list_lignes = TrouverLignes(&Picture);
   if (list_lignes == NULL)
 	DetecBut->setText("Echec");
   rouge = qRgb(255, 0, 0);
+  bleu = qRgb(0, 0, 255);
   w = Picture.width();
   temp = Picture;
 
@@ -128,6 +129,17 @@ void Fenetre::DetectLignes()
 	}      
       printf("%i est ligne de %i\n", list_lignes->ord, list_lignes->larg);
       list_lignes = list_lignes->next;
+    }
+
+  list_portees = GroupLignes(list_lignes, w - 1, Picture.height() - 1);
+  while (list_portees) // on verifie
+    {
+      for (i=0; i<w; i++)
+	{
+	  temp.setPixel(i, list_portees->pos.top(), bleu);
+	  temp.setPixel(i, list_portees->pos.bottom(), bleu);
+	}      
+      list_portees = list_portees->next;
     }
 
   Image2Apercu(&temp);
