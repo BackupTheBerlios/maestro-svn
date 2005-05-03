@@ -13,58 +13,69 @@ Fenetre::Fenetre(QWidget *parent, const char *name)
   : QMainWindow(parent, name)
 {
   /* on definit l'aspect de la fenetre*/
-  resize(800, 600);  //taille
-  setCaption("Maestro");  //nom
+  resize(550, 80);  //taille
+  setCaption("Maestro - A Optical Musicscore Recognition");  //nom
 
   /* on definit nos boutons et autres composantes de la fenetre*/
   OpenBut = new QPushButton(this, "OpenBut");  //allocation
+  FiltBut = new QPushButton(this, "FiltBut");
+  RecoBut = new QPushButton(this, "RecoBut");
+  MusicBut = new QPushButton(this, "MusicBut");
+  AboutBut = new QPushButton(this, "AboutBut");
   QuitBut = new QPushButton(this, "QuitBut");
   PreviewCadre = new QGroupBox(this, "PreviewCadre");
   Apercu = new QLabel(this, "Apercu");
-  DetecBut = new QPushButton(this, "DetecBut");
-  FiltBut = new QPushButton(this, "FiltBut");
-  SaveBut = new QPushButton(this, "SaveBut");
-  RecoBut = new QPushButton(this, "RecoBut");
-  MidiBut = new QPushButton(this, "MidiBut");
-  MusicBut = new QPushButton(this, "MusicBut");
+  APropos = new QFrame(this ,0, WType_Popup);
+
+  QLabel *dev = new QLabel(APropos, "dev");
 
   NBelt_listd = 0;
   list_lignes = NULL;
 
   OpenBut->setText("Open");  //nom affiche
-  QuitBut->setText("Quit");
-  PreviewCadre->setTitle("Preview");
-  DetecBut->setText("Detection");
   FiltBut->setText("Filtrer");
-  SaveBut->setText("Sauver");
-  RecoBut->setText("Reconnaissance");
-  MidiBut->setText("Creer Midi");
+  RecoBut->setText("Detection");
   MusicBut->setText("Jouer Midi");
+  AboutBut->setText("A Propos");
+  QuitBut->setText("Quit");
+  dev->setText("Maestro 0.7\n \nEn cours de developpement\n \nAH-TEC Mathieu\nFRELING Fabien\nSMATI Sami\nVENTURI Romain");
 
-  OpenBut->move(10, 30);  //emplacement
-  QuitBut->move(10, 80);
-  PreviewCadre->move(170, 10);
-  Apercu->move(180, 40);
-  DetecBut->move(10, 250);
-  FiltBut->move(10, 150);
-  RecoBut->move(10, 320);
-  SaveBut->move(30, 190);
-  MidiBut->move(10, 390);
-  MusicBut->move(30, 430);
+  OpenBut->move(10, 20);  //emplacement
+  FiltBut->move(80, 20);
+  RecoBut->move(150, 20);
+  MusicBut->move(240, 20);
+  AboutBut->move(380, 20);
+  QuitBut->move(470, 20);
+  PreviewCadre->move(10, 200);
+  Apercu->move(20, 220);
+  APropos->move(this->x() + 150, this->y() + 100);
+  dev->move(10, 10);
 
-  PreviewCadre->resize(600, 550); //taille
-  Apercu->resize(580, 510);
-  RecoBut->resize(130, 30);
+  //APropos->setFrameStyle(WinPanel | Raised);
+
+  OpenBut->resize(70, 40);  //taille
+  FiltBut->resize(70, 40);
+  RecoBut->resize(90, 40);
+  MusicBut->resize(90, 40);
+  AboutBut->resize(90, 40);
+  QuitBut->resize(70, 40);
+  APropos->resize(300, 300);
+  dev->resize(280, 280);
+
+  FiltBut->setEnabled(false);
+  RecoBut->setEnabled(false);
+  MusicBut->setEnabled(false);
 
   /* on relie nos boutons a nos fonctions */
-  connect(OpenBut, SIGNAL(clicked()), this, SLOT(OuvrirImage()));
+  connect(OpenBut, SIGNAL(clicked()), this, SLOT(resize(550, 600)));
   connect(QuitBut, SIGNAL(clicked()), this, SLOT(close()));
-  connect(DetecBut, SIGNAL(clicked()), this, SLOT(DetectLignes()));
-  connect(FiltBut, SIGNAL(clicked()), this, SLOT(Filtrage()));
-  connect(SaveBut, SIGNAL(clicked()), this, SLOT(Sauvegarde()));
-  connect(RecoBut, SIGNAL(clicked()), this, SLOT(Reconnaissance()));
-  connect(MidiBut, SIGNAL(clicked()), this, SLOT(CreationMidi()));
-  connect(MusicBut, SIGNAL(clicked()), this, SLOT(JouerMidi()));
+  //connect(DetecBut, SIGNAL(clicked()), this, SLOT(DetectLignes()));
+  //connect(FiltBut, SIGNAL(clicked()), this, SLOT(Filtrage()));
+  //connect(SaveBut, SIGNAL(clicked()), this, SLOT(Sauvegarde()));
+  //connect(RecoBut, SIGNAL(clicked()), this, SLOT(Reconnaissance()));
+  //connect(MidiBut, SIGNAL(clicked()), this, SLOT(CreationMidi()));
+  //connect(MusicBut, SIGNAL(clicked()), this, SLOT(JouerMidi()));
+  connect(AboutBut, SIGNAL(clicked()), APropos, SLOT(show()));
 }
 
 /* Destructeur - fait automatiquement */
@@ -111,10 +122,10 @@ void Fenetre::DetectLignes()
   QImage temp;
 
   Supprimer_liste2(&list_lignes);
-  DetecBut->setText("Detection");
+  //DetecBut->setText("Detection");
   list_lignes = TrouverLignes(&Picture);
-  if (list_lignes == NULL)
-	DetecBut->setText("Echec");
+  //if (list_lignes == NULL)
+  //	DetecBut->setText("Echec");
   rouge = qRgb(255, 0, 0);
   bleu = qRgb(0, 0, 255);
   w = Picture.width();

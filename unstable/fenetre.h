@@ -21,25 +21,22 @@ class Fenetre : public QMainWindow
   Fenetre(QWidget *parent=0, const char *name=0);
   ~Fenetre(); 
 
-  /*Romain *rom;
-  Sami *sam;
-  Reco *rec;*/
-
   QPushButton *OpenBut;
-  QPushButton *QuitBut;
-  QPushButton *DetecBut;
   QPushButton *FiltBut;
-  QPushButton *SaveBut;
   QPushButton *RecoBut;
-  QPushButton *MidiBut;
   QPushButton *MusicBut;
+  QPushButton *AboutBut;
+  QPushButton *QuitBut;
+  
   QGroupBox *PreviewCadre;
   QLabel *Apercu;
+  QFrame *APropos;
 
   QImage Picture;
   QImage PictModif;
   QString FilePath;
   int NBelt_listd;
+
   p_liste2 list_lignes;
   p_coord list_portees;
 
