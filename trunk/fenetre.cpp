@@ -119,6 +119,7 @@ void Fenetre::DetectLignes()
   bleu = qRgb(0, 0, 255);
   w = Picture.width();
   temp = Picture;
+  list_portees = GroupLignes(list_lignes, w - 1, Picture.height() - 1);
 
   while (list_lignes) // on verifie
     {
@@ -131,7 +132,6 @@ void Fenetre::DetectLignes()
       list_lignes = list_lignes->next;
     }
 
-  list_portees = GroupLignes(list_lignes, w - 1, Picture.height() - 1);
   while (list_portees) // on verifie
     {
       for (i=0; i<w; i++)
