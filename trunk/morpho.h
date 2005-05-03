@@ -24,8 +24,8 @@ void Creuser(QImage * img);
 typedef struct s_reconnaissance_cle t_rcle;
 struct s_reconnaissance_cle
 {
-  int largeur;
-  int hauteur;
+  int largeur; // largeur de l'image passee en parametre
+  int hauteur; // hauteur de l'image passee en parametre
   int debutv,finv; // hauteur du debut et fin de la forme.
   int debuth,finh; // largeur du debut et fin de la forme.
   int projh; // emplacement ou la projection horizontale est maximale
