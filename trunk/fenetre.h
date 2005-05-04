@@ -41,10 +41,9 @@ class Fenetre : public QMainWindow
   QImage PictModif;
   QString FilePath;
   int NBelt_listd;
-  int espacement_ligne;
   p_liste2 list_lignes;
   p_coord list_portees;
-
+  int espacement_ligne;
     
   public slots:
     void OuvrirImage();

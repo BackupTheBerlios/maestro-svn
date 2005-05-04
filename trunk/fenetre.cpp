@@ -90,6 +90,7 @@ void Fenetre::OuvrirImage()
 					  "openfiledialog",
 					  "Choose an image to load");
   succes = Picture.load(FilePath);
+  PictModif = Picture;
   Image2Apercu(&Picture);
 }
 
@@ -159,59 +160,47 @@ void Fenetre::VirerLignes()
 {
   //Version de virer ligne de mat inserer par sam
 
-  /*
- QImage temp=Picture;
-  const int h=espacement_ligne;
-  int i,j,t;
-  QRgb blanc = qRgb(255,255,255);
-  
-  
-  for (i=0;temp.valid(i,0);i++)
-    {
-      t = 0;
-      for (j=0;temp.valid(0,j);j++)
-	{
-	  if ((temp.pixel(i,j)) == blanc)
-	    if (t<=h)
-	      while(t)
-		temp.setPixel(i,(j - (t--)),blanc);
-	    else
-	      t = 0;
-	  else
-	    t++;
-	}
-    }
-  Image2Apercu(&temp);
-  */
-
-  p_liste2 l = TrouverLignes(&Picture);
+  p_liste2 l = TrouverLignes(&PictModif);
   QRgb blanc =  qRgb(255,255,255);
   QRgb noir =  qRgb(0,0,0);
-
   int i,j,k,x;
   PictModif = Picture;
+  espacement_ligne = CalculEspacement(l);
   printf("Virer lignes active\n");
   while (l != NULL )
     {
       i = l->ord;
       j = l->larg;
-      printf("ordonee = %i, largeur = %i",i,j);;
-      
+      printf("ordonee = %i, largeur = %i , espacement_ligne = %i",i,j, espacement_ligne);;
+      /*
+     
       for( x=-1*(l->larg) ; x < j + (l->larg); x++ )
 	{
 	  printf("Virer ligne de %i\n",x+i);
 	  for(k=0;PictModif.valid(k,x+i);k++)
 	    {
-	      if (PictModif.pixel(k,i+j+int((l->larg)/2)+1) != noir)
-	      PictModif.setPixel(k,x+i,blanc);
+	      if (PictModif.pixel(k,i+j+int((l->larg)/2)+(l->larg)/3) != noir)
+		PictModif.setPixel(k,x+i,blanc);
 	    }
 	}
-      
+
+      */    
+
+      for( x=-1* espacement_ligne ; x < j + espacement_ligne; x++ )
+	{
+	  printf("Virer ligne de %i\n",x+i);
+	  for(k=0;PictModif.valid(k,x+i);k++)
+	    {
+	      if ( (PictModif.pixel(k,i+j +int(espacement_ligne/2+ espacement_ligne/3)) != noir)
+		   && (PictModif.pixel(k,i-j) != noir) )
+		PictModif.setPixel(k,x+i,blanc);
+	    }
+	}  
       l = l->next;
     }
  Image2Apercu(&PictModif);
  printf("Fin de virer lignes\n");;
-
+ 
 }
 
 

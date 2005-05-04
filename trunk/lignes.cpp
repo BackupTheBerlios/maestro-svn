@@ -180,3 +180,16 @@ p_coord GroupLignes(p_liste2 liste, int droite, int bas)
   
   return result;
 }
+
+int CalculEspacement(p_liste2 l)
+{
+int res=0;
+p_liste2 tmp = l;
+while(tmp)
+{
+  if (tmp->larg > res)
+    res = tmp->larg;
+  tmp = tmp->next;
+}
+return res;
+}
