@@ -28,6 +28,7 @@ class Fenetre : public QMainWindow
   QPushButton *OpenBut;
   QPushButton *QuitBut;
   QPushButton *DetecBut;
+  QPushButton *VirerligneBut;
   QPushButton *FiltBut;
   QPushButton *SaveBut;
   QPushButton *RecoBut;
@@ -40,6 +41,7 @@ class Fenetre : public QMainWindow
   QImage PictModif;
   QString FilePath;
   int NBelt_listd;
+  int espacement_ligne;
   p_liste2 list_lignes;
   p_coord list_portees;
 
@@ -48,6 +50,7 @@ class Fenetre : public QMainWindow
     void OuvrirImage();
     void Image2Apercu(QImage *picture);
     void DetectLignes();
+    void VirerLignes();
     void Filtrage();
     void Sauvegarde();
     void Reconnaissance();

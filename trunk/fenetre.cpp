@@ -27,6 +27,7 @@ Fenetre::Fenetre(QWidget *parent, const char *name)
   RecoBut = new QPushButton(this, "RecoBut");
   MidiBut = new QPushButton(this, "MidiBut");
   MusicBut = new QPushButton(this, "MusicBut");
+  VirerligneBut = new QPushButton (this, "VirerligneBut");
 
   NBelt_listd = 0;
   list_lignes = NULL;
@@ -34,7 +35,8 @@ Fenetre::Fenetre(QWidget *parent, const char *name)
   OpenBut->setText("Open");  //nom affiche
   QuitBut->setText("Quit");
   PreviewCadre->setTitle("Preview");
-  DetecBut->setText("Detection");
+  DetecBut->setText("Detection ligne");
+  VirerligneBut->setText("Virer ligne");
   FiltBut->setText("Filtrer");
   SaveBut->setText("Sauver");
   RecoBut->setText("Reconnaissance");
@@ -46,8 +48,9 @@ Fenetre::Fenetre(QWidget *parent, const char *name)
   PreviewCadre->move(170, 10);
   Apercu->move(180, 40);
   DetecBut->move(10, 250);
+  VirerligneBut->move(10,300);
   FiltBut->move(10, 150);
-  RecoBut->move(10, 320);
+  RecoBut->move(10, 350);
   SaveBut->move(30, 190);
   MidiBut->move(10, 390);
   MusicBut->move(30, 430);
@@ -60,6 +63,7 @@ Fenetre::Fenetre(QWidget *parent, const char *name)
   connect(OpenBut, SIGNAL(clicked()), this, SLOT(OuvrirImage()));
   connect(QuitBut, SIGNAL(clicked()), this, SLOT(close()));
   connect(DetecBut, SIGNAL(clicked()), this, SLOT(DetectLignes()));
+  connect(VirerligneBut, SIGNAL(clicked()), this, SLOT(VirerLignes()));
   connect(FiltBut, SIGNAL(clicked()), this, SLOT(Filtrage()));
   connect(SaveBut, SIGNAL(clicked()), this, SLOT(Sauvegarde()));
   connect(RecoBut, SIGNAL(clicked()), this, SLOT(Reconnaissance()));
@@ -81,7 +85,7 @@ void Fenetre::OuvrirImage()
   bool succes;
 
   FilePath = QFileDialog::getOpenFileName("~/",
-					  "Images (*.png *.jpg *.bmp *.gif)",
+					  "Images (*.png *.jpg *.bmp *.gif sauvegarde)",
 					  this,
 					  "openfiledialog",
 					  "Choose an image to load");
@@ -120,6 +124,7 @@ void Fenetre::DetectLignes()
   w = Picture.width();
   temp = Picture;
   list_portees = GroupLignes(list_lignes, w - 1, Picture.height() - 1);
+  espacement_ligne = 0;
 
   while (list_lignes) // on verifie
     {
@@ -129,6 +134,10 @@ void Fenetre::DetectLignes()
 	    temp.setPixel(i, list_lignes->ord + j, rouge);
 	}      
       printf("%i est ligne de %i\n", list_lignes->ord, list_lignes->larg);
+
+      if(list_lignes->larg > espacement_ligne) // on assigne espacement_ligne (variable globle dans fenetre.h)
+	espacement_ligne = list_lignes->larg;
+
       list_lignes = list_lignes->next;
     }
 
@@ -144,6 +153,68 @@ void Fenetre::DetectLignes()
 
   Image2Apercu(&temp);
 }
+
+
+void Fenetre::VirerLignes()
+{
+  //Version de virer ligne de mat inserer par sam
+
+  /*
+ QImage temp=Picture;
+  const int h=espacement_ligne;
+  int i,j,t;
+  QRgb blanc = qRgb(255,255,255);
+  
+  
+  for (i=0;temp.valid(i,0);i++)
+    {
+      t = 0;
+      for (j=0;temp.valid(0,j);j++)
+	{
+	  if ((temp.pixel(i,j)) == blanc)
+	    if (t<=h)
+	      while(t)
+		temp.setPixel(i,(j - (t--)),blanc);
+	    else
+	      t = 0;
+	  else
+	    t++;
+	}
+    }
+  Image2Apercu(&temp);
+  */
+
+  p_liste2 l = TrouverLignes(&Picture);
+  QRgb blanc =  qRgb(255,255,255);
+  QRgb noir =  qRgb(0,0,0);
+
+  int i,j,k,x;
+  PictModif = Picture;
+  printf("Virer lignes active\n");
+  while (l != NULL )
+    {
+      i = l->ord;
+      j = l->larg;
+      printf("ordonee = %i, largeur = %i",i,j);;
+      
+      for( x=-1*(l->larg) ; x < j + (l->larg); x++ )
+	{
+	  printf("Virer ligne de %i\n",x+i);
+	  for(k=0;PictModif.valid(k,x+i);k++)
+	    {
+	      if (PictModif.pixel(k,i+j+int((l->larg)/2)+1) != noir)
+	      PictModif.setPixel(k,x+i,blanc);
+	    }
+	}
+      
+      l = l->next;
+    }
+ Image2Apercu(&PictModif);
+ printf("Fin de virer lignes\n");;
+
+}
+
+
 
 /* On filtre l'image sans la redimensionner */
 void Fenetre::Filtrage()
@@ -165,6 +236,7 @@ void Fenetre::Filtrage()
 void Fenetre::Sauvegarde()
 {
   Picture = PictModif;
+  PictModif.save("sauvegarde", "PNG" );
 }
 
 void Fenetre::Reconnaissance()
