@@ -54,6 +54,18 @@ void Initialiser_coord(p_coord *p)
   *p = NULL;
 }
 
+void Supprimer_coord(p_coord *p)
+{
+  p_coord temp;
+
+  while ((*p))
+    {
+      temp = *p;
+      *p = (*p)->next;
+      free(temp);
+    }
+}
+
 void Ajouter_liste2(p_liste2 * p, int m, int n)
 {
   while ((*p))

@@ -9,6 +9,7 @@
 #include<qlabel.h>
 #include<qpixmap.h>
 #include<qgroupbox.h>
+#include<qcheckbox.h>
 
 #include"mat_list.h"
 
@@ -27,6 +28,12 @@ class Fenetre : public QMainWindow
   QPushButton *MusicBut;
   QPushButton *AboutBut;
   QPushButton *QuitBut;
+
+  QPushButton *ABut;
+  QCheckBox *ABox;
+  QCheckBox *BBox;
+  QGroupBox *AGroup;
+  QLabel *ALabel;
   
   QGroupBox *PreviewCadre;
   QLabel *Apercu;
@@ -42,16 +49,14 @@ class Fenetre : public QMainWindow
 
     
   public slots:
-    void Agrandissement();
     void OuvrirImage();
     void OpenClick();
     void Image2Apercu(QImage *picture);
     void DetectLignes();
     void Filtrage();
     void Sauvegarde();
-    void Reconnaissance();
-    void CreationMidi();
-    void JouerMidi();
+    void RecoClick();
+    void FiltClick();
 };
 
 #endif
