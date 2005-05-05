@@ -42,7 +42,9 @@ class Fenetre : public QMainWindow
 
     
   public slots:
+    void Agrandissement();
     void OuvrirImage();
+    void OpenClick();
     void Image2Apercu(QImage *picture);
     void DetectLignes();
     void Filtrage();

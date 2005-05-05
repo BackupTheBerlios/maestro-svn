@@ -46,8 +46,8 @@ Fenetre::Fenetre(QWidget *parent, const char *name)
   MusicBut->move(240, 20);
   AboutBut->move(380, 20);
   QuitBut->move(470, 20);
-  PreviewCadre->move(10, 200);
-  Apercu->move(20, 220);
+  PreviewCadre->move(10, 90);
+  Apercu->move(20, 100);
   APropos->move(this->x() + 150, this->y() + 100);
   dev->move(10, 10);
 
@@ -59,7 +59,9 @@ Fenetre::Fenetre(QWidget *parent, const char *name)
   MusicBut->resize(90, 40);
   AboutBut->resize(90, 40);
   QuitBut->resize(70, 40);
-  APropos->resize(300, 300);
+  PreviewCadre->resize(340, 400);
+  Apercu->resize(320, 380);
+  APropos->resize(250, 250);
   dev->resize(280, 280);
 
   FiltBut->setEnabled(false);
@@ -67,12 +69,12 @@ Fenetre::Fenetre(QWidget *parent, const char *name)
   MusicBut->setEnabled(false);
 
   /* on relie nos boutons a nos fonctions */
-  connect(OpenBut, SIGNAL(clicked()), this, SLOT(resize(550, 600)));
+  connect(OpenBut, SIGNAL(clicked()), this, SLOT(OpenClick()));
   connect(QuitBut, SIGNAL(clicked()), this, SLOT(close()));
   //connect(DetecBut, SIGNAL(clicked()), this, SLOT(DetectLignes()));
-  //connect(FiltBut, SIGNAL(clicked()), this, SLOT(Filtrage()));
+  connect(FiltBut, SIGNAL(clicked()), this, SLOT(Filtrage()));
   //connect(SaveBut, SIGNAL(clicked()), this, SLOT(Sauvegarde()));
-  //connect(RecoBut, SIGNAL(clicked()), this, SLOT(Reconnaissance()));
+  connect(RecoBut, SIGNAL(clicked()), this, SLOT(DetectLignes()));
   //connect(MidiBut, SIGNAL(clicked()), this, SLOT(CreationMidi()));
   //connect(MusicBut, SIGNAL(clicked()), this, SLOT(JouerMidi()));
   connect(AboutBut, SIGNAL(clicked()), APropos, SLOT(show()));
@@ -82,6 +84,12 @@ Fenetre::Fenetre(QWidget *parent, const char *name)
 Fenetre::~Fenetre()
 {
 
+}
+
+/* On agrandit la fenetre */
+void Fenetre::Agrandissement()
+{
+  resize(550, 500);
 }
 
 /* On ouvre une image qu'on stocke dans la variable Picture 
@@ -100,6 +108,15 @@ void Fenetre::OuvrirImage()
   Image2Apercu(&Picture);
 }
 
+/* On clique sur 'Open' */
+void Fenetre::OpenClick()
+{
+  OuvrirImage();
+  Agrandissement();
+  FiltBut->setEnabled(true);
+  RecoBut->setEnabled(true);
+}
+
 /* On convertit une image en pixmap et on l'affiche 
 sur le label Apercu de la classe Fenetre */
 void Fenetre::Image2Apercu(QImage *picture)
@@ -107,7 +124,7 @@ void Fenetre::Image2Apercu(QImage *picture)
   QImage Mini;
   QPixmap temp;
 
-  Mini = picture->smoothScale(580, 510, picture->ScaleMin);
+  Mini = picture->smoothScale(Apercu->width(), Apercu->height(), picture->ScaleMin);
   temp.convertFromImage(Mini, 0);
   Apercu->setPixmap(temp); 
 }
