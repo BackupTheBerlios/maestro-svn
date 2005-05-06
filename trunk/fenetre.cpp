@@ -65,7 +65,7 @@ Fenetre::Fenetre(QWidget *parent, const char *name)
   connect(QuitBut, SIGNAL(clicked()), this, SLOT(close()));
   connect(DetecBut, SIGNAL(clicked()), this, SLOT(DetectLignes()));
   connect(VirerligneBut, SIGNAL(clicked()), this, SLOT(VirerLignes()));
-  connect(FiltBut, SIGNAL(clicked()), this, SLOT(Filtrage_simple())); // ATTENTION FILTRAGE SIMPLE POUR LES TESTS.
+  connect(FiltBut, SIGNAL(clicked()), this, SLOT(Filtrage()));
   connect(SaveBut, SIGNAL(clicked()), this, SLOT(Sauvegarde()));
   connect(RecoBut, SIGNAL(clicked()), this, SLOT(Reconnaissance()));
   connect(MidiBut, SIGNAL(clicked()), this, SLOT(CreationMidi()));
@@ -206,12 +206,12 @@ void Fenetre::Filtrage()
   Image2Apercu(&PictModif);
 }
 
-void Fenetre::Filtrage_simple() // filtrage pour les tests : pas de rotation.
+void Fenetre::Filtrage_simple(QImage * im) // filtrage pour les tests : pas de rotation.
 {
-  PictModif = filtrer_grayscale(Picture);
-  PictModif = filtrer_seuillage(PictModif);
-  PictModif = filtrer_median(PictModif, NBelt_listd);
-  Image2Apercu(&PictModif);
+  *im = filtrer_grayscale(*im);
+  *im = filtrer_seuillage(*im);
+  *im = filtrer_median(*im, NBelt_listd);
+  Image2Apercu(im);
 }
 
 /* On sauvegarde l'image modifiee apres filtrage */
@@ -223,12 +223,12 @@ void Fenetre::Sauvegarde()
 
 void Fenetre::Reconnaissance()
 {
-
+  Filtrage_simple(&Picture); // On repasse une couche de filtrage c mieu.
   // Reconnaissance des notes noire Pour le moment.
   p_lcord l;
   //  p_liste2 ll = TrouverLignes(&Picture);
   //  l = liste_noire(&Picture,CalculEspacement(ll));
-  l = liste_noire(&Picture,18);
+  l = liste_noire(&Picture,8);
   Image2Apercu(&Picture);
 }
 

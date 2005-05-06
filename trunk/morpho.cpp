@@ -305,13 +305,13 @@ int hauteur_noir(int x, int y, QImage * im, int esp)
   int res = 0;
   int y2 = y+1;
   QRgb noir = qRgb(0,0,0);
-  while (im->valid(x,y2) && (im->pixel(x,y2) == noir) && (res < 2*esp))
+  while (im->valid(x,y2) && (im->pixel(x,y2) == noir) && (res < 3*esp))
     {
       y2++;
       res++;
     }
   y2 = y-1;
-  while (im->valid(x,y2) && (im->pixel(x,y2) == noir) && (res < 2*esp))
+  while (im->valid(x,y2) && (im->pixel(x,y2) == noir) && (res < 3*esp))
     {
       y2--;
       res++;
@@ -340,6 +340,32 @@ void verifie_point( int esp, int x, int y, QImage * im, p_lcord * liste)
   int resx, resy, z, t;
   p_lcord l = (*liste);
   QRgb bleu=qRgb(0,0,255);
+  z = largeur_noir (x,y+1, im,esp);
+  t = hauteur_noir (x+1,y, im,esp);
+
+  if (z > 3*esp/2) // largeur
+    return;
+  if (z < esp) // largeur
+    return;
+  if (t < 3*esp/4) //hauteur
+    return;
+  if (t > 3*esp/2) //hauteur
+    return;
+
+
+  z = largeur_noir (x,y-1, im,esp);
+  t = hauteur_noir (x-1,y, im,esp);
+
+  if (z > 3*esp/2) // largeur
+    return;
+  if (z < esp) // largeur
+    return;
+  if (t < 3*esp/4) //hauteur
+    return;
+  if (t > 3*esp/2) //hauteur
+    return;
+
+
   z = largeur_noir (x,y, im,esp);
   t = hauteur_noir (x,y, im,esp);
 
@@ -351,15 +377,15 @@ void verifie_point( int esp, int x, int y, QImage * im, p_lcord * liste)
     return;
   if (t > 3*esp/2) //hauteur
     return;
+
+
   resx = x ;//- int(z/2);
   resy = y ;//- int(t/2);
 
   // ajout dans la liste
   while (l)
     {
-      if (abs(resx - (l->x)) < 3*esp/2)
-	return;
-      if (abs(resy - (l->y)) < esp)
+      if ((abs(resx - (l->x)) < 3*esp/2) && (abs(resy - (l->y)) < esp))
 	return;
       l = l->suivant;
     }
