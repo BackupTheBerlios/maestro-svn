@@ -208,8 +208,6 @@ void Fenetre::Filtrage()
 
 void Fenetre::Filtrage_simple(QImage * im) // filtrage pour les tests : pas de rotation.
 {
-  *im = filtrer_grayscale(*im);
-  *im = filtrer_seuillage(*im);
   *im = filtrer_median(*im, NBelt_listd);
   Image2Apercu(im);
 }
