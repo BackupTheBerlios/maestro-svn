@@ -36,6 +36,8 @@ struct s_reconnaissance_cle
   int projveedd;
 };
 
+
+
 int projection_horizontale(QImage * im, int j);
 
 int projection_verticale(QImage * im, int i);
@@ -51,4 +53,23 @@ void afficher_caracteristique_cle(t_rcle res);
 int reconnaissance_cle(QImage * im);//0:fa 1:sol 2:ut
 
 void afficher_cle(QImage * im);
+
+/***** Reconnaissance des notes de musique ***/
+
+typedef struct s_lcord * p_lcord; // liste de coordonnees x y;
+struct s_lcord
+{
+  int x;
+  int y;
+  p_lcord suivant;
+};
+int largeur_noir(int x, int y, QImage * im );
+int hauteur_noir(int x, int y, QImage * im);
+void ajouter_plcord(p_lcord * p, int x, int y);
+void verifie_point( int esp, int x, int y, QImage * im, p_lcord * liste);
+p_lcord liste_noire (QImage * im, int esp );
+void dessiner_croix(QImage * im, QRgb coul, int x, int y);
+
+
+
 #endif

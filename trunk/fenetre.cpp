@@ -5,6 +5,7 @@
 
 #include"lignes.h"
 #include"filtre.h"
+#include"morpho.h"
 
 
 
@@ -37,7 +38,7 @@ Fenetre::Fenetre(QWidget *parent, const char *name)
   PreviewCadre->setTitle("Preview");
   DetecBut->setText("Detection ligne");
   VirerligneBut->setText("Virer ligne");
-  FiltBut->setText("Filtrer");
+  FiltBut->setText("FiltrerS");
   SaveBut->setText("Sauver");
   RecoBut->setText("Reconnaissance");
   MidiBut->setText("Creer Midi");
@@ -64,7 +65,7 @@ Fenetre::Fenetre(QWidget *parent, const char *name)
   connect(QuitBut, SIGNAL(clicked()), this, SLOT(close()));
   connect(DetecBut, SIGNAL(clicked()), this, SLOT(DetectLignes()));
   connect(VirerligneBut, SIGNAL(clicked()), this, SLOT(VirerLignes()));
-  connect(FiltBut, SIGNAL(clicked()), this, SLOT(Filtrage()));
+  connect(FiltBut, SIGNAL(clicked()), this, SLOT(Filtrage_simple())); // ATTENTION FILTRAGE SIMPLE POUR LES TESTS.
   connect(SaveBut, SIGNAL(clicked()), this, SLOT(Sauvegarde()));
   connect(RecoBut, SIGNAL(clicked()), this, SLOT(Reconnaissance()));
   connect(MidiBut, SIGNAL(clicked()), this, SLOT(CreationMidi()));
@@ -125,7 +126,7 @@ void Fenetre::DetectLignes()
   w = Picture.width();
   temp = Picture;
   list_portees = GroupLignes(list_lignes, w - 1, Picture.height() - 1);
-  espacement_ligne = 0;
+  largeur_ligne = 0;
 
   while (list_lignes) // on verifie
     {
@@ -136,8 +137,8 @@ void Fenetre::DetectLignes()
 	}      
       printf("%i est ligne de %i\n", list_lignes->ord, list_lignes->larg);
 
-      if(list_lignes->larg > espacement_ligne) // on assigne espacement_ligne (variable globle dans fenetre.h)
-	espacement_ligne = list_lignes->larg;
+      if(list_lignes->larg > largeur_ligne) // on assigne espacement_ligne (variable globle dans fenetre.h)
+	largeur_ligne = list_lignes->larg;
 
       list_lignes = list_lignes->next;
     }
@@ -158,40 +159,24 @@ void Fenetre::DetectLignes()
 
 void Fenetre::VirerLignes()
 {
-  //Version de virer ligne de mat inserer par sam
-
   p_liste2 l = TrouverLignes(&PictModif);
   QRgb blanc =  qRgb(255,255,255);
   QRgb noir =  qRgb(0,0,0);
   int i,j,k,x;
   PictModif = Picture;
-  espacement_ligne = CalculEspacement(l);
+  largeur_ligne = CalculLargeur(l);
   printf("Virer lignes active\n");
   while (l != NULL )
     {
       i = l->ord;
       j = l->larg;
-      printf("ordonee = %i, largeur = %i , espacement_ligne = %i",i,j, espacement_ligne);;
-      /*
-     
-      for( x=-1*(l->larg) ; x < j + (l->larg); x++ )
+      printf("ordonee = %i, largeur = %i , espacement_ligne = %i",i,j, largeur_ligne);;
+      for( x=-1* largeur_ligne ; x < j + largeur_ligne; x++ )
 	{
-	  printf("Virer ligne de %i\n",x+i);
+	  // printf("Virer ligne de %i\n",x+i);
 	  for(k=0;PictModif.valid(k,x+i);k++)
 	    {
-	      if (PictModif.pixel(k,i+j+int((l->larg)/2)+(l->larg)/3) != noir)
-		PictModif.setPixel(k,x+i,blanc);
-	    }
-	}
-
-      */    
-
-      for( x=-1* espacement_ligne ; x < j + espacement_ligne; x++ )
-	{
-	  printf("Virer ligne de %i\n",x+i);
-	  for(k=0;PictModif.valid(k,x+i);k++)
-	    {
-	      if ( (PictModif.pixel(k,i+j +int(espacement_ligne/2+ espacement_ligne/3)) != noir)
+	      if ( (PictModif.pixel(k,i+j +int(largeur_ligne/2+ largeur_ligne/3)) != noir)
 		   && (PictModif.pixel(k,i-j) != noir) )
 		PictModif.setPixel(k,x+i,blanc);
 	    }
@@ -221,6 +206,14 @@ void Fenetre::Filtrage()
   Image2Apercu(&PictModif);
 }
 
+void Fenetre::Filtrage_simple() // filtrage pour les tests : pas de rotation.
+{
+  PictModif = filtrer_grayscale(Picture);
+  PictModif = filtrer_seuillage(PictModif);
+  PictModif = filtrer_median(PictModif, NBelt_listd);
+  Image2Apercu(&PictModif);
+}
+
 /* On sauvegarde l'image modifiee apres filtrage */
 void Fenetre::Sauvegarde()
 {
@@ -231,6 +224,12 @@ void Fenetre::Sauvegarde()
 void Fenetre::Reconnaissance()
 {
 
+  // Reconnaissance des notes noire Pour le moment.
+  p_lcord l;
+  //  p_liste2 ll = TrouverLignes(&Picture);
+  //  l = liste_noire(&Picture,CalculEspacement(ll));
+  l = liste_noire(&Picture,18);
+  Image2Apercu(&Picture);
 }
 
 void Fenetre::CreationMidi()

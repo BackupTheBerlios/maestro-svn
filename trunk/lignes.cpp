@@ -181,7 +181,7 @@ p_coord GroupLignes(p_liste2 liste, int droite, int bas)
   return result;
 }
 
-int CalculEspacement(p_liste2 l)
+int CalculLargeur(p_liste2 l)
 {
 int res=0;
 p_liste2 tmp = l;
@@ -192,4 +192,27 @@ while(tmp)
   tmp = tmp->next;
 }
 return res;
+}
+
+
+
+int CalculEspacement(p_liste2 l)
+{
+int res=0,tmp2 = 0,i=1;
+p_liste2 tmp = l;
+while(tmp)
+  {
+    if (!tmp2)
+      {
+	tmp2 = tmp->ord;
+      }
+    else
+      {
+	res = res + (l->ord - tmp2);
+	tmp2 = l->ord;
+	i++;
+      }
+    tmp = tmp->next;
+  }
+ return (int(res/i));
 }

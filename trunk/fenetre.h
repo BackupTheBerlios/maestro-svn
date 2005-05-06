@@ -43,7 +43,7 @@ class Fenetre : public QMainWindow
   int NBelt_listd;
   p_liste2 list_lignes;
   p_coord list_portees;
-  int espacement_ligne;
+  int largeur_ligne;
     
   public slots:
     void OuvrirImage();
@@ -51,6 +51,7 @@ class Fenetre : public QMainWindow
     void DetectLignes();
     void VirerLignes();
     void Filtrage();
+    void Filtrage_simple(); // filtrage pour les tests : pas de rotation.
     void Sauvegarde();
     void Reconnaissance();
     void CreationMidi();

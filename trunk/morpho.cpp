@@ -275,3 +275,148 @@ void afficher_cle(QImage * im)
     }
   
 }
+
+
+/***************************************************/
+/***      RECONNAISSANCE DES NOTES DE MUSIQUE    ***/
+/***************************************************/
+
+int largeur_noir(int x, int y, QImage * im , int esp) //donne la largeur de gauche a droite d'une bande noir;
+{
+  int res = 0;
+  int x2 = x+1;
+  QRgb noir = qRgb(0,0,0);
+  while (im->valid(x2,y) && (im->pixel(x2,y) == noir) && (res < 3*esp))
+    {
+      x2++;
+      res++;
+    }
+    x2 = x-1;
+  while (im->valid(x2,y) && (im->pixel(x2,y) == noir) && (res < 3*esp))
+    {
+      x2--;
+      res++;
+      }
+  return res;
+}
+
+int hauteur_noir(int x, int y, QImage * im, int esp)
+{
+  int res = 0;
+  int y2 = y+1;
+  QRgb noir = qRgb(0,0,0);
+  while (im->valid(x,y2) && (im->pixel(x,y2) == noir) && (res < 2*esp))
+    {
+      y2++;
+      res++;
+    }
+  y2 = y-1;
+  while (im->valid(x,y2) && (im->pixel(x,y2) == noir) && (res < 2*esp))
+    {
+      y2--;
+      res++;
+      }
+
+  return res;
+}
+
+
+void ajouter_plcord(p_lcord * p, int x, int y)
+{
+  while ((*p))
+    p = &((*p)->suivant);
+
+  if (!(*p))
+    {
+      (*p) = (p_lcord) (malloc(sizeof(s_lcord)));
+      (*p)->x = x;
+      (*p)->y = y;
+      (*p)->suivant = NULL;
+    }
+}
+
+void verifie_point( int esp, int x, int y, QImage * im, p_lcord * liste)
+{
+  int resx, resy, z, t;
+  p_lcord l = (*liste);
+  QRgb bleu=qRgb(0,0,255);
+  z = largeur_noir (x,y, im,esp);
+  t = hauteur_noir (x,y, im,esp);
+
+  if (z > 3*esp/2) // largeur
+    return;
+  if (z < esp) // largeur
+    return;
+  if (t < 3*esp/4) //hauteur
+    return;
+  if (t > 3*esp/2) //hauteur
+    return;
+  resx = x ;//- int(z/2);
+  resy = y ;//- int(t/2);
+
+  // ajout dans la liste
+  while (l)
+    {
+      if (abs(resx - (l->x)) < 3*esp/2)
+	return;
+      if (abs(resy - (l->y)) < esp)
+	return;
+      l = l->suivant;
+    }
+  ajouter_plcord(liste,resx,resy);
+  printf("Croix detectee : x = %i \t y = %i\t h = %i \t l = %i\n",resx,resy,z,t);
+  dessiner_croix(im,bleu,resx,resy);
+}
+
+p_lcord liste_noire (QImage * im, int esp )
+{
+  p_lcord liste = NULL;
+  int x = 0, y = 0;
+  int h = im->height();
+  int l = im->width();
+  QRgb noir = qRgb(0,0,0);
+
+  while( y < h )
+    {
+      x = 0;
+      while( x < l )
+	{
+	  if (im->pixel(x,y) == noir)
+	    verifie_point(esp,x,y,im,&liste);
+	  x++;
+	}
+      y++;
+    }
+  return liste;
+}
+
+
+void dessiner_croix(QImage * im, QRgb coul, int x, int y)
+{
+  int x2=x, y2=y;
+  int l = 3; //longueur de la croix
+  while((im->valid(x2,y2)) && ((x2-x) < l))
+    {
+      im->setPixel(x2,y2,coul);
+      x2++;
+    }
+  x2 = x;
+  while((im->valid(x2,y2)) && ((x-x2) < l))
+    {
+      im->setPixel(x2,y2,coul);
+      x2--;
+    }
+  x2 = x;
+  while((im->valid(x2,y2)) && ((y2-y) < l))
+    {
+      im->setPixel(x2,y2,coul);
+      y2++;
+    }
+  y2 = y;
+  while((im->valid(x2,y2)) && ((y-y2) < l))
+    {
+      im->setPixel(x2,y2,coul);
+      y2--;
+    }
+  y2 = y;
+}
