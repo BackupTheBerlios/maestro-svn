@@ -228,7 +228,7 @@ void Fenetre::Reconnaissance()
   p_lcord l;
   //  p_liste2 ll = TrouverLignes(&Picture);
   //  l = liste_noire(&Picture,CalculEspacement(ll));
-  l = liste_noire(&Picture,8);
+  l = liste_noire(&Picture,18); /************************* ligne a modifier qd on regroupe tout *******/
   Image2Apercu(&Picture);
 }
 

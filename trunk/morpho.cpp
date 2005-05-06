@@ -316,7 +316,6 @@ int hauteur_noir(int x, int y, QImage * im, int esp)
       y2--;
       res++;
       }
-
   return res;
 }
 
@@ -385,7 +384,7 @@ void verifie_point( int esp, int x, int y, QImage * im, p_lcord * liste)
   // ajout dans la liste
   while (l)
     {
-      if ((abs(resx - (l->x)) < 3*esp/2) && (abs(resy - (l->y)) < esp))
+      if ((abs(resx - (l->x)) < 2*esp) && (abs(resy - (l->y)) < 2*esp))
 	return;
       l = l->suivant;
     }
