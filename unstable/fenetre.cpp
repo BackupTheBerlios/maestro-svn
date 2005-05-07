@@ -214,6 +214,7 @@ void Fenetre::Filtrage()
     PictModif = filtrer_rotation(PictModif, angle);
 
   PictModif = filtrer_median(PictModif, NBelt_listd);
+  Picture = PictModif;
   Image2Apercu(&PictModif);
 }
 
