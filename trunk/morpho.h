@@ -68,6 +68,7 @@ int hauteur_noir(int x, int y, QImage * im,int esp);
 void ajouter_plcord(p_lcord * p, int x, int y);
 void verifie_point( int esp, int x, int y, QImage * im, p_lcord * liste);
 p_lcord liste_noire (QImage * im, int esp );
+void trouver_centre(QImage * im, p_lcord * liste);
 void dessiner_croix(QImage * im, QRgb coul, int x, int y);
 
 

@@ -390,16 +390,18 @@ void verifie_point( int esp, int x, int y, QImage * im, p_lcord * liste)
     }
   ajouter_plcord(liste,resx,resy);
   printf("Croix detectee : x = %i \t y = %i\t h = %i \t l = %i\n",resx,resy,z,t);
-  dessiner_croix(im,bleu,resx,resy);
+    dessiner_croix(im,bleu,resx,resy);
 }
 
 p_lcord liste_noire (QImage * im, int esp )
 {
   p_lcord liste = NULL;
+  p_lcord liste2;
   int x = 0, y = 0;
   int h = im->height();
   int l = im->width();
   QRgb noir = qRgb(0,0,0);
+  QRgb rouge = qRgb(255,0,0);
 
   while( y < h )
     {
@@ -412,7 +414,78 @@ p_lcord liste_noire (QImage * im, int esp )
 	}
       y++;
     }
+  trouver_centre(im,&liste);
+  liste2 = liste;
+  while(liste2)
+    {
+      dessiner_croix(im,rouge,liste2->x,liste2->y);
+      liste2 = liste2 -> suivant;
+    }
+  
   return liste;
+}
+
+void trouver_centre(QImage * im, p_lcord * liste)
+{
+  int resx,resy;
+  int tx, ty;
+  int tmp1,tmp2;
+  p_lcord l = *liste;
+  QRgb blanc = qRgb(255,255,255);
+
+  while(l)
+    {
+      tmp1 = 0;
+      tmp2 = 0;
+      tx = l->x;
+      ty = l->y;
+      while (im->valid(tx,ty) && (im->pixel(tx,ty) != blanc))
+	{
+	  tx++;
+	  tmp1++;
+	}
+      tx = l->x;
+      while (im->valid(tx,ty) && (im->pixel(tx,ty) != blanc))
+	{
+	  tx--;
+	  tmp2++;
+	}
+      resx = l->x - tmp2 + int((tmp1+tmp2)/2);
+      l->x = resx;
+      tmp1 = 0;     tmp2 = 0;
+      tx = l->x;    ty = l->y;
+      while (im->valid(tx,ty) && (im->pixel(tx,ty) != blanc))
+	{
+	  ty++;
+	  tmp1++;
+	}
+      ty = l->y;
+      while (im->valid(tx,ty) && (im->pixel(tx,ty) != blanc))
+	{
+	  ty--;
+	  tmp2++;
+	}
+      resy = l->y - tmp2 + int((tmp1+tmp2)/2);
+      l->y = resy;      
+      tmp1 = 0;
+      tmp2 = 0;
+      tx = l->x;
+      ty = l->y;
+      while (im->valid(tx,ty) && (im->pixel(tx,ty) != blanc))
+	{
+	  tx++;
+	  tmp1++;
+	}
+      tx = l->x;
+      while (im->valid(tx,ty) && (im->pixel(tx,ty) != blanc))
+	{
+	  tx--;
+	  tmp2++;
+	}
+      resx = l->x - tmp2 + int((tmp1+tmp2)/2);
+      l->x = resx;
+        l = l->suivant;
+    }
 }
 
 
