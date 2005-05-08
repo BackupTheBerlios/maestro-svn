@@ -30,6 +30,8 @@ Fenetre::Fenetre(QWidget *parent, const char *name)
   ABut = new QPushButton(this, "ABut");  
   BBut = new QPushButton(this, "BBut");
   CBut = new QPushButton(this, "CBut");
+  DBut = new QPushButton(this, "BBut");
+  EBut = new QPushButton(this, "CBut");
   AGroup = new QGroupBox(this, "AGroup");
   ABox = new QCheckBox(AGroup, "ABox");
   BBox = new QCheckBox(AGroup, "BBox");
@@ -72,6 +74,8 @@ Fenetre::Fenetre(QWidget *parent, const char *name)
   ABut->hide();
   BBut->hide();
   CBut->hide();
+  DBut->hide();
+  EBut->hide();
   ABox->hide();
   BBox->hide();
   AGroup->hide();
@@ -262,12 +266,16 @@ void Fenetre::OpenClick()
 {
   BBut->hide();
   CBut->hide();
+  DBut->hide();
+  EBut->hide();
   ABox->hide();
   BBox->hide();
   AGroup->hide();
   disconnect(ABut, 0, 0, 0);
   disconnect(BBut, 0, 0, 0);
   disconnect(CBut, 0, 0, 0);
+  disconnect(DBut, 0, 0, 0);
+  disconnect(EBut, 0, 0, 0);
 
   OuvrirImage();
   setFixedSize(550, 500);
@@ -291,12 +299,16 @@ void Fenetre::FiltClick()
 {
   BBut->hide();
   CBut->hide();
+  DBut->hide();
+  EBut->hide();
   ABox->hide();
   BBox->hide();
   AGroup->hide();
   disconnect(ABut, 0, 0, 0);
   disconnect(BBut, 0, 0, 0);
   disconnect(CBut, 0, 0, 0);
+  disconnect(DBut, 0, 0, 0);
+  disconnect(EBut, 0, 0, 0);
 
   ALabel->show();
   ALabel->setText("Cliquez sur 'Go !' \npour traiter l'image.");
@@ -313,6 +325,8 @@ void Fenetre::RecoClick()
   disconnect(ABut, 0, 0, 0);
   disconnect(BBut, 0, 0, 0);
   disconnect(CBut, 0, 0, 0);
+  disconnect(DBut, 0, 0, 0);
+  disconnect(EBut, 0, 0, 0);
 
   AGroup->show();
   AGroup->setTitle("Options");
@@ -337,15 +351,27 @@ void Fenetre::RecoClick()
 
   BBut->show();
   BBut->resize(60, 30);
-  BBut->move(360, 290);
+  BBut->move(360, 260);
   BBut->setText("Note");
   //connect(BBut, SIGNAL(clicked()), this, SLOT());
 
   CBut->show();
   CBut->resize(60, 30);
-  CBut->move(440, 290);
+  CBut->move(440, 260);
   CBut->setText("Cle");
   //connect(CBut, SIGNAL(clicked()), this, SLOT());
+
+  DBut->show();
+  DBut->resize(60, 30);
+  DBut->move(360, 300);
+  DBut->setText("<<");
+  //connect(DBut, SIGNAL(clicked()), this, SLOT());
+
+  EBut->show();
+  EBut->resize(60, 30);
+  EBut->move(440, 300);
+  EBut->setText(">>");
+  //connect(EBut, SIGNAL(clicked()), this, SLOT());
 }
 
 /* On clique sur 'Jouer Midi' */

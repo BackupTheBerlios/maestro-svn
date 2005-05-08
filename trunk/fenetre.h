@@ -34,6 +34,8 @@ class Fenetre : public QMainWindow
   QPushButton *ABut;
   QPushButton *BBut;
   QPushButton *CBut;
+  QPushButton *DBut;
+  QPushButton *EBut;
   QCheckBox *ABox;
   QCheckBox *BBox;
   QGroupBox *AGroup;
