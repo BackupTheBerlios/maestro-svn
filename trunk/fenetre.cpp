@@ -103,7 +103,6 @@ void Fenetre::OuvrirImage()
 					  "openfiledialog",
 					  "Choose an image to load");
   succes = Picture.load(FilePath);
-  PictModif = Picture;
   Image2Apercu(&Picture);
 }
 
