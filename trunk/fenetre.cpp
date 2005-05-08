@@ -14,62 +14,72 @@ Fenetre::Fenetre(QWidget *parent, const char *name)
   : QMainWindow(parent, name)
 {
   /* on definit l'aspect de la fenetre*/
-  resize(800, 600);  //taille
-  setCaption("Maestro");  //nom
+  setFixedSize(550, 80);  //taille
+  setCaption("Maestro - A Optical Musicscore Recognition");  //nom
 
   /* on definit nos boutons et autres composantes de la fenetre*/
   OpenBut = new QPushButton(this, "OpenBut");  //allocation
+  FiltBut = new QPushButton(this, "FiltBut");
+  RecoBut = new QPushButton(this, "RecoBut");
+  MusicBut = new QPushButton(this, "MusicBut");
+  AboutBut = new QPushButton(this, "AboutBut");
   QuitBut = new QPushButton(this, "QuitBut");
   PreviewCadre = new QGroupBox(this, "PreviewCadre");
   Apercu = new QLabel(this, "Apercu");
-  DetecBut = new QPushButton(this, "DetecBut");
-  FiltBut = new QPushButton(this, "FiltBut");
-  SaveBut = new QPushButton(this, "SaveBut");
-  RecoBut = new QPushButton(this, "RecoBut");
-  MidiBut = new QPushButton(this, "MidiBut");
-  MusicBut = new QPushButton(this, "MusicBut");
-  VirerligneBut = new QPushButton (this, "VirerligneBut");
+  APropos = new QMessageBox(this ,"APropos");
+  ABut = new QPushButton(this, "ABut");
+  AGroup = new QGroupBox(this, "AGroup");
+  ABox = new QCheckBox(AGroup, "ABox");
+  BBox = new QCheckBox(AGroup, "BBox");
+  ALabel = new QLabel(this, "ALabel");
 
   NBelt_listd = 0;
   list_lignes = NULL;
 
   OpenBut->setText("Open");  //nom affiche
-  QuitBut->setText("Quit");
-  PreviewCadre->setTitle("Preview");
-  DetecBut->setText("Detection ligne");
-  VirerligneBut->setText("Virer ligne");
-  FiltBut->setText("FiltrerS");
-  SaveBut->setText("Sauver");
-  RecoBut->setText("Reconnaissance");
-  MidiBut->setText("Creer Midi");
+  FiltBut->setText("Filtrer");
+  RecoBut->setText("Detection");
   MusicBut->setText("Jouer Midi");
+  AboutBut->setText("A Propos");
+  QuitBut->setText("Quit");
+  PreviewCadre->setTitle("Apercu");
 
-  OpenBut->move(10, 30);  //emplacement
-  QuitBut->move(10, 80);
-  PreviewCadre->move(170, 10);
-  Apercu->move(180, 40);
-  DetecBut->move(10, 250);
-  VirerligneBut->move(10,300);
-  FiltBut->move(10, 150);
-  RecoBut->move(10, 350);
-  SaveBut->move(30, 190);
-  MidiBut->move(10, 390);
-  MusicBut->move(30, 430);
+  OpenBut->move(10, 20);  //emplacement
+  FiltBut->move(80, 20);
+  RecoBut->move(150, 20);
+  MusicBut->move(240, 20);
+  AboutBut->move(380, 20);
+  QuitBut->move(470, 20);
+  PreviewCadre->move(10, 80);
+  Apercu->move(20, 100);
 
-  PreviewCadre->resize(600, 550); //taille
-  Apercu->resize(580, 510);
-  RecoBut->resize(130, 30);
+  OpenBut->resize(70, 40);  //taille
+  FiltBut->resize(70, 40);
+  RecoBut->resize(90, 40);
+  MusicBut->resize(90, 40);
+  AboutBut->resize(90, 40);
+  QuitBut->resize(70, 40);
+  PreviewCadre->resize(340, 410);
+  Apercu->resize(320, 380);
+  APropos->resize(250, 250);
+
+  FiltBut->setEnabled(false);
+  RecoBut->setEnabled(false);
+  //MusicBut->setEnabled(false);
+
+  ABut->hide();
+  ABox->hide();
+  BBox->hide();
+  AGroup->hide();
+  ALabel->hide();
 
   /* on relie nos boutons a nos fonctions */
-  connect(OpenBut, SIGNAL(clicked()), this, SLOT(OuvrirImage()));
+  connect(OpenBut, SIGNAL(clicked()), this, SLOT(OpenClick()));
+  connect(FiltBut, SIGNAL(clicked()), this, SLOT(FiltClick()));
+  connect(RecoBut, SIGNAL(clicked()), this, SLOT(RecoClick()));
+  connect(MusicBut, SIGNAL(clicked()), this, SLOT(MusicClick()));
+  connect(AboutBut, SIGNAL(clicked()), this, SLOT(AboutClick()));
   connect(QuitBut, SIGNAL(clicked()), this, SLOT(close()));
-  connect(DetecBut, SIGNAL(clicked()), this, SLOT(DetectLignes()));
-  connect(VirerligneBut, SIGNAL(clicked()), this, SLOT(VirerLignes()));
-  connect(FiltBut, SIGNAL(clicked()), this, SLOT(Filtrage()));
-  connect(SaveBut, SIGNAL(clicked()), this, SLOT(Sauvegarde()));
-  connect(RecoBut, SIGNAL(clicked()), this, SLOT(Reconnaissance()));
-  connect(MidiBut, SIGNAL(clicked()), this, SLOT(CreationMidi()));
-  connect(MusicBut, SIGNAL(clicked()), this, SLOT(JouerMidi()));
 }
 
 /* Destructeur - fait automatiquement */
@@ -115,42 +125,45 @@ void Fenetre::DetectLignes()
   int i, j, w;
   QRgb rouge, bleu;
   QImage temp;
+  p_liste2 toto;
+  p_coord tata;
 
-  Supprimer_liste2(&list_lignes);
-  DetecBut->setText("Detection");
-  list_lignes = TrouverLignes(&Picture);
-  if (list_lignes == NULL)
-	DetecBut->setText("Echec");
   rouge = qRgb(255, 0, 0);
   bleu = qRgb(0, 0, 255);
   w = Picture.width();
   temp = Picture;
+  
+  Supprimer_liste2(&list_lignes);
+  list_lignes = TrouverLignes(&Picture);
+  Supprimer_coord(&list_portees);
   list_portees = GroupLignes(list_lignes, w - 1, Picture.height() - 1);
-  largeur_ligne = 0;
 
-  while (list_lignes) // on verifie
+  if (ABox->isChecked())
     {
-      for (i=0; i<w; i++)
+      toto = list_lignes;
+      while (toto) // on verifie
 	{
-	  for (j=0; j<list_lignes->larg; j++)
-	    temp.setPixel(i, list_lignes->ord + j, rouge);
-	}      
-      printf("%i est ligne de %i\n", list_lignes->ord, list_lignes->larg);
-
-      if(list_lignes->larg > largeur_ligne) // on assigne espacement_ligne (variable globle dans fenetre.h)
-	largeur_ligne = list_lignes->larg;
-
-      list_lignes = list_lignes->next;
+	  for (i=0; i<w; i++)
+	    {
+	      for (j=0; j<toto->larg; j++)
+		temp.setPixel(i, toto->ord + j, rouge);
+	    }      
+	  toto = toto->next;
+	}
     }
 
-  while (list_portees) // on verifie
+  if (BBox->isChecked())
     {
-      for (i=0; i<w; i++)
+      tata = list_portees;
+      while (tata) // on verifie
 	{
-	  temp.setPixel(i, list_portees->pos.top(), bleu);
-	  temp.setPixel(i, list_portees->pos.bottom(), bleu);
-	}      
-      list_portees = list_portees->next;
+	  for (i=0; i<w; i++)
+	    {
+	      temp.setPixel(i, tata->pos.top(), bleu);
+	      temp.setPixel(i, tata->pos.bottom(), bleu);
+	    }      
+	  tata = tata->next;
+	}
     }
 
   Image2Apercu(&temp);
@@ -230,12 +243,89 @@ void Fenetre::Reconnaissance()
   Image2Apercu(&Picture);
 }
 
-void Fenetre::CreationMidi()
+
+
+/***** FONCTIONS CLICK *****/
+
+
+/* On clique sur 'Open' */
+void Fenetre::OpenClick()
+{
+  ABox->hide();
+  BBox->hide();
+  AGroup->hide();
+  disconnect(ABut, 0, 0, 0);
+
+  OuvrirImage();
+  setFixedSize(550, 500);
+  FiltBut->setEnabled(true);
+  RecoBut->setEnabled(true);
+  ABut->show();
+  ABut->resize(90, 40);
+  ABut->setText("Changer");
+  ABut->move(440, 350);
+  connect(ABut, SIGNAL(clicked()), this, SLOT(OuvrirImage()));
+  ALabel->show();
+  ALabel->move(360, 80);
+  ALabel->resize(180, 220);
+  ALabel->setText("Vous pouvez desormais \nchoisir de filtrer l'image \nou bien de lancer \ndirectement la \nreconnaissance.\n\nVous pouvez changer \nd'image si vous vous etes \ntrompe.");
+}
+
+/* On clique sur 'Filtrer' */
+void Fenetre::FiltClick()
+{
+  ABox->hide();
+  BBox->hide();
+  AGroup->hide();
+  disconnect(ABut, 0, 0, 0);
+
+  ALabel->show();
+  ALabel->setText("Cliquez sur 'Go !' \npour traiter l'image.");
+  ABut->show();
+  ABut->setText("Go !");
+  connect(ABut, SIGNAL(clicked()), this, SLOT(Filtrage()));
+}
+
+/* On clique sur 'Detecter' */
+void Fenetre::RecoClick()
+{
+  ALabel->hide();
+  disconnect(ABut, 0, 0, 0);
+  
+  AGroup->show();
+  AGroup->setTitle("Options");
+  AGroup->move(360, 80);
+  AGroup->resize(180, 150);
+  ABox->show();
+  ABox->setChecked(false);
+  ABox->setText("Voir lignes");
+  ABox->move(10, 40);
+  ABox->resize(120, 20);
+  BBox->show();
+  BBox->setChecked(false);
+  BBox->setText("Voir portees");
+  BBox->move(10, 60);
+  BBox->resize(120, 20);
+  ABut->show();
+  ABut->setText("Go !");
+  connect(ABut, SIGNAL(clicked()), this, SLOT(DetectLignes()));
+}
+
+/* On clique sur 'Jouer Midi' */
+void Fenetre::MusicClick()
 {
 
 }
 
-void Fenetre::JouerMidi()
+/* On clique sur 'A Propos' */
+void Fenetre::AboutClick()
 {
-
+  APropos->about(this, "E=mb²", 
+		 "<p><b>Maestro 0.7b</b>"
+		 "<br>Version en cours de développement"
+		 "<p>Programmeurs :"
+		 "<br>Mathieu AH-TEC, "
+		 "Fabien FRELING\n"
+		 "<br>Sami SMATI, "
+		 "Romain VENTURI");
 }

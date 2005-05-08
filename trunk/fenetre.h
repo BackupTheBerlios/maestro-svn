@@ -9,6 +9,9 @@
 #include<qlabel.h>
 #include<qpixmap.h>
 #include<qgroupbox.h>
+#include<qcheckbox.h>
+#include<qsound.h>
+#include<qmessagebox.h>
 
 #include"mat_list.h"
 
@@ -21,33 +24,41 @@ class Fenetre : public QMainWindow
   Fenetre(QWidget *parent=0, const char *name=0);
   ~Fenetre(); 
 
-  /*Romain *rom;
-  Sami *sam;
-  Reco *rec;*/
-
   QPushButton *OpenBut;
-  QPushButton *QuitBut;
-  QPushButton *DetecBut;
-  QPushButton *VirerligneBut;
   QPushButton *FiltBut;
-  QPushButton *SaveBut;
   QPushButton *RecoBut;
-  QPushButton *MidiBut;
   QPushButton *MusicBut;
+  QPushButton *AboutBut;
+  QPushButton *QuitBut;
+
+  QPushButton *ABut;
+  QCheckBox *ABox;
+  QCheckBox *BBox;
+  QGroupBox *AGroup;
+  QLabel *ALabel;
+  
   QGroupBox *PreviewCadre;
   QLabel *Apercu;
+  QMessageBox *APropos;
 
   QImage Picture;
   QImage PictModif;
   QString FilePath;
-  int NBelt_listd;
+
   p_liste2 list_lignes;
   p_coord list_portees;
+
+  int NBelt_listd;
   int largeur_ligne; // donne la largeur d'une ligne
   int espacement_ligne; // Donne l'espacement entre deux lignes d'une portee
-  void Filtrage_simple(QImage * im); // filtrage pour les tests : pas de rotation.
     
   public slots:
+    void OpenClick();
+    void FiltClick();
+    void RecoClick();
+    void MusicClick();
+    void AboutClick();
+ 
     void OuvrirImage();
     void Image2Apercu(QImage *picture);
     void DetectLignes();
@@ -55,8 +66,7 @@ class Fenetre : public QMainWindow
     void Filtrage();
     void Sauvegarde();
     void Reconnaissance();
-    void CreationMidi();
-    void JouerMidi();
+    void Filtrage_simple(QImage * im); // filtrage pour les tests : pas de rotation.
 };
 
 #endif
