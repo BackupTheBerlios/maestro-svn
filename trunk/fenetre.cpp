@@ -29,6 +29,7 @@ Fenetre::Fenetre(QWidget *parent, const char *name)
   APropos = new QMessageBox(this ,"APropos");
   ABut = new QPushButton(this, "ABut");  
   BBut = new QPushButton(this, "BBut");
+  CBut = new QPushButton(this, "CBut");
   AGroup = new QGroupBox(this, "AGroup");
   ABox = new QCheckBox(AGroup, "ABox");
   BBox = new QCheckBox(AGroup, "BBox");
@@ -70,6 +71,7 @@ Fenetre::Fenetre(QWidget *parent, const char *name)
 
   ABut->hide();
   BBut->hide();
+  CBut->hide();
   ABox->hide();
   BBox->hide();
   AGroup->hide();
@@ -259,21 +261,25 @@ void Fenetre::Reconnaissance()
 void Fenetre::OpenClick()
 {
   BBut->hide();
+  CBut->hide();
   ABox->hide();
   BBox->hide();
   AGroup->hide();
   disconnect(ABut, 0, 0, 0);
   disconnect(BBut, 0, 0, 0);
+  disconnect(CBut, 0, 0, 0);
 
   OuvrirImage();
   setFixedSize(550, 500);
   FiltBut->setEnabled(true);
   RecoBut->setEnabled(true);
+
   ABut->show();
   ABut->resize(90, 40);
   ABut->setText("Changer");
   ABut->move(440, 350);
   connect(ABut, SIGNAL(clicked()), this, SLOT(OuvrirImage()));
+
   ALabel->show();
   ALabel->move(360, 80);
   ALabel->resize(180, 220);
@@ -284,14 +290,17 @@ void Fenetre::OpenClick()
 void Fenetre::FiltClick()
 {
   BBut->hide();
+  CBut->hide();
   ABox->hide();
   BBox->hide();
   AGroup->hide();
   disconnect(ABut, 0, 0, 0);
   disconnect(BBut, 0, 0, 0);
+  disconnect(CBut, 0, 0, 0);
 
   ALabel->show();
   ALabel->setText("Cliquez sur 'Go !' \npour traiter l'image.");
+
   ABut->show();
   ABut->setText("Go !");
   connect(ABut, SIGNAL(clicked()), this, SLOT(Filtrage()));
@@ -300,28 +309,43 @@ void Fenetre::FiltClick()
 /* On clique sur 'Detecter' */
 void Fenetre::RecoClick()
 {
-  BBut->hide();
   ALabel->hide();
   disconnect(ABut, 0, 0, 0);
   disconnect(BBut, 0, 0, 0);
+  disconnect(CBut, 0, 0, 0);
 
   AGroup->show();
   AGroup->setTitle("Options");
   AGroup->move(360, 80);
   AGroup->resize(180, 150);
+
   ABox->show();
   ABox->setChecked(false);
   ABox->setText("Voir lignes");
   ABox->move(10, 40);
   ABox->resize(120, 20);
+
   BBox->show();
   BBox->setChecked(false);
   BBox->setText("Voir portees");
   BBox->move(10, 60);
   BBox->resize(120, 20);
+
   ABut->show();
   ABut->setText("Go !");
   connect(ABut, SIGNAL(clicked()), this, SLOT(DetectLignes()));
+
+  BBut->show();
+  BBut->resize(60, 30);
+  BBut->move(360, 290);
+  BBut->setText("Note");
+  //connect(BBut, SIGNAL(clicked()), this, SLOT());
+
+  CBut->show();
+  CBut->resize(60, 30);
+  CBut->move(440, 290);
+  CBut->setText("Cle");
+  //connect(CBut, SIGNAL(clicked()), this, SLOT());
 }
 
 /* On clique sur 'Jouer Midi' */
