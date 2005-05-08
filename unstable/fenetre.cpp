@@ -25,14 +25,12 @@ Fenetre::Fenetre(QWidget *parent, const char *name)
   QuitBut = new QPushButton(this, "QuitBut");
   PreviewCadre = new QGroupBox(this, "PreviewCadre");
   Apercu = new QLabel(this, "Apercu");
-  APropos = new QFrame(this ,0, WType_Popup);
+  APropos = new QMessageBox(this ,"APropos");
   ABut = new QPushButton(this, "ABut");
   AGroup = new QGroupBox(this, "AGroup");
   ABox = new QCheckBox(AGroup, "ABox");
   BBox = new QCheckBox(AGroup, "BBox");
   ALabel = new QLabel(this, "ALabel");
-  
-  QLabel *dev = new QLabel(APropos, "dev");
 
   NBelt_listd = 0;
   list_lignes = NULL;
@@ -43,7 +41,6 @@ Fenetre::Fenetre(QWidget *parent, const char *name)
   MusicBut->setText("Jouer Midi");
   AboutBut->setText("A Propos");
   QuitBut->setText("Quit");
-  dev->setText("Maestro 0.7\n \nEn cours de developpement\n \nAH-TEC Mathieu\nFRELING Fabien\nSMATI Sami\nVENTURI Romain");
   PreviewCadre->setTitle("Apercu");
 
   OpenBut->move(10, 20);  //emplacement
@@ -54,10 +51,6 @@ Fenetre::Fenetre(QWidget *parent, const char *name)
   QuitBut->move(470, 20);
   PreviewCadre->move(10, 80);
   Apercu->move(20, 100);
-  APropos->move(this->x() + 150, this->y() + 100);
-  dev->move(10, 10);
-
-  //APropos->setFrameStyle(WinPanel | Raised);
 
   OpenBut->resize(70, 40);  //taille
   FiltBut->resize(70, 40);
@@ -68,11 +61,10 @@ Fenetre::Fenetre(QWidget *parent, const char *name)
   PreviewCadre->resize(340, 410);
   Apercu->resize(320, 380);
   APropos->resize(250, 250);
-  dev->resize(280, 280);
 
   FiltBut->setEnabled(false);
   RecoBut->setEnabled(false);
-  MusicBut->setEnabled(false);
+  //MusicBut->setEnabled(false);
 
   ABut->hide();
   ABox->hide();
@@ -88,8 +80,8 @@ Fenetre::Fenetre(QWidget *parent, const char *name)
   //connect(SaveBut, SIGNAL(clicked()), this, SLOT(Sauvegarde()));
   connect(RecoBut, SIGNAL(clicked()), this, SLOT(RecoClick()));
   //connect(MidiBut, SIGNAL(clicked()), this, SLOT(CreationMidi()));
-  //connect(MusicBut, SIGNAL(clicked()), this, SLOT(JouerMidi()));
-  connect(AboutBut, SIGNAL(clicked()), APropos, SLOT(show()));
+  connect(MusicBut, SIGNAL(clicked()), this, SLOT(MusicClick()));
+  connect(AboutBut, SIGNAL(clicked()), this, SLOT(AboutClick()));
 }
 
 /* Destructeur - fait automatiquement */
@@ -260,4 +252,21 @@ void Fenetre::FiltClick()
   ABut->show();
   ABut->setText("Go !");
   connect(ABut, SIGNAL(clicked()), this, SLOT(Filtrage()));
+}
+
+void Fenetre::MusicClick()
+{
+ 
+}
+
+void Fenetre::AboutClick()
+{
+  APropos->about(this, "E=mb²", 
+		 "<p><b>Maestro 0.7b</b>"
+		 "<br>Version en cours de développement"
+		 "<p>Programmeurs :"
+		 "<br>Mathieu AH-TEC, "
+		 "Fabien FRELING\n"
+		 "<br>Sami SMATI, "
+		 "Romain VENTURI");
 }

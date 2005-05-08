@@ -10,6 +10,8 @@
 #include<qpixmap.h>
 #include<qgroupbox.h>
 #include<qcheckbox.h>
+#include<qsound.h>
+#include<qmessagebox.h>
 
 #include"mat_list.h"
 
@@ -37,7 +39,7 @@ class Fenetre : public QMainWindow
   
   QGroupBox *PreviewCadre;
   QLabel *Apercu;
-  QFrame *APropos;
+  QMessageBox *APropos;
 
   QImage Picture;
   QImage PictModif;
@@ -57,6 +59,8 @@ class Fenetre : public QMainWindow
     void Sauvegarde();
     void RecoClick();
     void FiltClick();
+    void MusicClick();
+    void AboutClick();
 };
 
 #endif
