@@ -27,7 +27,8 @@ Fenetre::Fenetre(QWidget *parent, const char *name)
   PreviewCadre = new QGroupBox(this, "PreviewCadre");
   Apercu = new QLabel(this, "Apercu");
   APropos = new QMessageBox(this ,"APropos");
-  ABut = new QPushButton(this, "ABut");
+  ABut = new QPushButton(this, "ABut");  
+  BBut = new QPushButton(this, "BBut");
   AGroup = new QGroupBox(this, "AGroup");
   ABox = new QCheckBox(AGroup, "ABox");
   BBox = new QCheckBox(AGroup, "BBox");
@@ -68,6 +69,7 @@ Fenetre::Fenetre(QWidget *parent, const char *name)
   //MusicBut->setEnabled(false);
 
   ABut->hide();
+  BBut->hide();
   ABox->hide();
   BBox->hide();
   AGroup->hide();
@@ -217,6 +219,12 @@ void Fenetre::Filtrage()
 
   PictModif = filtrer_median(PictModif, NBelt_listd);
   Image2Apercu(&PictModif);
+
+  BBut->show(); // on propose de sauvegarder
+  BBut->resize(90, 40);
+  BBut->move(440, 400);
+  BBut->setText("Sauver");
+  connect(BBut, SIGNAL(clicked()), this, SLOT(Sauvegarde()));
 }
 
 void Fenetre::Filtrage_simple(QImage * im) // filtrage pour les tests : pas de rotation.
@@ -251,10 +259,12 @@ void Fenetre::Reconnaissance()
 /* On clique sur 'Open' */
 void Fenetre::OpenClick()
 {
+  BBut->hide();
   ABox->hide();
   BBox->hide();
   AGroup->hide();
   disconnect(ABut, 0, 0, 0);
+  disconnect(BBut, 0, 0, 0);
 
   OuvrirImage();
   setFixedSize(550, 500);
@@ -274,10 +284,12 @@ void Fenetre::OpenClick()
 /* On clique sur 'Filtrer' */
 void Fenetre::FiltClick()
 {
+  BBut->hide();
   ABox->hide();
   BBox->hide();
   AGroup->hide();
   disconnect(ABut, 0, 0, 0);
+  disconnect(BBut, 0, 0, 0);
 
   ALabel->show();
   ALabel->setText("Cliquez sur 'Go !' \npour traiter l'image.");
@@ -289,9 +301,11 @@ void Fenetre::FiltClick()
 /* On clique sur 'Detecter' */
 void Fenetre::RecoClick()
 {
+  BBut->hide();
   ALabel->hide();
   disconnect(ABut, 0, 0, 0);
-  
+  disconnect(BBut, 0, 0, 0);
+
   AGroup->show();
   AGroup->setTitle("Options");
   AGroup->move(360, 80);
