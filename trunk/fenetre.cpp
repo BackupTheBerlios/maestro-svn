@@ -114,7 +114,7 @@ void Fenetre::Image2Apercu(QImage *picture)
   QImage Mini;
   QPixmap temp;
 
-  Mini = picture->smoothScale(580, 510, picture->ScaleMin);
+  Mini = picture->smoothScale(Apercu->width(), Apercu->height(), picture->ScaleMin);
   temp.convertFromImage(Mini, 0);
   Apercu->setPixmap(temp); 
 }
