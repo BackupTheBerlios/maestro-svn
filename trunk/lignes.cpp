@@ -39,10 +39,10 @@ p_liste2 TrouverLignes(QImage *picture)
   p_liste2 liste;
   int i, fin, cpt, depart;
 
-  Initialiser_liste2(&liste);
   i = 0;
   fin = picture->height();
   depart = (picture->width())/2;
+  liste = NULL;
 
   while (i < fin)
     {
@@ -83,7 +83,7 @@ float Max_Largeur(p_liste2 liste)
   float temp;
 
   temp = 0;
-  while (!(liste))
+  while (liste)
     {
       if (temp < liste->larg)
 	temp = liste->larg;
@@ -158,11 +158,12 @@ p_coord GroupLignes(p_liste2 liste, int droite, int bas)
   p_coord result;
   int debut, fin, temp1, temp2, reference, ecart;
 
-  Initialiser_coord(&result);
   debut = 0;
   reference = EcartMin(liste);
   temp1 = liste->ord;
   liste = liste->next;
+  result = NULL;
+
   while (liste) 
     {
       temp2 = liste->ord;

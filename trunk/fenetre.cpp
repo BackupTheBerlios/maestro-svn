@@ -39,6 +39,7 @@ Fenetre::Fenetre(QWidget *parent, const char *name)
 
   NBelt_listd = 0;
   list_lignes = NULL;
+  list_portees = NULL;
 
   OpenBut->setText("Open");  //nom affiche
   FiltBut->setText("Filtrer");

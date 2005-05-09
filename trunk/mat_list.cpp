@@ -62,16 +62,11 @@ void Ajouter_coord(p_coord * p, int x1, int y1, int x2, int y2)
     }       
 }
 
-void Initialiser_coord(p_coord *p)
-{
-  *p = NULL;
-}
-
 void Supprimer_coord(p_coord *p)
 {
   p_coord temp;
 
-  while ((*p))
+  while (*p)
     {
       temp = *p;
       *p = (*p)->next;
@@ -84,7 +79,7 @@ void Supprimer_coord(p_coord *p)
 
 /*** LISTE2 ***/
 
-void Ajouter_liste2(p_liste2 * p, int m, int n)
+void Ajouter_liste2(p_liste2 *p, int m, int n)
 {
   while ((*p))
     p = &((*p)->next);
@@ -98,16 +93,11 @@ void Ajouter_liste2(p_liste2 * p, int m, int n)
     }       
 }
 
-void Initialiser_liste2(p_liste2 *p)
-{
-  *p = NULL;
-}
-
 void Supprimer_liste2(p_liste2 *p)
 {
   p_liste2 temp;
 
-  while ((*p))
+  while (*p)
     {
       temp = *p;
       *p = (*p)->next;
