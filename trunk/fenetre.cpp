@@ -6,7 +6,7 @@
 #include"lignes.h"
 #include"filtre.h"
 #include"morpho.h"
-
+#include"reconnaissance.h"
 
 
 /* Constructeur de la classe Fenetre */
@@ -30,8 +30,9 @@ Fenetre::Fenetre(QWidget *parent, const char *name)
   ABut = new QPushButton(this, "ABut");  
   BBut = new QPushButton(this, "BBut");
   CBut = new QPushButton(this, "CBut");
-  DBut = new QPushButton(this, "BBut");
-  EBut = new QPushButton(this, "CBut");
+  DBut = new QPushButton(this, "DBut");
+  EBut = new QPushButton(this, "EBut");
+  FBut = new QPushButton(this, "FBut");
   AGroup = new QGroupBox(this, "AGroup");
   ABox = new QCheckBox(AGroup, "ABox");
   BBox = new QCheckBox(AGroup, "BBox");
@@ -77,6 +78,7 @@ Fenetre::Fenetre(QWidget *parent, const char *name)
   CBut->hide();
   DBut->hide();
   EBut->hide();
+  FBut->hide();
   ABox->hide();
   BBox->hide();
   AGroup->hide();
@@ -139,7 +141,7 @@ void Fenetre::DetectLignes()
   rouge = qRgb(255, 0, 0);
   bleu = qRgb(0, 0, 255);
   w = Picture.width();
-  temp = Picture;
+  temp = Picture.copy();
   
   Supprimer_liste2(&list_lignes);
   list_lignes = TrouverLignes(&Picture);
@@ -180,18 +182,20 @@ void Fenetre::DetectLignes()
 
 void Fenetre::VirerLignes()
 {
-  p_liste2 l = TrouverLignes(&PictModif);
   QRgb blanc =  qRgb(255,255,255);
   QRgb noir =  qRgb(0,0,0);
   int i,j,k,x;
+
   PictModif = Picture;
-  largeur_ligne = CalculLargeur(l);
+  largeur_ligne = Max_Largeur(list_lignes);
+  espacement_ligne = CalculEspacement(list_lignes);
+  printf("esp = %i \t largeur = %i\n", espacement_ligne, largeur_ligne);
   printf("Virer lignes active\n");
-  while (l != NULL )
+  while (list_lignes != NULL )
     {
-      i = l->ord;
-      j = l->larg;
-      printf("ordonee = %i, largeur = %i , espacement_ligne = %i",i,j, largeur_ligne);;
+      i = list_lignes->ord;
+      j = list_lignes->larg;
+      printf("ordonee = %i, largeur = %i , espacement_ligne = %i\n",i,j, espacement_ligne);;
       for( x=-1* largeur_ligne ; x < j + largeur_ligne; x++ )
 	{
 	  // printf("Virer ligne de %i\n",x+i);
@@ -202,7 +206,7 @@ void Fenetre::VirerLignes()
 		PictModif.setPixel(k,x+i,blanc);
 	    }
 	}  
-      l = l->next;
+      list_lignes = list_lignes->next;
     }
  Image2Apercu(&PictModif);
  printf("Fin de virer lignes\n");;
@@ -218,12 +222,12 @@ void Fenetre::Filtrage()
 
   PictModif = filtrer_grayscale(Picture);
   PictModif = filtrer_seuillage(PictModif);
-  angle = rotation_calcul_angle(PictModif);
+//  angle = rotation_calcul_angle(PictModif);
 
   if (angle != 0.0)   
-    PictModif = filtrer_rotation(PictModif, angle);
+  //  PictModif = filtrer_rotation(PictModif, angle);
 
-  PictModif = filtrer_median(PictModif, NBelt_listd);
+  //PictModif = filtrer_median(PictModif, NBelt_listd);
   Image2Apercu(&PictModif);
 
   BBut->show(); // on propose de sauvegarder
@@ -236,7 +240,7 @@ void Fenetre::Filtrage()
 void Fenetre::Filtrage_simple(QImage * im) // filtrage pour les tests : pas de rotation.
 {
   *im = filtrer_median(*im, NBelt_listd);
-  Image2Apercu(im);
+ // Image2Apercu(im);
 }
 
 /* On sauvegarde l'image modifiee apres filtrage */
@@ -248,13 +252,86 @@ void Fenetre::Sauvegarde()
 
 void Fenetre::Reconnaissance()
 {
-  Filtrage_simple(&Picture); // On repasse une couche de filtrage c mieu.
-  // Reconnaissance des notes noire Pour le moment.
+  QImage img;
+  QPixmap pix;
   p_lcord l;
+  int i;
+    
+  img = ALabel->pixmap()->convertToImage();
+  Filtrage_simple(&img); // On repasse une couche de filtrage c mieu.
+  // Reconnaissance des notes noire Pour le moment.
   //  p_liste2 ll = TrouverLignes(&Picture);
   //  l = liste_noire(&Picture,CalculEspacement(ll));
-  l = liste_noire(&Picture,18); /************************* ligne a modifier qd on regroupe tout *******/
-  Image2Apercu(&Picture);
+  printf("esp = %i \n", espacement_ligne);
+  l = liste_noire(&img,espacement_ligne); 
+  
+  if (l==NULL)
+  {
+    for (i=1; i<=largeur_ligne;i++)
+    Dilater(&img);
+  
+  for (i=1; i<=largeur_ligne;i++)
+    Eroder(&img);
+      l = liste_noire(&img,espacement_ligne); 
+  }
+  pix.convertFromImage(img);
+  ALabel->setPixmap(pix);
+}
+
+void Fenetre::Reconnaissance_cle()
+{
+  QImage img;
+  
+  img = ALabel->pixmap()->convertToImage();
+  afficher_caracteristique_cle(caracteristiques_cle(&img));
+  afficher_cle(&img);
+}
+
+void Fenetre::ClickTrouver()
+{
+  QImage img;
+  int i;
+  p_coord p=list_portees;
+  
+  list_images = NULL;
+  
+  img = Picture.copy();
+  for (i=1; i<=largeur_ligne;i++)
+    Dilater(&img);
+  
+  for (i=1; i<=largeur_ligne;i++)
+    Eroder(&img);
+
+  if (list_portees)
+  list_images =TrouverMorceaux(&(img.copy(list_portees->pos)),espacement_ligne);
+   
+  ALabel->show();
+  ALabel->resize(180, 150);
+  ALabel->move(360, 340);
+  ALabel->setPixmap(NULL);
+}
+
+void Fenetre::ClickDefiler()
+{
+  QImage tmp;
+  QImage morceau;
+  QPixmap temp;
+
+  if (list_images)
+  {
+    morceau = Picture.copy(list_portees->pos).copy(list_images->r);
+    tmp = morceau;
+    /*tmp = morceau.smoothScale(ALabel->width(), ALabel->height(), morceau.ScaleMin);*/
+    temp.convertFromImage(tmp, 0);
+    ALabel->setPixmap(temp);
+    list_images = list_images->p;
+  }
+  else
+  if (list_portees)
+  {
+    list_portees = list_portees->next;
+    ClickTrouver();
+  }
 }
 
 
@@ -269,6 +346,7 @@ void Fenetre::OpenClick()
   CBut->hide();
   DBut->hide();
   EBut->hide();
+  FBut->hide();
   ABox->hide();
   BBox->hide();
   AGroup->hide();
@@ -277,6 +355,7 @@ void Fenetre::OpenClick()
   disconnect(CBut, 0, 0, 0);
   disconnect(DBut, 0, 0, 0);
   disconnect(EBut, 0, 0, 0);
+  disconnect(FBut, 0, 0, 0);
 
   OuvrirImage();
   setFixedSize(550, 500);
@@ -302,6 +381,7 @@ void Fenetre::FiltClick()
   CBut->hide();
   DBut->hide();
   EBut->hide();
+  FBut->hide();
   ABox->hide();
   BBox->hide();
   AGroup->hide();
@@ -310,11 +390,13 @@ void Fenetre::FiltClick()
   disconnect(CBut, 0, 0, 0);
   disconnect(DBut, 0, 0, 0);
   disconnect(EBut, 0, 0, 0);
+  disconnect(FBut, 0, 0, 0);
 
   ALabel->show();
   ALabel->setText("Cliquez sur 'Go !' \npour traiter l'image.");
 
   ABut->show();
+  ABut->move(440, 350);
   ABut->setText("Go !");
   connect(ABut, SIGNAL(clicked()), this, SLOT(Filtrage()));
 }
@@ -328,11 +410,12 @@ void Fenetre::RecoClick()
   disconnect(CBut, 0, 0, 0);
   disconnect(DBut, 0, 0, 0);
   disconnect(EBut, 0, 0, 0);
+  disconnect(FBut, 0, 0, 0);
 
   AGroup->show();
   AGroup->setTitle("Options");
   AGroup->move(360, 80);
-  AGroup->resize(180, 150);
+  AGroup->resize(180, 120);
 
   ABox->show();
   ABox->setChecked(false);
@@ -348,37 +431,44 @@ void Fenetre::RecoClick()
 
   ABut->show();
   ABut->setText("Go !");
+  ABut->move(440, 280);
   connect(ABut, SIGNAL(clicked()), this, SLOT(DetectLignes()));
 
   BBut->show();
   BBut->resize(60, 30);
-  BBut->move(360, 260);
+  BBut->move(360, 200);
   BBut->setText("Note");
-  //connect(BBut, SIGNAL(clicked()), this, SLOT());
+  connect(BBut, SIGNAL(clicked()), this, SLOT(Reconnaissance()));
 
   CBut->show();
   CBut->resize(60, 30);
-  CBut->move(440, 260);
+  CBut->move(440, 200);
   CBut->setText("Cle");
-  //connect(CBut, SIGNAL(clicked()), this, SLOT());
+  connect(CBut, SIGNAL(clicked()), this, SLOT(Reconnaissance_cle()));
 
   DBut->show();
   DBut->resize(60, 30);
-  DBut->move(360, 300);
-  DBut->setText("<<");
-  //connect(DBut, SIGNAL(clicked()), this, SLOT());
+  DBut->move(360, 240);
+  DBut->setText("Trouver");
+  connect(DBut, SIGNAL(clicked()), this, SLOT(ClickTrouver()));
 
   EBut->show();
   EBut->resize(60, 30);
-  EBut->move(440, 300);
+  EBut->move(440, 240);
   EBut->setText(">>");
-  //connect(EBut, SIGNAL(clicked()), this, SLOT());
+  connect(EBut, SIGNAL(clicked()), this, SLOT(ClickDefiler()));
+
+  FBut->show();
+  FBut->resize(60, 30);
+  FBut->move(360, 280);
+  FBut->setText("Virer");
+  connect(FBut, SIGNAL(clicked()), this, SLOT(VirerLignes()));
 }
 
 /* On clique sur 'Jouer Midi' */
 void Fenetre::MusicClick()
 {
-
+  QSound::play("green_day.mid");
 }
 
 /* On clique sur 'A Propos' */

@@ -61,6 +61,7 @@ p_liste2 TrouverLignes(QImage *picture)
   return liste;
 }
 
+
 float Moyenne_Largeur(p_liste2 liste)
 {
   float count;
@@ -87,10 +88,12 @@ float Max_Largeur(p_liste2 liste)
     {
       if (temp < liste->larg)
 	temp = liste->larg;
+      liste = liste->next;
     }
 
   return temp;
 }
+
 
 void SupprimerLignes(QImage *img, int h)
 {
@@ -116,6 +119,7 @@ void SupprimerLignes(QImage *img, int h)
     
 }
 
+
 void AfficherLignes(p_liste2 p, QImage *img)
 {
   int i;
@@ -128,6 +132,7 @@ void AfficherLignes(p_liste2 p, QImage *img)
       p = p->next;
     }
 }
+
 
 int EcartMin(p_liste2 liste)
 {
@@ -171,30 +176,16 @@ p_coord GroupLignes(p_liste2 liste, int droite, int bas)
       if (ecart > 4 * reference)
 	{ 
 	  fin = temp1 + (ecart / 2);
-	  Ajouter_coord(&result, 0, debut, droite, fin);
+	  Ajouter_coord(&result, 0, debut, droite, fin, fin - (temp1 - debut));
 	  debut = fin + 1;
 	}      
       temp1 = temp2;
       liste = liste->next;
       }
-  Ajouter_coord(&result, 0, debut, droite, bas);
+  Ajouter_coord(&result, 0, debut, droite, bas, bas - (temp1 - debut));
   
   return result;
 }
-
-int CalculLargeur(p_liste2 l)
-{
-int res=0;
-p_liste2 tmp = l;
-while(tmp)
-{
-  if (tmp->larg > res)
-    res = tmp->larg;
-  tmp = tmp->next;
-}
-return res;
-}
-
 
 
 int CalculEspacement(p_liste2 l)
@@ -209,8 +200,9 @@ while(tmp)
       }
     else
       {
-	res = res + (l->ord - tmp2);
-	tmp2 = l->ord;
+      	printf("l->ord = %i\n",tmp->ord);
+	res = res + (tmp->ord - tmp2);
+	tmp2 = tmp->ord;
 	i++;
       }
     tmp = tmp->next;

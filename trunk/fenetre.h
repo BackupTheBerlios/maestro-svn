@@ -14,6 +14,7 @@
 #include<qmessagebox.h>
 
 #include"mat_list.h"
+#include "reconnaissance.h"
 
 
 
@@ -36,6 +37,7 @@ class Fenetre : public QMainWindow
   QPushButton *CBut;
   QPushButton *DBut;
   QPushButton *EBut;
+  QPushButton *FBut;
   QCheckBox *ABox;
   QCheckBox *BBox;
   QGroupBox *AGroup;
@@ -51,6 +53,7 @@ class Fenetre : public QMainWindow
 
   p_liste2 list_lignes;
   p_coord list_portees;
+  p_liste_img list_images;
 
   int NBelt_listd;
   int largeur_ligne; // donne la largeur d'une ligne
@@ -62,6 +65,9 @@ class Fenetre : public QMainWindow
     void RecoClick();
     void MusicClick();
     void AboutClick();
+    
+    void ClickTrouver();
+    void ClickDefiler();
  
     void OuvrirImage();
     void Image2Apercu(QImage *picture);
@@ -70,6 +76,7 @@ class Fenetre : public QMainWindow
     void Filtrage();
     void Sauvegarde();
     void Reconnaissance();
+    void Reconnaissance_cle();
     void Filtrage_simple(QImage * im); // filtrage pour les tests : pas de rotation.
 };
 

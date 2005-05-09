@@ -20,7 +20,6 @@ int EcartMin(p_liste2 liste);
 
 p_coord GroupLignes(p_liste2 liste, int droite, int bas);
 
-int CalculLargeur(p_liste2 l);
 int CalculEspacement(p_liste2 l);
 
 #endif
