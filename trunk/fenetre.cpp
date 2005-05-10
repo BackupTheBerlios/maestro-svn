@@ -269,7 +269,8 @@ void Fenetre::Reconnaissance()
   int i;
     
   img = ALabel->pixmap()->convertToImage();
-  Filtrage_simple(&img); // On repasse une couche de filtrage c mieu.
+  if (qualite_image)
+    Filtrage_simple(&img); // On repasse une couche de filtrage c mieu.
   // Reconnaissance des notes noire Pour le moment.
   //  p_liste2 ll = TrouverLignes(&Picture);
   //  l = liste_noire(&Picture,CalculEspacement(ll));

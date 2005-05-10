@@ -248,7 +248,7 @@ int reconnaissance_cle(QImage * im)
 
   if(v > 25)
     return 0;
-  if(v<0 && -1*v < 20)
+  if((v<0 && -1*v < 20) || (v > 0 && v <= 20))
     return 1;
   if(v<0 && -1*v > 40)
     return 2;

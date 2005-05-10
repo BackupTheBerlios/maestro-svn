@@ -190,9 +190,9 @@ p_coord GroupLignes(p_liste2 liste, int droite, int bas)
 
 int CalculEspacement(p_liste2 l)
 {
-int res=0,tmp2 = 0,i=1;
+int res=0,tmp2 = 0,i=1,stop =1;
 p_liste2 tmp = l;
-while(tmp)
+while(tmp && stop)
   {
     if (!tmp2)
       {
@@ -205,6 +205,8 @@ while(tmp)
 	tmp2 = tmp->ord;
 	i++;
       }
+    if(i>=4)
+      stop = 0;
     tmp = tmp->next;
   }
  return (int(res/i));
