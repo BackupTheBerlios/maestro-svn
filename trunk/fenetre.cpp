@@ -222,12 +222,12 @@ void Fenetre::Filtrage()
 
   PictModif = filtrer_grayscale(Picture);
   PictModif = filtrer_seuillage(PictModif);
-//  angle = rotation_calcul_angle(PictModif);
+  angle = rotation_calcul_angle(PictModif);
 
   if (angle != 0.0)   
-  //  PictModif = filtrer_rotation(PictModif, angle);
+    PictModif = filtrer_rotation(PictModif, angle);
 
-  //PictModif = filtrer_median(PictModif, NBelt_listd);
+  PictModif = filtrer_median(PictModif, NBelt_listd);
   Image2Apercu(&PictModif);
 
   BBut->show(); // on propose de sauvegarder
