@@ -148,32 +148,26 @@ void Fenetre::DetectLignes()
   Supprimer_coord(&list_portees);
   list_portees = GroupLignes(list_lignes, w - 1, Picture.height() - 1);
 
-  if (ABox->isChecked())
+  toto = list_lignes;
+  while (toto) // on verifie
     {
-      toto = list_lignes;
-      while (toto) // on verifie
+      for (i=0; i<w; i++)
 	{
-	  for (i=0; i<w; i++)
-	    {
-	      for (j=0; j<toto->larg; j++)
-		temp.setPixel(i, toto->ord + j, rouge);
-	    }      
-	  toto = toto->next;
-	}
+	  for (j=0; j<toto->larg; j++)
+	    temp.setPixel(i, toto->ord + j, rouge);
+	}      
+      toto = toto->next;
     }
-
-  if (BBox->isChecked())
+   
+  tata = list_portees;
+  while (tata) // on verifie
     {
-      tata = list_portees;
-      while (tata) // on verifie
+      for (i=0; i<w; i++)
 	{
-	  for (i=0; i<w; i++)
-	    {
-	      temp.setPixel(i, tata->pos.top(), bleu);
-	      temp.setPixel(i, tata->pos.bottom(), bleu);
-	    }      
-	  tata = tata->next;
-	}
+	  temp.setPixel(i, tata->pos.top(), bleu);
+	  temp.setPixel(i, tata->pos.bottom(), bleu);
+	}      
+      tata = tata->next;
     }
 
   Image2Apercu(&temp);
@@ -377,14 +371,12 @@ void Fenetre::OpenClick()
 /* On clique sur 'Filtrer' */
 void Fenetre::FiltClick()
 {
+  ALabel->hide();
   BBut->hide();
   CBut->hide();
   DBut->hide();
   EBut->hide();
   FBut->hide();
-  ABox->hide();
-  BBox->hide();
-  AGroup->hide();
   disconnect(ABut, 0, 0, 0);
   disconnect(BBut, 0, 0, 0);
   disconnect(CBut, 0, 0, 0);
@@ -392,10 +384,25 @@ void Fenetre::FiltClick()
   disconnect(EBut, 0, 0, 0);
   disconnect(FBut, 0, 0, 0);
 
-  ALabel->show();
-  ALabel->setText("Cliquez sur 'Go !' \npour traiter l'image.");
+  AGroup->show();
+  AGroup->setTitle("Type");
+  AGroup->move(360, 80);
+  AGroup->resize(180, 120);
+
+  ABox->show();
+  ABox->setChecked(false);
+  ABox->setText("Nette");
+  ABox->move(10, 40);
+  ABox->resize(120, 20);
+
+  BBox->show();
+  BBox->setChecked(true);
+  BBox->setText("Scannée");
+  BBox->move(10, 60);
+  BBox->resize(120, 20);
 
   ABut->show();
+  ABut->resize(90, 40);
   ABut->move(440, 350);
   ABut->setText("Go !");
   connect(ABut, SIGNAL(clicked()), this, SLOT(Filtrage()));
@@ -405,6 +412,9 @@ void Fenetre::FiltClick()
 void Fenetre::RecoClick()
 {
   ALabel->hide();
+  AGroup->hide();
+  ABox->hide();
+  BBox->hide();
   disconnect(ABut, 0, 0, 0);
   disconnect(BBut, 0, 0, 0);
   disconnect(CBut, 0, 0, 0);
@@ -412,55 +422,39 @@ void Fenetre::RecoClick()
   disconnect(EBut, 0, 0, 0);
   disconnect(FBut, 0, 0, 0);
 
-  AGroup->show();
-  AGroup->setTitle("Options");
-  AGroup->move(360, 80);
-  AGroup->resize(180, 120);
-
-  ABox->show();
-  ABox->setChecked(false);
-  ABox->setText("Voir lignes");
-  ABox->move(10, 40);
-  ABox->resize(120, 20);
-
-  BBox->show();
-  BBox->setChecked(false);
-  BBox->setText("Voir portees");
-  BBox->move(10, 60);
-  BBox->resize(120, 20);
-
   ABut->show();
-  ABut->setText("Go !");
-  ABut->move(440, 280);
+  ABut->setText("Lignes");
+  ABut->resize(80, 40);
+  ABut->move(360, 120);
   connect(ABut, SIGNAL(clicked()), this, SLOT(DetectLignes()));
 
   BBut->show();
-  BBut->resize(60, 30);
-  BBut->move(360, 200);
+  BBut->resize(80, 40);
+  BBut->move(360, 230);
   BBut->setText("Note");
   connect(BBut, SIGNAL(clicked()), this, SLOT(Reconnaissance()));
 
   CBut->show();
-  CBut->resize(60, 30);
-  CBut->move(440, 200);
+  CBut->resize(80, 40);
+  CBut->move(450, 230);
   CBut->setText("Cle");
   connect(CBut, SIGNAL(clicked()), this, SLOT(Reconnaissance_cle()));
 
   DBut->show();
-  DBut->resize(60, 30);
-  DBut->move(360, 240);
+  DBut->resize(80, 40);
+  DBut->move(360, 180);
   DBut->setText("Trouver");
   connect(DBut, SIGNAL(clicked()), this, SLOT(ClickTrouver()));
 
   EBut->show();
-  EBut->resize(60, 30);
-  EBut->move(440, 240);
+  EBut->resize(80, 40);
+  EBut->move(450, 180);
   EBut->setText(">>");
   connect(EBut, SIGNAL(clicked()), this, SLOT(ClickDefiler()));
 
   FBut->show();
-  FBut->resize(60, 30);
-  FBut->move(360, 280);
+  FBut->resize(80, 40);
+  FBut->move(450, 120);
   FBut->setText("Virer");
   connect(FBut, SIGNAL(clicked()), this, SLOT(VirerLignes()));
 }
