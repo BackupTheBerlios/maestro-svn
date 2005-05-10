@@ -34,8 +34,8 @@ Fenetre::Fenetre(QWidget *parent, const char *name)
   EBut = new QPushButton(this, "EBut");
   FBut = new QPushButton(this, "FBut");
   AGroup = new QGroupBox(this, "AGroup");
-  ABox = new QCheckBox(AGroup, "ABox");
-  BBox = new QCheckBox(AGroup, "BBox");
+  ABox = new QCheckBox(AGroup, "ABox");// image nette
+  BBox = new QCheckBox(AGroup, "BBox"); //image scannee
   ALabel = new QLabel(this, "ALabel");
 
   NBelt_listd = 0;
@@ -214,14 +214,24 @@ void Fenetre::Filtrage()
 {
   float angle;
 
-  PictModif = filtrer_grayscale(Picture);
-  PictModif = filtrer_seuillage(PictModif);
-  angle = rotation_calcul_angle(PictModif);
-
-  if (angle != 0.0)   
-    PictModif = filtrer_rotation(PictModif, angle);
-
-  PictModif = filtrer_median(PictModif, NBelt_listd);
+  if (BBox->isChecked())
+    {
+      PictModif = filtrer_grayscale(Picture);
+      PictModif = filtrer_seuillage(PictModif,155);
+      angle = rotation_calcul_angle(PictModif);
+      
+      if (angle != 0.0)   
+	PictModif = filtrer_rotation(PictModif, angle);
+      
+      PictModif = filtrer_median(PictModif, NBelt_listd,155);
+      qualite_image = 1;
+    }
+  else
+    {
+      PictModif = filtrer_grayscale(Picture);
+      PictModif = filtrer_seuillage(PictModif,200);
+      qualite_image = 0;
+    }
   Image2Apercu(&PictModif);
 
   BBut->show(); // on propose de sauvegarder
@@ -233,7 +243,13 @@ void Fenetre::Filtrage()
 
 void Fenetre::Filtrage_simple(QImage * im) // filtrage pour les tests : pas de rotation.
 {
-  *im = filtrer_median(*im, NBelt_listd);
+  int s;
+  if (qualite_image)
+    s = 155;
+  else
+    s = 200;
+
+  *im = filtrer_median(*im, NBelt_listd,s);
  // Image2Apercu(im);
 }
 

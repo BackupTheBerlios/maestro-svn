@@ -58,6 +58,7 @@ class Fenetre : public QMainWindow
   int NBelt_listd;
   int largeur_ligne; // donne la largeur d'une ligne
   int espacement_ligne; // Donne l'espacement entre deux lignes d'une portee
+  int qualite_image; // dit si c une image scannee ou une image nette.
     
   public slots:
     void OpenClick();

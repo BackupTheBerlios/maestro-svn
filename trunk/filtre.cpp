@@ -145,12 +145,12 @@ int arrondi(double a)
 }
 
 
-QImage filtrer_median(QImage im1, int NBelt_listd)
+QImage filtrer_median(QImage im1, int NBelt_listd, int s)
 {
   QImage im2 = im1.copy();
   listd p=NULL;
   int x=1, y=1;
-  im1 = filtrer_seuillage(im1);
+  im1 = filtrer_seuillage(im1,s);
   
   image_vider(im2);    
   while(x < (im1.width() -1) )
@@ -181,7 +181,7 @@ QImage filtrer_median(QImage im1, int NBelt_listd)
 }
 
 
-QImage filtrer_seuillage( QImage im1 )
+QImage filtrer_seuillage( QImage im1 ,int s)
 {
   int x=0,y=0;
   while (x<im1.width())
@@ -189,7 +189,7 @@ QImage filtrer_seuillage( QImage im1 )
       y=0;
       while(y<im1.height())
 	{
-	  if (qBlue(qGray(im1.pixel(x,y))) < 155)
+	  if (qBlue(qGray(im1.pixel(x,y))) < s)
 	    im1.setPixel(x,y,qRgb(0,0,0));
 	  else
 	    im1.setPixel(x,y,qRgb(255,255,255));

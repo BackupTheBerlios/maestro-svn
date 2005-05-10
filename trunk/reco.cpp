@@ -39,7 +39,7 @@ void mat_Filtrer(QLabel *lblCadre)
     lblCadre->setPixmap(*pix);
 }
 
-void mat_Filtrer_bien(QImage *pix, QLabel *lblCadre, int NBelt_listd)
+void mat_Filtrer_bien(QImage *pix, QLabel *lblCadre, int NBelt_listd,int s)
 {
  QImage ima;
  QPixmap * img;
@@ -58,7 +58,7 @@ void mat_Filtrer_bien(QImage *pix, QLabel *lblCadre, int NBelt_listd)
   h = pix->height();
   lblCadre->setGeometry(QRect(10,130,w,h ));
   *pix = filtrer_grayscale(*pix);
-  *pix = filtrer_seuillage(*pix);
+  *pix = filtrer_seuillage(*pix,s);
 
     angle = rotation_calcul_angle(*pix);
 
@@ -67,7 +67,7 @@ void mat_Filtrer_bien(QImage *pix, QLabel *lblCadre, int NBelt_listd)
   else
     ima = *pix;
   
-  ima = filtrer_median(ima, NBelt_listd);
+  ima = filtrer_median(ima, NBelt_listd,s);
   lblCadre->setPixmap(ima);
   *pix = ima;
 }
