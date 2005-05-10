@@ -33,9 +33,10 @@ Fenetre::Fenetre(QWidget *parent, const char *name)
   DBut = new QPushButton(this, "DBut");
   EBut = new QPushButton(this, "EBut");
   FBut = new QPushButton(this, "FBut");
-  AGroup = new QGroupBox(this, "AGroup");
-  ABox = new QCheckBox(AGroup, "ABox");// image nette
-  BBox = new QCheckBox(AGroup, "BBox"); //image scannee
+  AGroup = new QButtonGroup(this, "AGroup");
+
+  ABox = new QRadioButton(AGroup, "ABox");// image nette
+  BBox = new QRadioButton(AGroup, "BBox"); //image scannee
   ALabel = new QLabel(this, "ALabel");
 
   NBelt_listd = 0;
@@ -401,6 +402,7 @@ void Fenetre::FiltClick()
   disconnect(FBut, 0, 0, 0);
 
   AGroup->show();
+  AGroup->setExclusive(true);
   AGroup->setTitle("Type");
   AGroup->move(360, 80);
   AGroup->resize(180, 120);

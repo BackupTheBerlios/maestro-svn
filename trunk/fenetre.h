@@ -10,6 +10,8 @@
 #include<qpixmap.h>
 #include<qgroupbox.h>
 #include<qcheckbox.h>
+#include <qradiobutton.h>
+#include <qbuttongroup.h>
 #include<qsound.h>
 #include<qmessagebox.h>
 
@@ -38,9 +40,10 @@ class Fenetre : public QMainWindow
   QPushButton *DBut;
   QPushButton *EBut;
   QPushButton *FBut;
-  QCheckBox *ABox;
-  QCheckBox *BBox;
-  QGroupBox *AGroup;
+
+  QRadioButton *ABox;
+  QRadioButton *BBox;
+  QButtonGroup *AGroup;
   QLabel *ALabel;
   
   QGroupBox *PreviewCadre;
