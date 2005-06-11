@@ -2,7 +2,7 @@
 #include <qcolor.h>
 
 #include "filtre.h"
-
+#include"math.h"
 
 
 int Moyenne ( QRgb r)
