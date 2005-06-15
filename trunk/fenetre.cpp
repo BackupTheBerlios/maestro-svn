@@ -296,7 +296,7 @@ void Fenetre::Reconnaissance_cle()
   
   img = ALabel->pixmap()->convertToImage();
   afficher_caracteristique_cle(caracteristiques_cle(&img));
-  afficher_cle(&img);
+  afficher_cle(&img,espacement_ligne);
 }
 
 void Fenetre::ClickTrouver()
@@ -308,11 +308,12 @@ void Fenetre::ClickTrouver()
   list_images = NULL;
   
   img = Picture.copy();
+  
   for (i=1; i<=largeur_ligne;i++)
     Dilater(&img);
   
   for (i=1; i<=largeur_ligne;i++)
-    Eroder(&img);
+  Eroder(&img);
 
   if (list_portees)
   list_images =TrouverMorceaux(&(img.copy(list_portees->pos)),espacement_ligne);

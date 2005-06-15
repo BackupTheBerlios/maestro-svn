@@ -235,30 +235,45 @@ void afficher_caracteristique_cle(t_rcle res)
   printf("-------------------------------------");
 }
 
-int reconnaissance_cle(QImage * im)
+int reconnaissance_cle(QImage * im,int esp)
 {
   t_rcle res;
   float v;
 
+
+  Dilater(im);
   res = caracteristiques_cle(im);
   v = (res.projved-res.debuth)*100/(res.finh-res.debuth) 
     - (res.projhed-res.debutv)*100/(res.finv-res.debutv);
-  printf("\ncalcul des projections = %f ",v);
+  printf("\ncalcul des projections = %f\n",v);
   //Rajouter ici les controles des tailles de la forme par rapport a l'espacement des lignes.
 
-  if(v > 25)
-    return 0;
-  if((v<0 && -1*v < 20) || (v > 0 && v <= 20))
-    return 1;
-  if(v<0 && -1*v > 40)
-    return 2;
+  printf("espacement_ligne= %i\n",esp);
+  if ((res.largeur >= esp) && (res.largeur <= 3*esp))
+    {
+      if (v < 0 && -1*v > 40)
+	return 4;
+    }
+  else
+    if (res.largeur > 3*esp)
+      {
+	if(v > 25)
+	  return 0; // cle de fa
+	if((v<0 && -1*v < 20) || (v > 0 && v <= 25))
+	  return 1; //cle de sol
+	if(v<0 && -1*v > 40)
+	  return 2; // cle de ut
+      }
+  
   return 3;
+  
+  
 }
 
-void afficher_cle(QImage * im)
+void afficher_cle(QImage * im,int esp)
 {
   printf("\n");
-  switch(reconnaissance_cle(im))
+  switch(reconnaissance_cle(im,esp))
     {  
     case 0 : printf("CLE DE FA\n");
       break;
@@ -270,6 +285,9 @@ void afficher_cle(QImage * im)
       break;
 
     case 3 : printf("CLE NON RECONNU ATTENTION\n");
+      break;
+
+    case 4 : printf("Bemol \n");
       break;
 
     }
@@ -425,7 +443,7 @@ p_lcord liste_noire (QImage * im, int esp )
   return liste;
 }
 
-void trouver_centre(QImage * im, p_lcord * liste)
+void trouver_centre(QImage * im, p_lcord * liste) // trouve le centre d'une note
 {
   int resx,resy;
   int tx, ty;
@@ -489,7 +507,7 @@ void trouver_centre(QImage * im, p_lcord * liste)
 }
 
 
-void dessiner_croix(QImage * im, QRgb coul, int x, int y)
+void dessiner_croix(QImage * im, QRgb coul, int x, int y) // dessiner les croix placant les notes.
 {
   int x2=x, y2=y;
   int l = 3; //longueur de la croix

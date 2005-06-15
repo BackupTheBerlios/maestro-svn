@@ -50,9 +50,9 @@ t_rcle caracteristiques_cle(QImage * im);
 
 void afficher_caracteristique_cle(t_rcle res);
 
-int reconnaissance_cle(QImage * im);//0:fa 1:sol 2:ut
+int reconnaissance_cle(QImage * im,int esp);//0:fa 1:sol 2:ut
 
-void afficher_cle(QImage * im);
+void afficher_cle(QImage * im,int esp);
 
 /***** Reconnaissance des notes de musique ***/
 
