@@ -149,3 +149,8 @@ void mat_Creuser(QLabel *lblCadre)
     pix->convertFromImage(img);
     lblCadre->setPixmap(*pix);
 }
+
+int niveau (int x, int niv0, int d)
+{
+  return ((2*(x-niv0))/d - 2); /* do=0;re=1;...*/
+}

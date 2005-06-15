@@ -20,5 +20,5 @@ void mat_Dilater(QLabel *lblCadre);
 void mat_FindLignes(QLabel *lblCadre);
 void mat_Creuser(QLabel *lblCadre);
 
-
+int niveau (int x, int niv0, int d);
 #endif

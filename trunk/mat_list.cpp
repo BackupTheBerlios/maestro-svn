@@ -133,3 +133,31 @@ void Fusion_liste_img (p_liste_img *p1,p_liste_img p2)
    
    (*p1)= p2;
 }
+
+void Initialiser_liste_note (p_list_note *p)
+{
+  (*p) = NULL;
+}
+
+void Ajouter_liste_note (p_list_note *p, bool cle, p_lcoord s, int niv0, int d)
+{
+  t_note t;
+  
+  while (*p)
+    p = &((*p)->p);
+  
+  if (!cle)
+  {
+    while (s)
+    {
+      (*p) = malloc(sizeof(t_list_note));
+      (*p)->cle = false;
+      t.type = noire /* trouver le type */
+      t.niveau = niveau (s->y, niv0, d);
+      (*p)->info = t;
+      (*p)->p = NULL;
+      s = s->suivant;
+      p = &((*p)->p);
+    }
+  }
+}

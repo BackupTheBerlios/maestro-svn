@@ -46,6 +46,30 @@ typedef struct t_liste_img
   p_liste_img p;
 } t_liste_img;
 
+enum t_type {ronde, blanche, croche, dcroche, tcroche, qcroche};
+
+enum t_cle {sol, ut, fa};
+
+typedef struct t_note
+{
+  t_type type;
+  int niveau;
+} 
+
+union cle_note
+{
+  t_note note;
+  t_cle cle;
+}
+
+typedef struct p_list_note * p_liste_note;
+
+typedef struct t_list_note
+{
+  bool cle;
+  cle_note info;
+  p_list_note p;
+} t_list_note;
 
 void Ajouter_liste (p_liste * p, int i);
 void Initialiser_liste (p_liste * p);
@@ -62,5 +86,7 @@ void Supprimer_liste2(p_liste2 *p);
 void Initialiser_liste_img (p_liste_img *p);
 void Ajouter_liste_img (p_liste_img *p, QImage img, QRect r);
 void Fusion_liste_img (p_liste_img *p1,p_liste_img p2);
+
+void Ajouter_liste_note (p_list_note *p, bool cle, p_lcoord s);
 
 #endif
