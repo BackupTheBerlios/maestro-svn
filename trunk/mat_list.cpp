@@ -1,6 +1,7 @@
 #include "mat_list.h"
 #include<qpoint.h>
 #include <stdlib.h>
+#include "reco.h"
 
 
 
@@ -139,7 +140,7 @@ void Initialiser_liste_note (p_list_note *p)
   (*p) = NULL;
 }
 
-void Ajouter_liste_note (p_list_note *p, bool cle, p_lcoord s, int niv0, int d)
+void Ajouter_liste_note (p_list_note *p, bool cle, p_lcord s, int niv0, int d)
 {
   t_note t;
   
@@ -150,9 +151,9 @@ void Ajouter_liste_note (p_list_note *p, bool cle, p_lcoord s, int niv0, int d)
   {
     while (s)
     {
-      (*p) = malloc(sizeof(t_list_note));
+      (*p) = (p_list_note) malloc(sizeof(t_list_note));
       (*p)->cle = false;
-      t.type = noire /* trouver le type */
+      t.type.note = noire; /* trouver le type */
       t.niveau = niveau (s->y, niv0, d);
       (*p)->info = t;
       (*p)->p = NULL;
