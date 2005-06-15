@@ -433,6 +433,7 @@ p_lcord liste_noire (QImage * im, int esp )
       y++;
     }
   trouver_centre(im,&liste);
+  trouver_type_note(liste,&im);
   liste2 = liste;
   while(liste2)
     {
@@ -504,6 +505,44 @@ void trouver_centre(QImage * im, p_lcord * liste) // trouve le centre d'une note
       l->x = resx;
         l = l->suivant;
     }
+}
+
+void trouver_type_note (p_lcord  l, QImage * im )
+{
+// fonction qui rempli le champ type qui di si c une blanche croche ...
+int nb_note=0; // nb de notes dans la liste;
+while (l<> NUL)
+{
+  nb_note++;
+  l = l-> suivant;
+}
+
+switch(nb_note)
+{
+  case 1 : {
+  // case de 1 note detectee
+  };
+   break;
+   
+  case 2 :{
+   // case de 2 note detectee
+   };
+   break;
+   
+  case 3 :{
+   // case de 3 note detectee
+   };
+   break;
+   
+  case 4 :{
+   // case de 4 note detectee
+   }
+   ;
+   break; 
+}
+
+
+return;
 }
 
 

@@ -3,6 +3,7 @@
 
 #include <qimage.h>
 #include <qcolor.h>
+#include "note.h"
 
 
 bool EgaleCouleur(QRgb r1, QRgb r2);
@@ -61,6 +62,7 @@ struct s_lcord
 {
   int x;
   int y;
+  t_type type;
   p_lcord suivant;
 };
 int largeur_noir(int x, int y, QImage * im ,int esp);
@@ -69,6 +71,7 @@ void ajouter_plcord(p_lcord * p, int x, int y);
 void verifie_point( int esp, int x, int y, QImage * im, p_lcord * liste);
 p_lcord liste_noire (QImage * im, int esp );
 void trouver_centre(QImage * im, p_lcord * liste);
+void trouver_type_note (p_lcord  l, QImage * im );
 void dessiner_croix(QImage * im, QRgb coul, int x, int y);
 
 
