@@ -140,14 +140,14 @@ void Initialiser_liste_note (p_list_note *p)
   (*p) = NULL;
 }
 
-void Ajouter_liste_note (p_list_note *p, bool cle, p_lcord s, int niv0, int d)
+void Ajouter_liste_note (p_list_note *p, int cle, p_lcord s, int niv0, int d)
 {
   t_note t;
   
   while (*p)
     p = &((*p)->p);
   
-  if (!cle)
+  if (cle=3)
   {
     while (s)
     {
@@ -160,5 +160,21 @@ void Ajouter_liste_note (p_list_note *p, bool cle, p_lcord s, int niv0, int d)
       s = s->suivant;
       p = &((*p)->p);
     }
+  }
+  else
+  {
+     (*p) = (p_list_note) malloc(sizeof(t_list_note));
+     (*p)->cle=true;
+     switch(cle) 
+     {
+       case 0 : t.type.cle = fa;
+       break;
+       case 1 : t.type.cle = sol;
+       break;
+       case 2 : t.type.cle = ut;
+     };
+     t.niveau = 0;
+     (*p)->info = t;
+     (*p)->p = NULL; 
   }
 }
