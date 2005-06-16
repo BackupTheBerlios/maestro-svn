@@ -1,5 +1,16 @@
 #include "morpho.h"
 
+
+/*
+
+fonction a faire is_blanche
+continuer trouver_type_note
+arranger verifie_point
+
+
+*/
+
+
 bool EgaleCouleur(QRgb r1, QRgb r2)
 {
     return ((qBlue(r1) == qBlue(r2)) && (qGreen(r1) == qGreen(r2)) && (qRed(r1) == qRed(r2)));
@@ -433,7 +444,7 @@ p_lcord liste_noire (QImage * im, int esp )
       y++;
     }
   trouver_centre(im,&liste);
-  trouver_type_note(liste,&im);
+  trouver_type_note(liste,im);
   liste2 = liste;
   while(liste2)
     {
@@ -507,42 +518,70 @@ void trouver_centre(QImage * im, p_lcord * liste) // trouve le centre d'une note
     }
 }
 
+int is_blanche (p_lcord l, QImage * im)
+{
+// fonction a faire
+return 0;
+}
+
 void trouver_type_note (p_lcord  l, QImage * im )
 {
 // fonction qui rempli le champ type qui di si c une blanche croche ...
-int nb_note=0; // nb de notes dans la liste;
-while (l<> NUL)
+int nb_note=0; // nb de notes dans la liste
+p_lcord l2=l;
+int i,j;
+QRgb noir = qRgb(255,255,255);
+
+while (l!= NULL)
 {
   nb_note++;
   l = l-> suivant;
 }
-
+l=l2;
 switch(nb_note)
 {
   case 1 : {
-  // case de 1 note detectee
-  };
+  if (is_blanche(l,im))
+  {
+    l->type = blanche;
+    printf("blanche \n");
+  }
+  else
+  {
+    i = l->x;
+    j = l-> y;
+    while (im->valid(i,j) && im->pixel(i,j) != noir) 
+      i++;
+    if ((im->width() - i) > im->width() / 10) // facteur a verifier
+    {
+      l->type = croche;
+      printf("croche\n");
+    }
+    else
+    {
+      l->type = noire;
+      printf("noire\n");
+    }
+  }
+  }
    break;
    
   case 2 :{
    // case de 2 note detectee
-   };
+   }
    break;
    
   case 3 :{
    // case de 3 note detectee
-   };
+   }
    break;
    
   case 4 :{
    // case de 4 note detectee
    }
-   ;
    break; 
 }
 
-
-return;
 }
 
 
