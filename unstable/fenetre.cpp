@@ -372,6 +372,21 @@ void Fenetre::ClickDefiler()
 
 
 
+/*****************  MUSIQUE  *******************/
+
+
+
+
+
+
+void Fenetre::JouerMidi(QSound *midi)
+{
+  if (midi->isFinished())
+    midi->play();
+}
+
+
+
 /****************  FONCTIONS CLICK  ***************/
 
 
@@ -489,7 +504,7 @@ void Fenetre::MusicClick()
   ABut->resize(90, 40);
   ABut->move(360, 280);
   ABut->setText("Play");
-  connect(ABut, SIGNAL(clicked()), midi, SLOT(play()));
+  connect(ABut, SIGNAL(clicked()), this, SLOT(JouerMidi(midi)));
 
   BBut->show();
   BBut->resize(90, 40);

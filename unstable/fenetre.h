@@ -79,6 +79,8 @@ class Fenetre : public QMainWindow
     void Image2Apercu(QImage *picture);
     void SteakHache();
 
+    void JouerMidi(QSound *midi);
+
     void DetectLignes();
     void VirerLignes();
     void Filtrage();
