@@ -433,16 +433,16 @@ p_lcord liste_noire (QImage * im, int esp, int larg )
   QRgb noir = qRgb(0,0,0);
   QRgb rouge = qRgb(255,0,0);
 
-  while( y < h )
+  while( x < l )
     {
-      x = 0;
-      while( x < l )
+      y = 0;
+      while( y < h )
 	{
 	  if (im->pixel(x,y) == noir)
 	    verifie_point(esp,x,y,im,&liste);
-	  x++;
+	  y++;
 	}
-      y++;
+      x++;
     }
 
   if (liste==NULL)
@@ -454,18 +454,18 @@ p_lcord liste_noire (QImage * im, int esp, int larg )
     Eroder(im);
 
   // on fait la verification que ca ne soit pas des notes blanches.
-
+  x = 0;
   y = 0;
-  while( y < h )
+  while( x < l )
     {
-      x = 0;
-      while( x < l )
+      y = 0;
+      while( y < h )
 	{
 	  if (im->pixel(x,y) == noir)
 	    verifie_point(esp,x,y,im,&liste);
-	  x++;
+	  y++;
 	}
-      y++;
+      x++;
     }
   if (i && liste) // on a cherche desnotes blanches
 	liste->type = blanche;
@@ -473,7 +473,7 @@ p_lcord liste_noire (QImage * im, int esp, int larg )
   }
 
   trouver_centre(im,&liste);
-  trouver_type_note(liste,im);
+  trouver_type_note(liste,im,larg);
   
 
 	
@@ -556,7 +556,7 @@ int is_blanche (p_lcord l, QImage * im)
 return 0;
 }
 
-void trouver_type_note (p_lcord  l, QImage * im )
+void trouver_type_note (p_lcord  l, QImage * im , int esp)
 {
 // fonction qui rempli le champ type qui di si c une blanche croche ...
 int nb_note=0; // nb de notes dans la liste
@@ -582,7 +582,7 @@ switch(nb_note)
   {
     i = l->x;
     j = l-> y;
-    while (im->valid(i,j) && im->pixel(i,j) != noir) 
+    while (im->valid(i,j) && im->pixel(i,j) != noir)  // on va tout a droite et on verifie que c une croche ou pas
       i++;
     if ((im->width() - i) > im->width() / 10) // facteur a verifier
     {
@@ -599,16 +599,88 @@ switch(nb_note)
    break;
    
   case 2 :{
+  i = projection_verticale(im,int ((l->x + l->suivant->x)/2));
+  if ((i>= 1.5*esp) && (i<= 4*esp))
+  {
+    l->type = croche;
+    l->suivant->type = croche;
+    printf("croche x 2\n");
+  }
+  
+  if ((i>= 4.5*esp) && (i<= 6*esp))
+  {
+    l->type = dcroche;
+    l->suivant->type = dcroche;
+    printf("dcroche x 2\n");
+  }  
    // case de 2 note detectee
    }
    break;
    
   case 3 :{
+  i = projection_verticale(im,int ((l->x + l->suivant->x)/2));
+  if ((i>= 1.5*esp) && (i<= 4*esp)) // 1 bare
+  {
+    l->type = croche;
+    printf("croche\n");
+  }
+  
+  if ((i>= 4.5*esp) && (i<= 6*esp)) // 2 barre
+  {
+    l->type = dcroche;
+    printf("dcroche x 2\n");
+  }    
+  
+  l2 = l->suivant;
+  i = projection_verticale(im,int ((l2->x + l2->suivant->x)/2));
+
+  
+  if ((i>= 1.5*esp) && (i<= 4*esp)) // 1 barre
+  {
+    if (l->type = dcroche)
+    {
+    	l->suivant->type = dcroche;
+	printf("dcroche\n");
+    }
+    else
+    {
+    	l->suivant->type = croche;
+	printf("croche\n");
+    }
+	
+    l2->suivant->type = croche;
+    printf("croche\n");
+  }
+  
+  if ((i>= 4.5*esp) && (i<= 6*esp)) //2 barre
+  {
+    if (l->type = croche)
+    {
+    	l->suivant->type = dcroche;
+	printf("dcroche\n");
+	}
+    else
+    {
+    	l->suivant->type = croche;
+	printf("croche\n");
+	}
+	
+    l2->suivant->type = dcroche;
+    printf("dcroche\n");
+  }
    // case de 3 note detectee
    }
    break;
    
   case 4 :{
+	l->type = dcroche;
+	l = l->suivant;
+	l->type = dcroche;
+	l = l->suivant;
+	l->type = dcroche;
+	l = l->suivant;
+	l->type = dcroche;
+	printf("dcroche x 4\n");
    // case de 4 note detectee
    }
    break; 
