@@ -83,7 +83,7 @@ Fenetre::Fenetre(QWidget *parent, const char *name)
 /* Destructeur - fait automatiquement */
 Fenetre::~Fenetre()
 {
-
+ 
 }
 
 
@@ -271,18 +271,22 @@ void Fenetre::RecoClick()
   AGroup->setTitle("Options");
   AGroup->move(360, 80);
   AGroup->resize(180, 150);
+
   ABox->show();
   ABox->setChecked(false);
   ABox->setText("Voir lignes");
   ABox->move(10, 40);
   ABox->resize(120, 20);
+
   BBox->show();
   BBox->setChecked(false);
   BBox->setText("Voir portees");
   BBox->move(10, 60);
   BBox->resize(120, 20);
+
   ABut->show();
   ABut->setText("Go !");
+
   connect(ABut, SIGNAL(clicked()), this, SLOT(DetectLignes()));
 }
 
@@ -292,18 +296,24 @@ void Fenetre::MusicClick()
 {
   SteackHache();
   
+  midi = new QSound("partition.mid");
   ALabel->show();
   ALabel->setText("Cliquez sur 'Play' pour \necouter la musique.");
   ALabel->move(360, 120);
   ALabel->resize(180, 100);
+
   ABut->show();
   ABut->setText("Play");
   ABut->move(360, 280);
   //ABut->resize();
+
   BBut->show();
   BBut->setText("Stop");
   BBut->move(450, 280);
   BBut->resize(90, 40);
+
+  connect(ABut, SIGNAL(clicked()), midi, SLOT(play()));
+  connect(BBut, SIGNAL(clicked()), midi, SLOT(stop()));
  }
 
 

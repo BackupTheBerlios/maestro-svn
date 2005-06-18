@@ -50,6 +50,8 @@ class Fenetre : public QMainWindow
   p_liste2 list_lignes;
   p_coord list_portees;
 
+  QSound *midi;
+
     
   public slots:
     void OuvrirImage();
@@ -58,6 +60,7 @@ class Fenetre : public QMainWindow
     void DetectLignes();
     void Filtrage();
     void Sauvegarde();
+
     void OpenClick();
     void FiltClick();
     void RecoClick();
