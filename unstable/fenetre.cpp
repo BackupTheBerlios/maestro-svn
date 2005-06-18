@@ -27,6 +27,7 @@ Fenetre::Fenetre(QWidget *parent, const char *name)
   Apercu = new QLabel(this, "Apercu");
   APropos = new QMessageBox(this ,"APropos");
   ABut = new QPushButton(this, "ABut");
+  BBut = new QPushButton(this, "BBut");
   AGroup = new QGroupBox(this, "AGroup");
   ABox = new QCheckBox(AGroup, "ABox");
   BBox = new QCheckBox(AGroup, "BBox");
@@ -35,7 +36,7 @@ Fenetre::Fenetre(QWidget *parent, const char *name)
   NBelt_listd = 0;
   list_lignes = NULL;
 
-  OpenBut->setText("Open");  //nom affiche
+  OpenBut->setText("Ouvrir");  //nom affiche
   FiltBut->setText("Filtrer");
   RecoBut->setText("Detection");
   MusicBut->setText("Jouer Midi");
@@ -62,33 +63,37 @@ Fenetre::Fenetre(QWidget *parent, const char *name)
   Apercu->resize(320, 380);
   APropos->resize(250, 250);
 
+  /* On desactive les boutons */
   FiltBut->setEnabled(false);
   RecoBut->setEnabled(false);
-  //MusicBut->setEnabled(false);
+  MusicBut->setEnabled(false);
 
-  ABut->hide();
-  ABox->hide();
-  BBox->hide();
-  AGroup->hide();
-  ALabel->hide();
+  SteackHache();
 
   /* on relie nos boutons a nos fonctions */
   connect(OpenBut, SIGNAL(clicked()), this, SLOT(OpenClick()));
   connect(QuitBut, SIGNAL(clicked()), this, SLOT(close()));
-  //connect(DetecBut, SIGNAL(clicked()), this, SLOT(DetectLignes()));
   connect(FiltBut, SIGNAL(clicked()), this, SLOT(FiltClick()));
-  //connect(SaveBut, SIGNAL(clicked()), this, SLOT(Sauvegarde()));
   connect(RecoBut, SIGNAL(clicked()), this, SLOT(RecoClick()));
-  //connect(MidiBut, SIGNAL(clicked()), this, SLOT(CreationMidi()));
   connect(MusicBut, SIGNAL(clicked()), this, SLOT(MusicClick()));
   connect(AboutBut, SIGNAL(clicked()), this, SLOT(AboutClick()));
 }
+
 
 /* Destructeur - fait automatiquement */
 Fenetre::~Fenetre()
 {
 
 }
+
+
+
+
+
+
+/****************  FONCTIONS DE BASE  *****************/
+
+
 
 /* On ouvre une image qu'on stocke dans la variable Picture 
 de la classe Fenetre, le chemin est sauvegarde dans 
@@ -106,28 +111,7 @@ void Fenetre::OuvrirImage()
   Image2Apercu(&Picture);
 }
 
-/* On clique sur 'Open' */
-void Fenetre::OpenClick()
-{
-  ABox->hide();
-  BBox->hide();
-  AGroup->hide();
-  disconnect(ABut, 0, 0, 0);
 
-  OuvrirImage();
-  setFixedSize(550, 500);
-  FiltBut->setEnabled(true);
-  RecoBut->setEnabled(true);
-  ABut->show();
-  ABut->resize(90, 40);
-  ABut->setText("Changer");
-  ABut->move(440, 350);
-  connect(ABut, SIGNAL(clicked()), this, SLOT(OuvrirImage()));
-  ALabel->show();
-  ALabel->move(360, 80);
-  ALabel->resize(180, 220);
-  ALabel->setText("Vous pouvez desormais \nchoisir de filtrer l'image \nou bien de lancer \ndirectement la \nreconnaissance.\n\nVous pouvez changer \nd'image si vous vous etes \ntrompe.");
-}
 
 /* On convertit une image en pixmap et on l'affiche 
 sur le label Apercu de la classe Fenetre */
@@ -140,6 +124,22 @@ void Fenetre::Image2Apercu(QImage *picture)
   temp.convertFromImage(Mini, 0);
   Apercu->setPixmap(temp); 
 }
+
+
+/* On cache tous les boutons */
+void Fenetre::SteackHache()
+{
+  ABut->hide();
+  BBut->hide();
+  ABox->hide();
+  BBox->hide();
+  AGroup->hide();
+  ALabel->hide();
+  
+  disconnect(ABut, 0, 0, 0);
+  disconnect(BBut, 0, 0, 0);
+}
+
 
 /* On detecte les lignes qu'on stocke dans une p_liste2 
 de la classe Fenetre, puis on affiche en rouge les lignes 
@@ -193,6 +193,7 @@ void Fenetre::DetectLignes()
   Image2Apercu(&temp);
 }
 
+
 /* On filtre l'image sans la redimensionner */
 void Fenetre::Filtrage()
 {
@@ -210,16 +211,61 @@ void Fenetre::Filtrage()
   Image2Apercu(&PictModif);
 }
 
+
 /* On sauvegarde l'image modifiee apres filtrage */
 void Fenetre::Sauvegarde()
 {
   Picture = PictModif;
 }
 
+
+
+
+
+
+/**************  BOUTONS DU HAUT  ****************/
+
+
+
+/* On clique sur 'Ouvrir' */
+void Fenetre::OpenClick()
+{
+  SteackHache();
+
+  OuvrirImage();
+  setFixedSize(550, 500);
+  FiltBut->setEnabled(true);
+  RecoBut->setEnabled(true);
+  MusicBut->setEnabled(true);
+  ABut->show();
+  ABut->resize(90, 40);
+  ABut->setText("Changer");
+  ABut->move(440, 350);
+  connect(ABut, SIGNAL(clicked()), this, SLOT(OuvrirImage()));
+  ALabel->show();
+  ALabel->move(360, 80);
+  ALabel->resize(180, 220);
+  ALabel->setText("Vous pouvez desormais \nchoisir de filtrer l'image \nou bien de lancer \ndirectement la \nreconnaissance.\n\nVous pouvez changer \nd'image si vous vous etes \ntrompe.");
+}
+
+
+/* On clique sur 'Filtrer' */
+void Fenetre::FiltClick()
+{
+  SteackHache();
+
+  ALabel->show();
+  ALabel->setText("Cliquez sur 'Go !' \npour traiter l'image.");
+  ABut->show();
+  ABut->setText("Go !");
+  connect(ABut, SIGNAL(clicked()), this, SLOT(Filtrage()));
+}
+
+
+/* On clique sur 'Detection' */
 void Fenetre::RecoClick()
 {
-  ALabel->hide();
-  disconnect(ABut, 0, 0, 0);
+  SteackHache();
   
   AGroup->show();
   AGroup->setTitle("Options");
@@ -240,25 +286,28 @@ void Fenetre::RecoClick()
   connect(ABut, SIGNAL(clicked()), this, SLOT(DetectLignes()));
 }
 
-void Fenetre::FiltClick()
-{
-  ABox->hide();
-  BBox->hide();
-  AGroup->hide();
-  disconnect(ABut, 0, 0, 0);
 
-  ALabel->show();
-  ALabel->setText("Cliquez sur 'Go !' \npour traiter l'image.");
-  ABut->show();
-  ABut->setText("Go !");
-  connect(ABut, SIGNAL(clicked()), this, SLOT(Filtrage()));
-}
-
+/* On clique sur 'Jouer Midi' */
 void Fenetre::MusicClick()
 {
- 
-}
+  SteackHache();
+  
+  ALabel->show();
+  ALabel->setText("Cliquez sur 'Play' pour \necouter la musique.");
+  ALabel->move(360, 120);
+  ALabel->resize(180, 100);
+  ABut->show();
+  ABut->setText("Play");
+  ABut->move(360, 280);
+  //ABut->resize();
+  BBut->show();
+  BBut->setText("Stop");
+  BBut->move(450, 280);
+  BBut->resize(90, 40);
+ }
 
+
+/* On clique sur 'Open' */
 void Fenetre::AboutClick()
 {
   APropos->about(this, "E=mb²", 

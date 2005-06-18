@@ -32,6 +32,7 @@ class Fenetre : public QMainWindow
   QPushButton *QuitBut;
 
   QPushButton *ABut;
+  QPushButton *BBut;
   QCheckBox *ABox;
   QCheckBox *BBox;
   QGroupBox *AGroup;
@@ -52,13 +53,14 @@ class Fenetre : public QMainWindow
     
   public slots:
     void OuvrirImage();
-    void OpenClick();
     void Image2Apercu(QImage *picture);
+    void SteackHache();
     void DetectLignes();
     void Filtrage();
     void Sauvegarde();
-    void RecoClick();
+    void OpenClick();
     void FiltClick();
+    void RecoClick();
     void MusicClick();
     void AboutClick();
 };
