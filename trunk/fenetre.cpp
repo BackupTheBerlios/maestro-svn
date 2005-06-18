@@ -275,17 +275,8 @@ void Fenetre::Reconnaissance()
   //  p_liste2 ll = TrouverLignes(&Picture);
   //  l = liste_noire(&Picture,CalculEspacement(ll));
   printf("esp = %i \n", espacement_ligne);
-  l = liste_noire(&img,espacement_ligne); 
+  l = liste_noire(&img,espacement_ligne,largeur_ligne); // on rempli la liste de note p_lcord
   
-  if (l==NULL)
-  {
-    for (i=1; i<=largeur_ligne;i++)
-    Dilater(&img);
-  
-  for (i=1; i<=largeur_ligne;i++)
-    Eroder(&img);
-      l = liste_noire(&img,espacement_ligne); 
-  }
   pix.convertFromImage(img);
   ALabel->setPixmap(pix);
 }

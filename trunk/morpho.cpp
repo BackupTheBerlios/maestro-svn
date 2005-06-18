@@ -407,8 +407,8 @@ void verifie_point( int esp, int x, int y, QImage * im, p_lcord * liste)
     return;
 
 
-  resx = x ;//- int(z/2);
-  resy = y ;//- int(t/2);
+  resx = x ; //- int(z/2);
+  resy = y ; //- int(t/2);
 
   // ajout dans la liste
   while (l)
@@ -422,13 +422,14 @@ void verifie_point( int esp, int x, int y, QImage * im, p_lcord * liste)
     dessiner_croix(im,bleu,resx,resy);
 }
 
-p_lcord liste_noire (QImage * im, int esp )
+p_lcord liste_noire (QImage * im, int esp, int larg )
 {
   p_lcord liste = NULL;
   p_lcord liste2;
   int x = 0, y = 0;
   int h = im->height();
   int l = im->width();
+  int i=0;
   QRgb noir = qRgb(0,0,0);
   QRgb rouge = qRgb(255,0,0);
 
@@ -443,8 +444,39 @@ p_lcord liste_noire (QImage * im, int esp )
 	}
       y++;
     }
+
+  if (liste==NULL)
+  {
+    for (i=1; i<=larg;i++) 
+      Dilater(im);
+  
+  for (i=1; i<=larg;i++)
+    Eroder(im);
+
+  // on fait la verification que ca ne soit pas des notes blanches.
+
+  y = 0;
+  while( y < h )
+    {
+      x = 0;
+      while( x < l )
+	{
+	  if (im->pixel(x,y) == noir)
+	    verifie_point(esp,x,y,im,&liste);
+	  x++;
+	}
+      y++;
+    }
+  if (i && liste) // on a cherche desnotes blanches
+	liste->type = blanche;
+
+  }
+
   trouver_centre(im,&liste);
   trouver_type_note(liste,im);
+  
+
+	
   liste2 = liste;
   while(liste2)
     {
@@ -541,7 +573,7 @@ l=l2;
 switch(nb_note)
 {
   case 1 : {
-  if (is_blanche(l,im))
+  if (l->type == blanche)
   {
     l->type = blanche;
     printf("blanche \n");
