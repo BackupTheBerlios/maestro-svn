@@ -58,6 +58,8 @@ class Fenetre : public QMainWindow
   p_coord list_portees;
   p_liste_img list_images;
 
+  QSound *midi;
+
   int NBelt_listd;
   int largeur_ligne; // donne la largeur d'une ligne
   int espacement_ligne; // Donne l'espacement entre deux lignes d'une portee
@@ -75,6 +77,8 @@ class Fenetre : public QMainWindow
  
     void OuvrirImage();
     void Image2Apercu(QImage *picture);
+    void SteackHache();
+
     void DetectLignes();
     void VirerLignes();
     void Filtrage();

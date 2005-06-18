@@ -39,10 +39,10 @@ p_liste2 TrouverLignes(QImage *picture)
   p_liste2 liste;
   int i, fin, cpt, depart;
 
-  Initialiser_liste2(&liste);
   i = 0;
   fin = picture->height();
   depart = (picture->width())/2;
+  liste = NULL;
 
   while (i < fin)
     {
@@ -60,6 +60,7 @@ p_liste2 TrouverLignes(QImage *picture)
 
   return liste;
 }
+
 
 float Moyenne_Largeur(p_liste2 liste)
 {
@@ -83,14 +84,16 @@ float Max_Largeur(p_liste2 liste)
   float temp;
 
   temp = 0;
-  while (!(liste))
+  while (liste)
     {
       if (temp < liste->larg)
 	temp = liste->larg;
+      liste = liste->next;
     }
 
   return temp;
 }
+
 
 void SupprimerLignes(QImage *img, int h)
 {
@@ -116,6 +119,7 @@ void SupprimerLignes(QImage *img, int h)
     
 }
 
+
 void AfficherLignes(p_liste2 p, QImage *img)
 {
   int i;
@@ -128,6 +132,7 @@ void AfficherLignes(p_liste2 p, QImage *img)
       p = p->next;
     }
 }
+
 
 int EcartMin(p_liste2 liste)
 {
@@ -158,11 +163,12 @@ p_coord GroupLignes(p_liste2 liste, int droite, int bas)
   p_coord result;
   int debut, fin, temp1, temp2, reference, ecart;
 
-  Initialiser_coord(&result);
   debut = 0;
   reference = EcartMin(liste);
   temp1 = liste->ord;
   liste = liste->next;
+  result = NULL;
+
   while (liste) 
     {
       temp2 = liste->ord;
@@ -170,13 +176,38 @@ p_coord GroupLignes(p_liste2 liste, int droite, int bas)
       if (ecart > 4 * reference)
 	{ 
 	  fin = temp1 + (ecart / 2);
-	  Ajouter_coord(&result, 0, debut, droite, fin);
+	  Ajouter_coord(&result, 0, debut, droite, fin, fin - (temp1 - debut));
 	  debut = fin + 1;
 	}      
       temp1 = temp2;
       liste = liste->next;
       }
-  Ajouter_coord(&result, 0, debut, droite, bas);
+  Ajouter_coord(&result, 0, debut, droite, bas, bas - (temp1 - debut));
   
   return result;
+}
+
+
+int CalculEspacement(p_liste2 l)
+{
+int res=0,tmp2 = 0,i=1,stop =1;
+p_liste2 tmp = l;
+while(tmp && stop)
+  {
+    if (!tmp2)
+      {
+	tmp2 = tmp->ord;
+      }
+    else
+      {
+      	printf("l->ord = %i\n",tmp->ord);
+	res = res + (tmp->ord - tmp2);
+	tmp2 = tmp->ord;
+	i++;
+      }
+    if(i>=4)
+      stop = 0;
+    tmp = tmp->next;
+  }
+ return (int(res/i));
 }

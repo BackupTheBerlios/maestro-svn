@@ -5,6 +5,8 @@
 
 #include"lignes.h"
 #include"filtre.h"
+#include"morpho.h"
+#include"reconnaissance.h"
 
 
 
@@ -26,15 +28,21 @@ Fenetre::Fenetre(QWidget *parent, const char *name)
   PreviewCadre = new QGroupBox(this, "PreviewCadre");
   Apercu = new QLabel(this, "Apercu");
   APropos = new QMessageBox(this ,"APropos");
-  ABut = new QPushButton(this, "ABut");
+  ABut = new QPushButton(this, "ABut");  
   BBut = new QPushButton(this, "BBut");
-  AGroup = new QGroupBox(this, "AGroup");
-  ABox = new QCheckBox(AGroup, "ABox");
-  BBox = new QCheckBox(AGroup, "BBox");
+  CBut = new QPushButton(this, "CBut");
+  DBut = new QPushButton(this, "DBut");
+  EBut = new QPushButton(this, "EBut");
+  FBut = new QPushButton(this, "FBut");
+  AGroup = new QButtonGroup(this, "AGroup");
+
+  ABox = new QRadioButton(AGroup, "ABox");// image nette
+  BBox = new QRadioButton(AGroup, "BBox"); //image scannee
   ALabel = new QLabel(this, "ALabel");
 
   NBelt_listd = 0;
   list_lignes = NULL;
+  list_portees = NULL;
 
   OpenBut->setText("Ouvrir");  //nom affiche
   FiltBut->setText("Filtrer");
@@ -63,7 +71,6 @@ Fenetre::Fenetre(QWidget *parent, const char *name)
   Apercu->resize(320, 380);
   APropos->resize(250, 250);
 
-  /* On desactive les boutons */
   FiltBut->setEnabled(false);
   RecoBut->setEnabled(false);
   MusicBut->setEnabled(false);
@@ -72,26 +79,26 @@ Fenetre::Fenetre(QWidget *parent, const char *name)
 
   /* on relie nos boutons a nos fonctions */
   connect(OpenBut, SIGNAL(clicked()), this, SLOT(OpenClick()));
-  connect(QuitBut, SIGNAL(clicked()), this, SLOT(close()));
   connect(FiltBut, SIGNAL(clicked()), this, SLOT(FiltClick()));
   connect(RecoBut, SIGNAL(clicked()), this, SLOT(RecoClick()));
   connect(MusicBut, SIGNAL(clicked()), this, SLOT(MusicClick()));
   connect(AboutBut, SIGNAL(clicked()), this, SLOT(AboutClick()));
+  connect(QuitBut, SIGNAL(clicked()), this, SLOT(close()));
 }
 
 
 /* Destructeur - fait automatiquement */
 Fenetre::~Fenetre()
 {
- 
+
 }
 
 
 
+/******************  FONCTIONS DE BASE  ***************/
 
 
 
-/****************  FONCTIONS DE BASE  *****************/
 
 
 
@@ -103,14 +110,13 @@ void Fenetre::OuvrirImage()
   bool succes;
 
   FilePath = QFileDialog::getOpenFileName("~/",
-					  "Images (*.png *.jpg *.bmp *.gif)",
+					  "Images (*.png *.jpg *.bmp *.gif sauvegarde)",
 					  this,
 					  "openfiledialog",
 					  "Choose an image to load");
   succes = Picture.load(FilePath);
   Image2Apercu(&Picture);
 }
-
 
 
 /* On convertit une image en pixmap et on l'affiche 
@@ -126,18 +132,26 @@ void Fenetre::Image2Apercu(QImage *picture)
 }
 
 
-/* On cache tous les boutons */
-void Fenetre::SteackHache()
+/* On cache et desactive tous les boutons */
+void Fenetre::SteakHache()
 {
   ABut->hide();
   BBut->hide();
+  CBut->hide();
+  DBut->hide();
+  EBut->hide();
+  FBut->hide();
   ABox->hide();
   BBox->hide();
   AGroup->hide();
   ALabel->hide();
-  
+
   disconnect(ABut, 0, 0, 0);
   disconnect(BBut, 0, 0, 0);
+  disconnect(CBut, 0, 0, 0);
+  disconnect(DBut, 0, 0, 0);
+  disconnect(EBut, 0, 0, 0);
+  disconnect(FBut, 0, 0, 0);
 }
 
 
@@ -155,42 +169,70 @@ void Fenetre::DetectLignes()
   rouge = qRgb(255, 0, 0);
   bleu = qRgb(0, 0, 255);
   w = Picture.width();
-  temp = Picture;
+  temp = Picture.copy();
   
   Supprimer_liste2(&list_lignes);
   list_lignes = TrouverLignes(&Picture);
   Supprimer_coord(&list_portees);
   list_portees = GroupLignes(list_lignes, w - 1, Picture.height() - 1);
 
-  if (ABox->isChecked())
+  toto = list_lignes;
+  while (toto) // on verifie
     {
-      toto = list_lignes;
-      while (toto) // on verifie
+      for (i=0; i<w; i++)
 	{
-	  for (i=0; i<w; i++)
-	    {
-	      for (j=0; j<toto->larg; j++)
-		temp.setPixel(i, toto->ord + j, rouge);
-	    }      
-	  toto = toto->next;
-	}
+	  for (j=0; j<toto->larg; j++)
+	    temp.setPixel(i, toto->ord + j, rouge);
+	}      
+      toto = toto->next;
     }
-
-  if (BBox->isChecked())
+   
+  tata = list_portees;
+  while (tata) // on verifie
     {
-      tata = list_portees;
-      while (tata) // on verifie
+      for (i=0; i<w; i++)
 	{
-	  for (i=0; i<w; i++)
-	    {
-	      temp.setPixel(i, tata->pos.top(), bleu);
-	      temp.setPixel(i, tata->pos.bottom(), bleu);
-	    }      
-	  tata = tata->next;
-	}
+	  temp.setPixel(i, tata->pos.top(), bleu);
+	  temp.setPixel(i, tata->pos.bottom(), bleu);
+	}      
+      tata = tata->next;
     }
 
   Image2Apercu(&temp);
+}
+
+
+void Fenetre::VirerLignes()
+{
+  QRgb blanc =  qRgb(255,255,255);
+  QRgb noir =  qRgb(0,0,0);
+  int i,j,k,x;
+
+  PictModif = Picture;
+  largeur_ligne = Max_Largeur(list_lignes);
+  espacement_ligne = CalculEspacement(list_lignes);
+  printf("esp = %i \t largeur = %i\n", espacement_ligne, largeur_ligne);
+  printf("Virer lignes active\n");
+  while (list_lignes != NULL )
+    {
+      i = list_lignes->ord;
+      j = list_lignes->larg;
+      printf("ordonee = %i, largeur = %i , espacement_ligne = %i\n",i,j, espacement_ligne);;
+      for( x=-1* largeur_ligne ; x < j + largeur_ligne; x++ )
+	{
+	  // printf("Virer ligne de %i\n",x+i);
+	  for(k=0;PictModif.valid(k,x+i);k++)
+	    {
+	      if ( (PictModif.pixel(k,i+j +int(largeur_ligne/2+ largeur_ligne/3)) != noir)
+		   && (PictModif.pixel(k,i-j) != noir) )
+		PictModif.setPixel(k,x+i,blanc);
+	    }
+	}  
+      list_lignes = list_lignes->next;
+    }
+ Image2Apercu(&PictModif);
+ printf("Fin de virer lignes\n");;
+ 
 }
 
 
@@ -199,16 +241,44 @@ void Fenetre::Filtrage()
 {
   float angle;
 
-  PictModif = filtrer_grayscale(Picture);
-  PictModif = filtrer_seuillage(PictModif);
-  angle = rotation_calcul_angle(PictModif);
-
-  if (angle != 0.0)   
-    PictModif = filtrer_rotation(PictModif, angle);
-
-  PictModif = filtrer_median(PictModif, NBelt_listd);
-  Picture = PictModif;
+  if (BBox->isChecked())
+    {
+      PictModif = filtrer_grayscale(Picture);
+      PictModif = filtrer_seuillage(PictModif,155);
+      angle = rotation_calcul_angle(PictModif);
+      
+      if (angle != 0.0)   
+	PictModif = filtrer_rotation(PictModif, angle);
+      
+      PictModif = filtrer_median(PictModif, NBelt_listd,155);
+      qualite_image = 1;
+    }
+  else
+    {
+      PictModif = filtrer_grayscale(Picture);
+      PictModif = filtrer_seuillage(PictModif,200);
+      qualite_image = 0;
+    }
   Image2Apercu(&PictModif);
+
+  BBut->show(); // on propose de sauvegarder
+  BBut->resize(90, 40);
+  BBut->move(440, 400);
+  BBut->setText("Sauver");
+  connect(BBut, SIGNAL(clicked()), this, SLOT(Sauvegarde()));
+}
+
+
+void Fenetre::Filtrage_simple(QImage * im) // filtrage pour les tests : pas de rotation.
+{
+  int s;
+  if (qualite_image)
+    s = 155;
+  else
+    s = 200;
+
+  *im = filtrer_median(*im, NBelt_listd,s);
+ // Image2Apercu(im);
 }
 
 
@@ -216,14 +286,95 @@ void Fenetre::Filtrage()
 void Fenetre::Sauvegarde()
 {
   Picture = PictModif;
+  PictModif.save("sauvegarde", "PNG" );
+}
+
+
+void Fenetre::Reconnaissance()
+{
+  QImage img;
+  QPixmap pix;
+  p_lcord l;
+  int i;
+    
+  img = ALabel->pixmap()->convertToImage();
+  if (qualite_image)
+    Filtrage_simple(&img); // On repasse une couche de filtrage c mieu.
+  // Reconnaissance des notes noire Pour le moment.
+  //  p_liste2 ll = TrouverLignes(&Picture);
+  //  l = liste_noire(&Picture,CalculEspacement(ll));
+  printf("esp = %i \n", espacement_ligne);
+  l = liste_noire(&img,espacement_ligne,largeur_ligne); // on rempli la liste de note p_lcord
+  
+  pix.convertFromImage(img);
+  ALabel->setPixmap(pix);
+}
+
+
+void Fenetre::Reconnaissance_cle()
+{
+  QImage img;
+  
+  img = ALabel->pixmap()->convertToImage();
+  afficher_caracteristique_cle(caracteristiques_cle(&img));
+  afficher_cle(&img,espacement_ligne);
+}
+
+
+void Fenetre::ClickTrouver()
+{
+  QImage img;
+  int i;
+  p_coord p=list_portees;
+  
+  list_images = NULL;
+  
+  img = Picture.copy();
+  
+  for (i=1; i<=largeur_ligne;i++)
+    Dilater(&img);
+  
+  for (i=1; i<=largeur_ligne;i++)
+  Eroder(&img);
+
+  if (list_portees)
+  list_images =TrouverMorceaux(&(img.copy(list_portees->pos)),espacement_ligne);
+   
+  ALabel->show();
+  ALabel->resize(180, 150);
+  ALabel->move(360, 340);
+  ALabel->setPixmap(NULL);
+}
+
+
+void Fenetre::ClickDefiler()
+{
+  QImage tmp;
+  QImage morceau;
+  QPixmap temp;
+
+  if (list_images)
+  {
+    morceau = Picture.copy(list_portees->pos).copy(list_images->r);
+    tmp = morceau;
+    /*tmp = morceau.smoothScale(ALabel->width(), ALabel->height(), morceau.ScaleMin);*/
+    temp.convertFromImage(tmp, 0);
+    ALabel->setPixmap(temp);
+    list_images = list_images->p;
+  }
+  else
+  if (list_portees)
+  {
+    list_portees = list_portees->next;
+    ClickTrouver();
+  }
 }
 
 
 
+/****************  FONCTIONS CLICK  ***************/
 
 
-
-/**************  BOUTONS DU HAUT  ****************/
 
 
 
@@ -237,87 +388,117 @@ void Fenetre::OpenClick()
   FiltBut->setEnabled(true);
   RecoBut->setEnabled(true);
   MusicBut->setEnabled(true);
+
   ABut->show();
   ABut->resize(90, 40);
   ABut->setText("Changer");
   ABut->move(440, 350);
   connect(ABut, SIGNAL(clicked()), this, SLOT(OuvrirImage()));
+
   ALabel->show();
   ALabel->move(360, 80);
   ALabel->resize(180, 220);
   ALabel->setText("Vous pouvez desormais \nchoisir de filtrer l'image \nou bien de lancer \ndirectement la \nreconnaissance.\n\nVous pouvez changer \nd'image si vous vous etes \ntrompe.");
 }
 
-
 /* On clique sur 'Filtrer' */
 void Fenetre::FiltClick()
 {
-  SteackHache();
+  SteakHache();
 
-  ALabel->show();
-  ALabel->setText("Cliquez sur 'Go !' \npour traiter l'image.");
-  ABut->show();
-  ABut->setText("Go !");
-  connect(ABut, SIGNAL(clicked()), this, SLOT(Filtrage()));
-}
-
-
-/* On clique sur 'Detection' */
-void Fenetre::RecoClick()
-{
-  SteackHache();
-  
   AGroup->show();
-  AGroup->setTitle("Options");
+  AGroup->setExclusive(true);
+  AGroup->setTitle("Type");
   AGroup->move(360, 80);
-  AGroup->resize(180, 150);
+  AGroup->resize(180, 120);
 
   ABox->show();
   ABox->setChecked(false);
-  ABox->setText("Voir lignes");
+  ABox->setText("Nette");
   ABox->move(10, 40);
   ABox->resize(120, 20);
 
   BBox->show();
-  BBox->setChecked(false);
-  BBox->setText("Voir portees");
+  BBox->setChecked(true);
+  BBox->setText("Scannée");
   BBox->move(10, 60);
   BBox->resize(120, 20);
 
   ABut->show();
+  ABut->resize(90, 40);
+  ABut->move(440, 350);
   ABut->setText("Go !");
-
-  connect(ABut, SIGNAL(clicked()), this, SLOT(DetectLignes()));
+  connect(ABut, SIGNAL(clicked()), this, SLOT(Filtrage()));
 }
 
+/* On clique sur 'Detecter' */
+void Fenetre::RecoClick()
+{
+  SteackHache();
+
+  ABut->show();
+  ABut->setText("Lignes");
+  ABut->resize(80, 40);
+  ABut->move(360, 120);
+  connect(ABut, SIGNAL(clicked()), this, SLOT(DetectLignes()));
+
+  BBut->show();
+  BBut->resize(80, 40);
+  BBut->move(360, 230);
+  BBut->setText("Note");
+  connect(BBut, SIGNAL(clicked()), this, SLOT(Reconnaissance()));
+
+  CBut->show();
+  CBut->resize(80, 40);
+  CBut->move(450, 230);
+  CBut->setText("Cle");
+  connect(CBut, SIGNAL(clicked()), this, SLOT(Reconnaissance_cle()));
+
+  DBut->show();
+  DBut->resize(80, 40);
+  DBut->move(360, 180);
+  DBut->setText("Trouver");
+  connect(DBut, SIGNAL(clicked()), this, SLOT(ClickTrouver()));
+
+  EBut->show();
+  EBut->resize(80, 40);
+  EBut->move(450, 180);
+  EBut->setText(">>");
+  connect(EBut, SIGNAL(clicked()), this, SLOT(ClickDefiler()));
+
+  FBut->show();
+  FBut->resize(80, 40);
+  FBut->move(450, 120);
+  FBut->setText("Virer");
+  connect(FBut, SIGNAL(clicked()), this, SLOT(VirerLignes()));
+}
 
 /* On clique sur 'Jouer Midi' */
 void Fenetre::MusicClick()
 {
   SteackHache();
-  
+
   midi = new QSound("partition.mid");
+
   ALabel->show();
-  ALabel->setText("Cliquez sur 'Play' pour \necouter la musique.");
+  ALabel->setText("Cliquez sur 'Play' pour\necouter la musique.");
   ALabel->move(360, 120);
   ALabel->resize(180, 100);
 
   ABut->show();
-  ABut->setText("Play");
+  ABut->resize(90, 40);
   ABut->move(360, 280);
-  //ABut->resize();
+  ABut->setText("Play");
+  connect(ABut, SIGNAL(clicked()), midi, SLOT(play()));
 
   BBut->show();
-  BBut->setText("Stop");
-  BBut->move(450, 280);
   BBut->resize(90, 40);
-
-  connect(ABut, SIGNAL(clicked()), midi, SLOT(play()));
+  BBut->move(450, 280);
+  BBut->setText("Stop");
   connect(BBut, SIGNAL(clicked()), midi, SLOT(stop()));
- }
+}
 
-
-/* On clique sur 'Open' */
+/* On clique sur 'A Propos' */
 void Fenetre::AboutClick()
 {
   APropos->about(this, "E=mb²", 

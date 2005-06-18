@@ -9,6 +9,7 @@
 #include"reconnaissance.h"
 
 
+
 /* Constructeur de la classe Fenetre */
 Fenetre::Fenetre(QWidget *parent, const char *name)
   : QMainWindow(parent, name)
@@ -43,7 +44,7 @@ Fenetre::Fenetre(QWidget *parent, const char *name)
   list_lignes = NULL;
   list_portees = NULL;
 
-  OpenBut->setText("Open");  //nom affiche
+  OpenBut->setText("Ouvrir");  //nom affiche
   FiltBut->setText("Filtrer");
   RecoBut->setText("Detection");
   MusicBut->setText("Jouer Midi");
@@ -72,18 +73,9 @@ Fenetre::Fenetre(QWidget *parent, const char *name)
 
   FiltBut->setEnabled(false);
   RecoBut->setEnabled(false);
-  //MusicBut->setEnabled(false);
+  MusicBut->setEnabled(false);
 
-  ABut->hide();
-  BBut->hide();
-  CBut->hide();
-  DBut->hide();
-  EBut->hide();
-  FBut->hide();
-  ABox->hide();
-  BBox->hide();
-  AGroup->hide();
-  ALabel->hide();
+  SteackHache();
 
   /* on relie nos boutons a nos fonctions */
   connect(OpenBut, SIGNAL(clicked()), this, SLOT(OpenClick()));
@@ -94,11 +86,21 @@ Fenetre::Fenetre(QWidget *parent, const char *name)
   connect(QuitBut, SIGNAL(clicked()), this, SLOT(close()));
 }
 
+
 /* Destructeur - fait automatiquement */
 Fenetre::~Fenetre()
 {
 
 }
+
+
+
+/******************  FONCTIONS DE BASE  ***************/
+
+
+
+
+
 
 /* On ouvre une image qu'on stocke dans la variable Picture 
 de la classe Fenetre, le chemin est sauvegarde dans 
@@ -116,6 +118,7 @@ void Fenetre::OuvrirImage()
   Image2Apercu(&Picture);
 }
 
+
 /* On convertit une image en pixmap et on l'affiche 
 sur le label Apercu de la classe Fenetre */
 void Fenetre::Image2Apercu(QImage *picture)
@@ -127,6 +130,30 @@ void Fenetre::Image2Apercu(QImage *picture)
   temp.convertFromImage(Mini, 0);
   Apercu->setPixmap(temp); 
 }
+
+
+/* On cache et desactive tous les boutons */
+void Fenetre::SteakHache()
+{
+  ABut->hide();
+  BBut->hide();
+  CBut->hide();
+  DBut->hide();
+  EBut->hide();
+  FBut->hide();
+  ABox->hide();
+  BBox->hide();
+  AGroup->hide();
+  ALabel->hide();
+
+  disconnect(ABut, 0, 0, 0);
+  disconnect(BBut, 0, 0, 0);
+  disconnect(CBut, 0, 0, 0);
+  disconnect(DBut, 0, 0, 0);
+  disconnect(EBut, 0, 0, 0);
+  disconnect(FBut, 0, 0, 0);
+}
+
 
 /* On detecte les lignes qu'on stocke dans une p_liste2 
 de la classe Fenetre, puis on affiche en rouge les lignes 
@@ -209,7 +236,6 @@ void Fenetre::VirerLignes()
 }
 
 
-
 /* On filtre l'image sans la redimensionner */
 void Fenetre::Filtrage()
 {
@@ -242,6 +268,7 @@ void Fenetre::Filtrage()
   connect(BBut, SIGNAL(clicked()), this, SLOT(Sauvegarde()));
 }
 
+
 void Fenetre::Filtrage_simple(QImage * im) // filtrage pour les tests : pas de rotation.
 {
   int s;
@@ -254,12 +281,14 @@ void Fenetre::Filtrage_simple(QImage * im) // filtrage pour les tests : pas de r
  // Image2Apercu(im);
 }
 
+
 /* On sauvegarde l'image modifiee apres filtrage */
 void Fenetre::Sauvegarde()
 {
   Picture = PictModif;
   PictModif.save("sauvegarde", "PNG" );
 }
+
 
 void Fenetre::Reconnaissance()
 {
@@ -281,6 +310,7 @@ void Fenetre::Reconnaissance()
   ALabel->setPixmap(pix);
 }
 
+
 void Fenetre::Reconnaissance_cle()
 {
   QImage img;
@@ -289,6 +319,7 @@ void Fenetre::Reconnaissance_cle()
   afficher_caracteristique_cle(caracteristiques_cle(&img));
   afficher_cle(&img,espacement_ligne);
 }
+
 
 void Fenetre::ClickTrouver()
 {
@@ -315,6 +346,7 @@ void Fenetre::ClickTrouver()
   ALabel->setPixmap(NULL);
 }
 
+
 void Fenetre::ClickDefiler()
 {
   QImage tmp;
@@ -340,31 +372,22 @@ void Fenetre::ClickDefiler()
 
 
 
-/***** FONCTIONS CLICK *****/
+/****************  FONCTIONS CLICK  ***************/
 
 
-/* On clique sur 'Open' */
+
+
+
+/* On clique sur 'Ouvrir' */
 void Fenetre::OpenClick()
 {
-  BBut->hide();
-  CBut->hide();
-  DBut->hide();
-  EBut->hide();
-  FBut->hide();
-  ABox->hide();
-  BBox->hide();
-  AGroup->hide();
-  disconnect(ABut, 0, 0, 0);
-  disconnect(BBut, 0, 0, 0);
-  disconnect(CBut, 0, 0, 0);
-  disconnect(DBut, 0, 0, 0);
-  disconnect(EBut, 0, 0, 0);
-  disconnect(FBut, 0, 0, 0);
+  SteackHache();
 
   OuvrirImage();
   setFixedSize(550, 500);
   FiltBut->setEnabled(true);
   RecoBut->setEnabled(true);
+  MusicBut->setEnabled(true);
 
   ABut->show();
   ABut->resize(90, 40);
@@ -381,18 +404,7 @@ void Fenetre::OpenClick()
 /* On clique sur 'Filtrer' */
 void Fenetre::FiltClick()
 {
-  ALabel->hide();
-  BBut->hide();
-  CBut->hide();
-  DBut->hide();
-  EBut->hide();
-  FBut->hide();
-  disconnect(ABut, 0, 0, 0);
-  disconnect(BBut, 0, 0, 0);
-  disconnect(CBut, 0, 0, 0);
-  disconnect(DBut, 0, 0, 0);
-  disconnect(EBut, 0, 0, 0);
-  disconnect(FBut, 0, 0, 0);
+  SteakHache();
 
   AGroup->show();
   AGroup->setExclusive(true);
@@ -422,16 +434,7 @@ void Fenetre::FiltClick()
 /* On clique sur 'Detecter' */
 void Fenetre::RecoClick()
 {
-  ALabel->hide();
-  AGroup->hide();
-  ABox->hide();
-  BBox->hide();
-  disconnect(ABut, 0, 0, 0);
-  disconnect(BBut, 0, 0, 0);
-  disconnect(CBut, 0, 0, 0);
-  disconnect(DBut, 0, 0, 0);
-  disconnect(EBut, 0, 0, 0);
-  disconnect(FBut, 0, 0, 0);
+  SteackHache();
 
   ABut->show();
   ABut->setText("Lignes");
@@ -473,7 +476,26 @@ void Fenetre::RecoClick()
 /* On clique sur 'Jouer Midi' */
 void Fenetre::MusicClick()
 {
-  QSound::play("green_day.mid");
+  SteackHache();
+
+  midi = new QSound("partition.mid");
+
+  ALabel->show();
+  ALabel->setText("Cliquez sur 'Play' pour\necouter la musique.");
+  ALabel->move(360, 120);
+  ALabel->resize(180, 100);
+
+  ABut->show();
+  ABut->resize(90, 40);
+  ABut->move(360, 280);
+  ABut->setText("Play");
+  connect(ABut, SIGNAL(clicked()), midi, SLOT(play()));
+
+  BBut->show();
+  BBut->resize(90, 40);
+  BBut->move(450, 280);
+  BBut->setText("Stop");
+  connect(BBut, SIGNAL(clicked()), midi, SLOT(stop()));
 }
 
 /* On clique sur 'A Propos' */

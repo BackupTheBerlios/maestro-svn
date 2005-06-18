@@ -60,5 +60,5 @@ void sami_carac(QImage pix)
 {
   /**  printf("Fichier : %s", FilePath.ascii());**/
   afficher_caracteristique_cle(caracteristiques_cle(&pix));
-  afficher_cle(&pix);
+  afficher_cle(&pix,0);
 }

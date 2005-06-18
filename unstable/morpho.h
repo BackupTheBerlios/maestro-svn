@@ -3,6 +3,7 @@
 
 #include <qimage.h>
 #include <qcolor.h>
+#include "note.h"
 
 
 bool EgaleCouleur(QRgb r1, QRgb r2);
@@ -24,8 +25,8 @@ void Creuser(QImage * img);
 typedef struct s_reconnaissance_cle t_rcle;
 struct s_reconnaissance_cle
 {
-  int largeur;
-  int hauteur;
+  int largeur; // largeur de l'image passee en parametre
+  int hauteur; // hauteur de l'image passee en parametre
   int debutv,finv; // hauteur du debut et fin de la forme.
   int debuth,finh; // largeur du debut et fin de la forme.
   int projh; // emplacement ou la projection horizontale est maximale
@@ -35,6 +36,8 @@ struct s_reconnaissance_cle
   int projved;
   int projveedd;
 };
+
+
 
 int projection_horizontale(QImage * im, int j);
 
@@ -48,7 +51,30 @@ t_rcle caracteristiques_cle(QImage * im);
 
 void afficher_caracteristique_cle(t_rcle res);
 
-int reconnaissance_cle(QImage * im);//0:fa 1:sol 2:ut
+int reconnaissance_cle(QImage * im,int esp);//0:fa 1:sol 2:ut
 
-void afficher_cle(QImage * im);
+void afficher_cle(QImage * im,int esp);
+
+/***** Reconnaissance des notes de musique ***/
+
+typedef struct s_lcord * p_lcord; // liste de coordonnees x y;
+struct s_lcord
+{
+  int x;
+  int y;
+  t_type type;
+  p_lcord suivant;
+};
+int largeur_noir(int x, int y, QImage * im ,int esp);
+int hauteur_noir(int x, int y, QImage * im,int esp);
+void ajouter_plcord(p_lcord * p, int x, int y);
+void verifie_point( int esp, int x, int y, QImage * im, p_lcord * liste);
+p_lcord liste_noire (QImage * im, int esp , int larg);
+void trouver_centre(QImage * im, p_lcord * liste);
+int is_blanche (p_lcord l, QImage * im);
+void trouver_type_note (p_lcord  l, QImage * im );
+void dessiner_croix(QImage * im, QRgb coul, int x, int y);
+
+
+
 #endif
