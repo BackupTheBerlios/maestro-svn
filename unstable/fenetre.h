@@ -75,11 +75,11 @@ class Fenetre : public QMainWindow
     void ClickTrouver();
     void ClickDefiler();
  
-    void OuvrirImage();
+    bool OuvrirImage();
     void Image2Apercu(QImage *picture);
     void SteakHache();
 
-    void JouerMidi(QSound *midi);
+    void JouerMidi();
 
     void DetectLignes();
     void VirerLignes();

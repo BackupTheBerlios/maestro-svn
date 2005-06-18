@@ -75,7 +75,7 @@ Fenetre::Fenetre(QWidget *parent, const char *name)
   RecoBut->setEnabled(false);
   MusicBut->setEnabled(false);
 
-  SteackHache();
+  SteakHache();
 
   /* on relie nos boutons a nos fonctions */
   connect(OpenBut, SIGNAL(clicked()), this, SLOT(OpenClick()));
@@ -105,7 +105,7 @@ Fenetre::~Fenetre()
 /* On ouvre une image qu'on stocke dans la variable Picture 
 de la classe Fenetre, le chemin est sauvegarde dans 
 FilePath */
-void Fenetre::OuvrirImage()
+bool Fenetre::OuvrirImage()
 {
   bool succes;
 
@@ -116,6 +116,8 @@ void Fenetre::OuvrirImage()
 					  "Choose an image to load");
   succes = Picture.load(FilePath);
   Image2Apercu(&Picture);
+
+  return (succes);
 }
 
 
@@ -372,6 +374,21 @@ void Fenetre::ClickDefiler()
 
 
 
+/*****************  MUSIQUE  *******************/
+
+
+
+
+
+
+void Fenetre::JouerMidi()
+{
+  if (midi->isFinished())
+    midi->play();
+}
+
+
+
 /****************  FONCTIONS CLICK  ***************/
 
 
@@ -381,24 +398,26 @@ void Fenetre::ClickDefiler()
 /* On clique sur 'Ouvrir' */
 void Fenetre::OpenClick()
 {
-  SteackHache();
+  SteakHache();
 
-  OuvrirImage();
-  setFixedSize(550, 500);
-  FiltBut->setEnabled(true);
-  RecoBut->setEnabled(true);
-  MusicBut->setEnabled(true);
+  if (OuvrirImage())
+    {
+      setFixedSize(550, 500);
+      FiltBut->setEnabled(true);
+      RecoBut->setEnabled(true);
+      MusicBut->setEnabled(true);
 
-  ABut->show();
-  ABut->resize(90, 40);
-  ABut->setText("Changer");
-  ABut->move(440, 350);
-  connect(ABut, SIGNAL(clicked()), this, SLOT(OuvrirImage()));
-
-  ALabel->show();
-  ALabel->move(360, 80);
-  ALabel->resize(180, 220);
-  ALabel->setText("Vous pouvez desormais \nchoisir de filtrer l'image \nou bien de lancer \ndirectement la \nreconnaissance.\n\nVous pouvez changer \nd'image si vous vous etes \ntrompe.");
+      ABut->show();
+      ABut->resize(90, 40);
+      ABut->setText("Changer");
+      ABut->move(440, 350);
+      connect(ABut, SIGNAL(clicked()), this, SLOT(OuvrirImage()));
+      
+      ALabel->show();
+      ALabel->move(360, 80);
+      ALabel->resize(180, 220);
+      ALabel->setText("Vous pouvez desormais \nchoisir de filtrer l'image \nou bien de lancer \ndirectement la \nreconnaissance.\n\nVous pouvez changer \nd'image si vous vous etes \ntrompe.");
+    }
 }
 
 /* On clique sur 'Filtrer' */
@@ -434,7 +453,7 @@ void Fenetre::FiltClick()
 /* On clique sur 'Detecter' */
 void Fenetre::RecoClick()
 {
-  SteackHache();
+  SteakHache();
 
   ABut->show();
   ABut->setText("Lignes");
@@ -476,7 +495,7 @@ void Fenetre::RecoClick()
 /* On clique sur 'Jouer Midi' */
 void Fenetre::MusicClick()
 {
-  SteackHache();
+  SteakHache();
 
   midi = new QSound("partition.mid");
 
@@ -489,7 +508,7 @@ void Fenetre::MusicClick()
   ABut->resize(90, 40);
   ABut->move(360, 280);
   ABut->setText("Play");
-  connect(ABut, SIGNAL(clicked()), midi, SLOT(play()));
+  connect(ABut, SIGNAL(clicked()), this, SLOT(JouerMidi()));
 
   BBut->show();
   BBut->resize(90, 40);

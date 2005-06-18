@@ -105,7 +105,7 @@ Fenetre::~Fenetre()
 /* On ouvre une image qu'on stocke dans la variable Picture 
 de la classe Fenetre, le chemin est sauvegarde dans 
 FilePath */
-void Fenetre::OuvrirImage()
+bool Fenetre::OuvrirImage()
 {
   bool succes;
 
@@ -116,6 +116,8 @@ void Fenetre::OuvrirImage()
 					  "Choose an image to load");
   succes = Picture.load(FilePath);
   Image2Apercu(&Picture);
+
+  return (succes);
 }
 
 
@@ -379,7 +381,7 @@ void Fenetre::ClickDefiler()
 
 
 
-void Fenetre::JouerMidi(QSound *midi)
+void Fenetre::JouerMidi()
 {
   if (midi->isFinished())
     midi->play();
@@ -398,22 +400,24 @@ void Fenetre::OpenClick()
 {
   SteakHache();
 
-  OuvrirImage();
-  setFixedSize(550, 500);
-  FiltBut->setEnabled(true);
-  RecoBut->setEnabled(true);
-  MusicBut->setEnabled(true);
+  if (OuvrirImage())
+    {
+      setFixedSize(550, 500);
+      FiltBut->setEnabled(true);
+      RecoBut->setEnabled(true);
+      MusicBut->setEnabled(true);
 
-  ABut->show();
-  ABut->resize(90, 40);
-  ABut->setText("Changer");
-  ABut->move(440, 350);
-  connect(ABut, SIGNAL(clicked()), this, SLOT(OuvrirImage()));
-
-  ALabel->show();
-  ALabel->move(360, 80);
-  ALabel->resize(180, 220);
-  ALabel->setText("Vous pouvez desormais \nchoisir de filtrer l'image \nou bien de lancer \ndirectement la \nreconnaissance.\n\nVous pouvez changer \nd'image si vous vous etes \ntrompe.");
+      ABut->show();
+      ABut->resize(90, 40);
+      ABut->setText("Changer");
+      ABut->move(440, 350);
+      connect(ABut, SIGNAL(clicked()), this, SLOT(OuvrirImage()));
+      
+      ALabel->show();
+      ALabel->move(360, 80);
+      ALabel->resize(180, 220);
+      ALabel->setText("Vous pouvez desormais \nchoisir de filtrer l'image \nou bien de lancer \ndirectement la \nreconnaissance.\n\nVous pouvez changer \nd'image si vous vous etes \ntrompe.");
+    }
 }
 
 /* On clique sur 'Filtrer' */
@@ -504,7 +508,7 @@ void Fenetre::MusicClick()
   ABut->resize(90, 40);
   ABut->move(360, 280);
   ABut->setText("Play");
-  connect(ABut, SIGNAL(clicked()), this, SLOT(JouerMidi(midi)));
+  connect(ABut, SIGNAL(clicked()), this, SLOT(JouerMidi()));
 
   BBut->show();
   BBut->resize(90, 40);
