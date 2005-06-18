@@ -77,7 +77,7 @@ class Fenetre : public QMainWindow
  
     void OuvrirImage();
     void Image2Apercu(QImage *picture);
-    void SteackHache();
+    void SteakHache();
 
     void DetectLignes();
     void VirerLignes();

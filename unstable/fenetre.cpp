@@ -75,7 +75,7 @@ Fenetre::Fenetre(QWidget *parent, const char *name)
   RecoBut->setEnabled(false);
   MusicBut->setEnabled(false);
 
-  SteackHache();
+  SteakHache();
 
   /* on relie nos boutons a nos fonctions */
   connect(OpenBut, SIGNAL(clicked()), this, SLOT(OpenClick()));
@@ -381,7 +381,7 @@ void Fenetre::ClickDefiler()
 /* On clique sur 'Ouvrir' */
 void Fenetre::OpenClick()
 {
-  SteackHache();
+  SteakHache();
 
   OuvrirImage();
   setFixedSize(550, 500);
@@ -434,7 +434,7 @@ void Fenetre::FiltClick()
 /* On clique sur 'Detecter' */
 void Fenetre::RecoClick()
 {
-  SteackHache();
+  SteakHache();
 
   ABut->show();
   ABut->setText("Lignes");
@@ -476,7 +476,7 @@ void Fenetre::RecoClick()
 /* On clique sur 'Jouer Midi' */
 void Fenetre::MusicClick()
 {
-  SteackHache();
+  SteakHache();
 
   midi = new QSound("partition.mid");
 
