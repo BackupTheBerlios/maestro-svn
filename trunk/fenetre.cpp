@@ -77,6 +77,9 @@ Fenetre::Fenetre(QWidget *parent, const char *name)
 
   SteakHache();
 
+  /* On initialise SDL */
+  InitPlayer();
+
   /* on relie nos boutons a nos fonctions */
   connect(OpenBut, SIGNAL(clicked()), this, SLOT(OpenClick()));
   connect(FiltBut, SIGNAL(clicked()), this, SLOT(FiltClick()));
@@ -90,7 +93,8 @@ Fenetre::Fenetre(QWidget *parent, const char *name)
 /* Destructeur - fait automatiquement */
 Fenetre::~Fenetre()
 {
-
+  /* On libere SDL */
+  CleanPlayer(midi);
 }
 
 
@@ -374,7 +378,7 @@ void Fenetre::ClickDefiler()
 
 
 
-/*****************  MUSIQUE  *******************/
+/*******************  MUSIQUE  *******************/
 
 
 
@@ -383,8 +387,13 @@ void Fenetre::ClickDefiler()
 
 void Fenetre::JouerMidi()
 {
-  if (midi->isFinished())
-    midi->play();
+  PlayMidi(midi);
+}
+
+
+void Fenetre::StopperMidi()
+{
+  StopMidi();
 }
 
 
@@ -497,7 +506,7 @@ void Fenetre::MusicClick()
 {
   SteakHache();
 
-  midi = new QSound("partition.mid");
+  midi = LoadMidi("partition.mid");
 
   ALabel->show();
   ALabel->setText("Cliquez sur 'Play' pour\necouter la musique.");
@@ -514,7 +523,7 @@ void Fenetre::MusicClick()
   BBut->resize(90, 40);
   BBut->move(450, 280);
   BBut->setText("Stop");
-  connect(BBut, SIGNAL(clicked()), midi, SLOT(stop()));
+  connect(BBut, SIGNAL(clicked()), this, SLOT(StopperMidi()));
 }
 
 /* On clique sur 'A Propos' */

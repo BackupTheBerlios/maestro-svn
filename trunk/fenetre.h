@@ -17,6 +17,7 @@
 
 #include"mat_list.h"
 #include "reconnaissance.h"
+#include"player.h"
 
 
 
@@ -58,7 +59,7 @@ class Fenetre : public QMainWindow
   p_coord list_portees;
   p_liste_img list_images;
 
-  QSound *midi;
+  Mix_Music *midi;
 
   int NBelt_listd;
   int largeur_ligne; // donne la largeur d'une ligne
@@ -80,6 +81,7 @@ class Fenetre : public QMainWindow
     void SteakHache();
 
     void JouerMidi();
+    void StopperMidi();
 
     void DetectLignes();
     void VirerLignes();
