@@ -1,5 +1,6 @@
-#include <SDL.h>
-#include <SDL_mixer.h>
+#include "SDL.h"
+#include "SDL_thread.h"
+#include "SDL_mixer.h"
 
 
 

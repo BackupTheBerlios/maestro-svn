@@ -366,14 +366,33 @@ void ajouter_plcord(p_lcord * p, int x, int y)
 void verifie_point( int esp, int x, int y, QImage * im, p_lcord * liste)
 {
   int resx, resy, z, t;
+  int i;
+  
   p_lcord l = (*liste);
   QRgb bleu=qRgb(0,0,255);
+  for(i=-1*int(esp/3);i<int(esp/3);i++)
+  {
+  z = largeur_noir (x,y+i, im,esp);
+  t = hauteur_noir (x+i,y, im,esp);
+  
+    if (z > 3*esp/2) // largeur
+     return;
+   if (z < 2*esp/3) // largeur
+     return;
+   if (t < 3*esp/4) //hauteur
+     return;
+   if (t > 3*esp/2) //hauteur
+     return;
+  
+  }  
+  
+  /*
   z = largeur_noir (x,y+1, im,esp);
   t = hauteur_noir (x+1,y, im,esp);
 
   if (z > 3*esp/2) // largeur
     return;
-  if (z < esp) // largeur
+  if (z < 2*esp/3) // largeur
     return;
   if (t < 3*esp/4) //hauteur
     return;
@@ -405,7 +424,7 @@ void verifie_point( int esp, int x, int y, QImage * im, p_lcord * liste)
     return;
   if (t > 3*esp/2) //hauteur
     return;
-
+*/
 
   resx = x ; //- int(z/2);
   resy = y ; //- int(t/2);
@@ -550,11 +569,6 @@ void trouver_centre(QImage * im, p_lcord * liste) // trouve le centre d'une note
     }
 }
 
-int is_blanche (p_lcord l, QImage * im)
-{
-// fonction a faire
-return 0;
-}
 
 void trouver_type_note (p_lcord  l, QImage * im , int esp)
 {
@@ -628,7 +642,7 @@ switch(nb_note)
   if ((i>= 4.5*esp) && (i<= 6*esp)) // 2 barre
   {
     l->type = dcroche;
-    printf("dcroche x 2\n");
+    printf("dcroche\n");
   }    
   
   l2 = l->suivant;
