@@ -64,6 +64,7 @@ void Initialiser_liste_img (p_liste_img *p);
 void Ajouter_liste_img (p_liste_img *p, QImage img, QRect r);
 void Fusion_liste_img (p_liste_img *p1,p_liste_img p2);
 
+void Initialiser_liste_note (p_list_note *p);
 void Ajouter_liste_note (p_list_note *p, bool cle, p_lcord s, int niv0, int d);
 
 #endif
