@@ -2,7 +2,7 @@
 #include<qpoint.h>
 #include <stdlib.h>
 #include "reco.h"
-
+#include "note.h"
 
 
 /*** LISTE ***/
